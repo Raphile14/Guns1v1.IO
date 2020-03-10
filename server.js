@@ -67,7 +67,7 @@ try {
     app.use(express.static('public'));
 
     // Routes
-    app.get('/', (req, res) => {
+    app.get('*', (req, res) => {
         res.render('index');        
     })
 
@@ -279,6 +279,11 @@ try {
         socket.on('newMessage', (data) => {
             //broadcast the new message
             io.sockets.emit('newMessage', {message : data.message, username : socket.username});
+        })
+
+        // =============================== Leaderboards ===============================
+        socket.on('leaderboard', (data) => {
+            socket.emit("leaderboardSent", {status : true});
         })
     })
     console.log("Guns1v1 Server Online");

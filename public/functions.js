@@ -1,6 +1,7 @@
 let rankQueueLength = 0;
 let username = "";
 
+// ================================= Functions ==================================
 // swap page script
 function show(shown, hidden) {
     document.getElementById(shown).style.display = 'block';
@@ -102,7 +103,6 @@ $(function(){
     });
 
     // ============================ Update Player Counts ============================
-
     socket.on('countData', (data) => {
         document.getElementById('playerCount').innerHTML = data.playerCount; 
         document.getElementById('ingameCount').innerHTML = data.ingameCount; 
@@ -206,11 +206,44 @@ $(function(){
     // =================================== Leaderboard ===================================
     let leaderboardButton = $("#leaderboardButton");
     let leaderboardMainMenu = $("#leaderboardMainMenu");
+    let leaderboardShow = $("#leaderboardShow");
 
+    // Tell Server to send Table
+    leaderboardShow.click(function(){
+        let choice = document.getElementById('leaderboardChoices'); 
+        socket.emit('leaderboard', {type : choice.options[choice.selectedIndex].value});      
+        console.log("packet sent")
+    });
+
+    // Receive Table Data
+    socket.on("leaderboardSent", (data) => {
+        counter = 0;        
+        let table = document.getElementById('leaderboardTable');
+        table.innerHTML = "";
+        table.style["verticalAlign"] = "middle";
+        let choice = document.getElementById('leaderboardChoices');        
+        let headerName = document.createElement("TH");
+        let headerType = document.createElement("TH");
+        let row = table.insertRow(counter);
+        let cell1 = row.insertCell(0);
+        let cell2 = row.insertCell(1);
+        
+        headerName.innerHTML = "Name";
+        headerName.style['border'] = "5px solid black";
+        headerName.style['width'] = "50%";
+        headerType.innerHTML = choice.options[choice.selectedIndex].text;
+        headerType.style['border'] = "5px solid black";
+        headerType.style['width'] = "50%";
+        row.appendChild(headerName);
+        row.appendChild(headerType);
+    })
+
+    // Go to leaderboard page
     leaderboardButton.click(function(){
         show('leaderboard', 'chatRoom');
     });
 
+    // Go back to main menu page
     leaderboardMainMenu.click(function(){
         show('chatRoom', 'leaderboard');
     })

@@ -25,7 +25,7 @@
       <!-- login -->
       <div class="login-wrap">      
         <div class="login-html">
-          <input id="tab-1" type="radio" name="tab" class="sign-in" checked/><label for="tab-1" class="tab">Sign In</label>
+          <input id="tab-1" type="radio" name="tab" class="sign-in" checked/><label for="tab-1" class="tab"> Sign In </label>
           <input id="tab-2" type="radio" name="tab" class="sign-up"/><label for="tab-2" class="tab"></label>
         
           <div class="login-form">
@@ -54,7 +54,8 @@
             <div class="hr"> </div>
               <p>
                 <center> <a href="#" onclick="return show('registrationPage', 'loginPage');"> Not yet a Member? Sign up </a> </center>
-              </p>                                   
+              </p>       
+              <!-- <center> <a href="#" onclick="return show('registrationPage', 'loginPage');"> Not yet a Member? Sign up </a> </center>                             -->
           </div>
         </div>
       </div>   
@@ -134,24 +135,23 @@
           <!-- <input id="tab-5" type="radio" name="tab" class="sign-in" checked/><label for="tab-5" class="tab"> Guns1v1.IO Public Chat Room </label> -->
           <h1> Guns1v1.IO</h1>
           <div class="btn-group">
-            <table>
+            <center> <table>
               <tr>
-                <td> <button id="rankedButton" class="rButton" type="submit"> Ranked Game </button> </td>
-                <td> <button id="casualButton" class="cButton" type="submit"> Casual  Game </button> </td>
-                <td> <button id="leaderboardButton" class="lBoardButton" type="button">Check Leaderboards </button> </td>
-                <td> <button id="profileButton" class="vButton" type="button"> View Profile </button> </td>
+                <td> <button id="rankedButton" class="rButton" type="submit"> Ranked </button> </td>
+                <td> <button id="casualButton" class="cButton" type="submit"> Casual </button> </td>
+                <td> <button id="leaderboardButton" class="lBoardButton" type="button">Leaderboards </button> </td>
+                <td> <button id="profileButton" class="vButton" type="button"> Profile </button> </td>
                 <td> <button id="logout" class="lButton" type="button"> Logout </button> </td>
               </tr>
-            </table>                                                                            
+            </center> </table>                                                                            
           </div>
         </header>  
         <center>
           <br> <br>            
           <table style="width: 95%; border:5px solid black;margin-left:auto;margin-right:auto;">
             <tr style="border: 5px solid black;">
-              <td style="width: 15%; border: 5px solid black;">                
-                <center> <p style="font-size: 40px;"> <br> <br> <br> Main Menu </p> </center> <br> <br>  
-                <center> === PLAYER STATUS === </center>
+              <td style="width: 15%; border: 5px solid black; vertical-align: text-top;">                
+                <center> = PLAYER STATUS = </center>
                 <p> Players Online: <label id="playerCount" for="p_online" class="label"> 0 </label> </p>
                 <p> Players Playing: <label id="ingameCount" for="p_playing" class="label"> 0 </label> </p>
                 <p> Players Queuing in Rank: <label id="rankQueueCount" for="r_queue" class="label"> 0 </label> </p>
@@ -176,8 +176,7 @@
                   <p> Current Capabilities </p>
                   <p> - Login System with SQL </p>
                   <p> - Working real-time chat system </p>
-                </section>
-                
+                </section>                
               </td>
               <td style="border: 5px solid black;">
                 <section id="chatroom" style="overflow: auto;">
@@ -207,7 +206,35 @@
       <header>
           <h1> <br> <br> Guns1v1.IO</h1>
           <p style="font-size: 40px;"> <br> LEADERBOARDS </p>
-          <button id="leaderboardMainMenu" class="rButton" type="submit"> Main Menu </button>
+          <button id="leaderboardMainMenu" type="submit"> Main Menu </button> <br> <br> <br>
+
+          <!-- Leaderboard Filter Choices -->
+          <select id="leaderboardChoices">
+            <option value="userWin"> Wins </option>
+            <option value="userGames"> Games Played </option>
+            <option value="timesUsedCharge"> Used Charge </option>
+            <option value="timesUsedPistol"> Used Pistol </option>
+            <option value="timesUsedCounter"> Used Counter </option>
+            <option value="timesUsedShield1"> Used Shield Lvl 1 </option>
+            <option value="timesUsedEvade"> Used Evade </option>
+            <option value="timesUsedBlock"> Used Block </option>
+            <option value="timesUsedDoublePistol"> Used Double Pistol </option>
+            <option value="timesUsedGrenade"> Used Grenade </option>
+            <option value="timesUsedShotgun"> Used Shotgun </option>
+            <option value="timesUsedShield2"> Used Shield Lvl 2 </option>
+            <option value="timesUsedLaser"> Used Laser </option>
+            <option value="timesUsedShield3"> Used Shield Lvl 3 </option>
+            <option value="timesUsedNuke"> Used Nuke </option>
+          </select>
+          <button id="leaderboardShow" type="submit"> Show </button> <br> <br> <br>
+            <center> <table id="leaderboardTable" style="vertical-align: middle; width: 70%; border:5px solid black; margin-left:auto;margin-right:auto;">
+              <tr style="border: 5px solid black;">
+                <th style="border: 5px solid black; width: 50%;"> Name </th> <th id="tableType" style="border: 5px solid black; width: 50%;"> Wins </th>
+              </tr>
+              <tr>
+                <td> 1. Raphael </td> <td> 100 </td>
+              </tr>
+            </center> </table>
       </header>
     </div>
 

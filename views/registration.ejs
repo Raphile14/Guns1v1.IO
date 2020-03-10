@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" const="text/html;charset=UTF-8" />
+    
+        <!-- font -->
+        <link href="http://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Bungee" rel="stylesheet" type="text/css">
+        <!-- css script -->
+        <link rel="stylesheet" type="text/css" href="style.css" >
+        
+        <!-- socket.io script -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>    
+    
+        <!-- title of page -->
+        <title> Guns1v1.IO Alphav1.0 - Registration </title>
+        
+      </head>
+
+      <body>
+        <!-- ========================================== REGISTRATION ==========================================  -->
+        <div id="registrationPage" style="display: none;">
+            <div class="signup-wrap">
+                <div class="login-html">
+                    <input id="tab-3" type="radio" name="tab2" class="sign-in" checked/><label for="tab-3" class="tab">Sign Up</label>
+                    <input id="tab-4" type="radio" name="tab2" class="sign-up"/><label for="tab-4" class="tab"></label>
+
+                    <!-- signup --> 
+                    <div class="login-form">                       
+                        <table>
+                            <td>
+                                <tr>
+                                    <div class="group">
+                                        <div> 
+                                            <label for="user" class="label"> Username </label>
+                                            <input id="usernameSignUp" name="username" type="text" class="input" required/>
+                                        </div>
+                                    </div> 
+
+                                    <div class="group">
+                                        <div>
+                                            <label for="user" class="label"> User Email </label>
+                                            <input id="useremailSignUp" name="email" type="email" class="input" required/>
+                                        </div>
+                                    </div> 
+
+                                    <div class="group">
+                                        <div>
+                                            <label for="pass" class="label"> Password </label>
+                                            <input id="passwordSignUp" name="password_1" type="password" class="input" data-type="password" value="" required/>
+                                        </div>
+                                    </div>  
+
+                                    <div class="group">
+                                        <div>
+                                            <label for="pass" class="label"> Confirm Password </label>
+                                            <input id="passwordSignUpConfirm"name="password_2" type="password" class="input" data-type="password" value="" required/>
+                                        </div>
+                                    </div>  
+
+                                    <div class="group">
+                                    <button id="signUpButton" class="button" type="button"> Sign Up </button>
+                                    </div>
+                                </tr>
+                            </td>
+
+                            <div class="hr"></div>
+                            <p> <center> <a href="#" onclick="return show('loginPage', 'registrationPage');"> Already a Member? Sign In </a></center> </p>
+
+                        </table>
+                    </div>          
+                </div>        
+            </div>      
+        </div>
+      </body>
+</html>
