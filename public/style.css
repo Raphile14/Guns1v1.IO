@@ -1,0 +1,441 @@
+body{
+    margin:0;
+    color:#6a6f8c;
+    background:#c8c8c8;
+    font:600 16px/18px 'Bungee',cursive;
+    /* background:url("cube2.gif"); */
+  }
+  *,:after,:before{box-sizing:border-box}
+  .clearfix:after,.clearfix:before{content:'';display:table}
+  .clearfix:after{clear:both;display:block}
+  a{color:inherit;text-decoration:none}
+  
+  .signup-wrap{
+    width:100%;
+    height:10%;
+    margin:auto;
+    margin-top: 30px;
+    max-width:525px;
+    min-height:370px;
+    position:relative;
+    box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+  }
+
+  .chat-wrap{
+    width:100%;
+    height:10%;
+    margin:auto;
+    margin-top: 30px;
+    max-width:90%;
+    min-height:300px;
+    /* max-height: 100%; */
+    position:relative;
+  }
+
+  .login-wrap{
+    width:100%;
+    height:10%;
+    margin:auto;
+    margin-top: 30px;
+    max-width:525px;
+    min-height:300px;
+    position:relative;
+    box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+  }
+
+  /* cube for login */
+  .login-html{
+    width:100%;
+    height:180%;
+    position:absolute;
+    padding:90px 70px 50px 70px;
+    background:rgba(40,57,101,.9);
+    
+  }
+  .login-html .sign-in-htm,
+  .login-html .sign-up-htm{
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    position:absolute;
+    -webkit-transform:rotateY(180deg);
+            transform:rotateY(180deg);
+    -webkit-backface-visibility:hidden;
+            backface-visibility:hidden;
+    transition:all .4s linear;
+  }
+  .login-html .sign-in,
+  .login-html .sign-up,
+  .login-form .group .check{
+    display:none;
+  }
+  .login-html .tab,
+  .login-form .group .label,
+  .login-form .group .button{
+    text-transform:uppercase;
+  }
+  .login-html .tab{
+    font-size:22px;
+    margin-right:15px;
+    padding-bottom:5px;
+    margin:0 15px 10px 0;
+    display:inline-block;
+    border-bottom:2px solid transparent;
+  }
+  .login-html .sign-in:checked + .tab,
+  .login-html .sign-up:checked + .tab{
+    color:#fff;
+    border-color:#1161ee;
+  }
+  .login-form{
+    min-height:345px;
+    position:relative;
+    -webkit-perspective:1000px;
+            perspective:1000px;
+    -webkit-transform-style:preserve-3d;
+            transform-style:preserve-3d;
+  }
+  .login-form .group{
+    margin-bottom:15px;
+  }
+  .login-form .group .label,
+  .login-form .group .input,
+  .login-form .group .button{
+    width:100%;
+    color:#fff;
+    display:block;
+  }
+  .login-form .group .input,
+  .login-form .group .button{
+    border:none;
+    padding:15px 20px;
+    border-radius:25px;
+    background:rgba(255,255,255,.1);
+  }
+  .login-form .group input[data-type="password"]{
+    -text-security:circle;
+    -webkit-text-security:circle;
+  }
+  .login-form .group .label{
+    color:#aaa;
+    font-size:12px;
+  }
+  .login-form .group .button{
+    background:#1161ee;
+  }
+  .login-form .group label .icon{
+    width:15px;
+    height:15px;
+    border-radius:2px;
+    position:relative;
+    display:inline-block;
+    background:rgba(255,255,255,.1);
+  }
+  .login-form .group label .icon:before,
+  .login-form .group label .icon:after{
+    content:'';
+    width:10px;
+    height:2px;
+    background:#fff;
+    position:absolute;
+    transition:all .2s ease-in-out 0s;
+  }
+  .login-form .group label .icon:before{
+    left:3px;
+    width:5px;
+    bottom:6px;
+    -webkit-transform:scale(0) rotate(0);
+            transform:scale(0) rotate(0);
+  }
+  .login-form .group label .icon:after{
+    top:6px;
+    right:0;
+    -webkit-transform:scale(0) rotate(0);
+            transform:scale(0) rotate(0);
+  }
+  .login-form .group .check:checked + label{
+    color:#fff;
+  }
+  .login-form .group .check:checked + label .icon{
+    background:#1161ee;
+  }
+  .login-form .group .check:checked + label .icon:before{
+    -webkit-transform:scale(1) rotate(45deg);
+            transform:scale(1) rotate(45deg);
+  }
+  .login-form .group .check:checked + label .icon:after{
+    -webkit-transform:scale(1) rotate(-45deg);
+            transform:scale(1) rotate(-45deg);
+  }
+  .login-html .sign-in:checked + .tab + .sign-up + .tab + .login-form .sign-in-htm{
+    -webkit-transform:rotate(0);
+            transform:rotate(0);
+  }
+  .login-html .sign-up:checked + .tab + .login-form .sign-up-htm{
+    -webkit-transform:rotate(0);
+            transform:rotate(0);
+  }
+  .hr{
+    height:2px;
+    margin:60px 0 50px 0;
+    background:rgba(255,255,255,.2);
+  }
+  .foot-lnk{
+    text-align:center;
+  }
+  .text-box {
+    font-size: 60px;
+    font-family: 'Raleway', sans-serif;
+    letter-spacing: 7px;
+    word-spacing: 12px;
+    text-transform: uppercase;
+    color:rgb(238, 238, 238);
+  }
+  .form_error span {
+    width: 80%;
+    height: 35px;
+    margin: 3px 10%;
+    font-size: 1.1em;
+    color: #D83D5A;
+  }
+  .form_error input {
+    border: 1px solid #D83D5A;
+  }
+
+
+/* @mixin vertical-align {
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  } */
+  
+  * {
+      box-sizing: border-box;
+  }
+  
+  html {
+      height:50px;
+      max-height: 100px;
+  }
+  
+  /* body {
+      margin: 0px;
+      height: 100%;
+  } */
+  
+  header {
+      text-align: center;
+  }
+  
+  h1 {
+      font-family: 'Bungee', cursive;
+      font-size: 78px;
+      margin: 0px;
+  }
+  
+  div#change_username, section#input_zone {
+      border: 5px outset #8258FA;
+  }
+  
+  div#change_username {
+      height: 3%;
+      display: inline-block;
+      background-color: #BCA9F5;
+  }
+  
+  section#chatroom {
+      /* margin-left: 50%; */
+      border: 5px inset #8258FA;
+      height: 800px;
+      max-height:100%;
+      width: 100%;
+      overflow: auto;
+  }
+  
+  section#input_zone {
+      height: 10%;
+      text-align: center;
+      background-color: #BCA9F5;
+      /* margin-left: 50%; */
+      width:100%;
+  }
+  
+  .vertical-align {
+      position: relative;
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+  }
+  
+  input#username {
+      font-family: 'Comfortaa', sans-serif;
+  }
+  
+  input#message {
+      display: inline-block;
+      width: 88%;
+      height: 70%;
+      font-family: 'Bungee', cursive;
+      font-size: 2vh;
+  }
+  
+  button#send_message {
+      display: inline-block;
+      height: 70%;
+      width: 10%;
+  }
+  
+  p.message {
+      margin: 0px;
+      width: 100%;
+      height: 40px;
+      font-size: 2vh;
+      font-family: 'Bungee', cursive;
+      padding: 1vh;
+      color: white;
+  }
+  
+  .message:nth-child(even) {
+      background-color:rgba(40,57,101,.9);;
+  }
+  
+  .message:nth-child(odd) {
+      background-color: rgb(97, 125, 247);
+  }
+  
+  .rButton:hover {background-color: #022f55}
+  .rButton {
+    background-color: rgb(90, 97, 202); 
+    border: none;
+    color: white;
+    padding: 32px 64px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 100%;
+    border-radius:5px;
+    border:solid 1px rgb(97, 120, 224);
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+    width: 100%;
+    height: 30%;
+    
+    -webkit-box-shadow: 0px 6px 0px #002966;
+    -moz-box-shadow: 0px 6px 0px #002966;
+    box-shadow: 0px 6px 0px #002966;
+  }
+  .cButton:hover {background-color: #9c9e04}
+  .cButton {
+    background-color: rgb(194, 226, 77); 
+    border: none;
+    color: white;
+    padding: 32px 64px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 100%;
+    border-radius:5px;
+    border:solid 1px rgb(219, 255, 87);
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+    width: 100%;
+    height: 30%;
+
+    -webkit-box-shadow: 0px 6px 0px #a89d00;
+    -moz-box-shadow: 0px 6px 0px #a89d00;
+    box-shadow: 0px 6px 0px #a89d00;
+  }
+  .lBoardButton:hover {background-color: #3e8e41}
+  .lBoardButton {
+    background-color: #4CAF50; 
+    border: none;
+    color: white;
+    padding: 32px 64px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 100%;
+    border-radius:5px;
+    border:solid 1px #4CAF50;
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+    width: 100%;
+    height: 30%;
+    
+    -webkit-box-shadow: 0px 6px 0px #006605;
+    -moz-box-shadow: 0px 6px 0px #006605;
+    box-shadow: 0px 6px 0px #006605;
+  }
+  .vButton:hover {background-color: #8b3887}
+  .vButton {
+    background-color: rgb(219, 69, 212); 
+    border: none;
+    color: white;
+    padding: 32px 64px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 16px;
+    border-radius:5px;
+    border:solid 1px rgb(219, 69, 212);
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+    width: 100%;
+    height: 30%;
+    
+    -webkit-box-shadow: 0px 6px 0px #8b3887;
+    -moz-box-shadow: 0px 6px 0px #8b3887;
+    box-shadow: 0px 6px 0px #8b3887;
+  }
+
+  .lButton:hover {background-color: #750a0a}
+  .lButton {
+    background-color: rgb(175, 76, 76); 
+    border: none;
+    color: white;
+    padding: 32px 64px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 100%;
+    border-radius:5px;
+    border:solid 1px rgb(175, 76, 76);
+    width: 100%;
+    height: 30%;
+    
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+    -webkit-box-shadow: 0px 6px 0px #660000;
+    -moz-box-shadow: 0px 6px 0px #660000;
+    box-shadow: 0px 6px 0px #660000;
+  }
+  .btn-group button {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .btn-group button:not(:last-child) {
+    border-right: none; /* Prevent double borders */
+  }
+  
+  /* Clear floats (clearfix hack) */
+  .btn-group:after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+  
