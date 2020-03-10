@@ -1,0 +1,27 @@
+=== CHANGE LOG ===
+
+Update Log 5: Guns1v1 Alpha 1.0 (03/11/2020)
+- Leaderboards page functionality done
+
+Update Log 4: Guns1v1 Alpha 1.0 (03/10/2020)
+- Added Changelog
+- Added Leaderboards page
+- Added Profile Page
+- Improved UI
+
+Update Log 3: Guns1v1 alpha 1.0 (03/08/2020)
+- Reduced sign up values
+- Added button onclick change color 
+- Removed SQL side signup values 
+
+Update Log 2: Guns1v1 alpha 1.0  (03/08/2020)
+- Added password encryption and decryption 
+- Improved User Interface 
+- Sending message now clears the input field 
+- Added changelog menu in the main menu 
+- The interface can now show the number of people online, queuing for games, and in-game 
+
+Update Log 1: Guns1v1 alpha 1.0  (03/03/2020)
+Current Capabilities 
+- Login System with SQL 
+- Working real-time chat system 

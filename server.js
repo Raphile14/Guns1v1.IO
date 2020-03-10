@@ -283,7 +283,65 @@ try {
 
         // =============================== Leaderboards ===============================
         socket.on('leaderboard', (data) => {
-            socket.emit("leaderboardSent", {status : true});
+            let leaderboardNames = [];
+            let leaderBoardData = [];
+            let leaderboardStatus = false;
+            let leaderboardQuery = "SELECT * FROM tbl_userdata WHERE " + data.type + " > 0 ORDER BY " + data.type + " DESC;";
+            conn.query(leaderboardQuery, function(err, result, fields){
+                for (let x = 0; x < result.length; x++) {
+                    leaderboardNames.push(result[x].username);
+                    if (data.type == "userElo") {
+                        leaderBoardData.push(result[x].userElo);
+                    } 
+                    else if (data.type == "userWin") {
+                        leaderBoardData.push(result[x].userWin);
+                    }      
+                    else if (data.type == "timesUsedCharge") {
+                        leaderBoardData.push(result[x].timesUsedCharge);
+                    } 
+                    else if (data.type == "timesUsedPistol") {
+                        leaderBoardData.push(result[x].timesUsedPistol);
+                    }    
+                    else if (data.type == "timesUsedCounter") {
+                        leaderBoardData.push(result[x].timesUsedCounter);
+                    }    
+                    else if (data.type == "timesUsedShield1") {
+                        leaderBoardData.push(result[x].timesUsedShield1);
+                    }    
+                    else if (data.type == "timesUsedEvade") {
+                        leaderBoardData.push(result[x].timesUsedEvade);
+                    } 
+                    else if (data.type == "timesUsedBlock") {
+                        leaderBoardData.push(result[x].timesUsedBlock);
+                    } 
+                    else if (data.type == "timesUsedDoublePistol") {
+                        leaderBoardData.push(result[x].timesUsedDoublePistol);
+                    } 
+                    else if (data.type == "timesUsedGrenade") {
+                        leaderBoardData.push(result[x].timesUsedGrenade);
+                    }    
+                    else if (data.type == "timesUsedShotgun") {
+                        leaderBoardData.push(result[x].timesUsedShotgun);
+                    } 
+                    else if (data.type == "timesUsedShield2") {
+                        leaderBoardData.push(result[x].timesUsedShield2);
+                    }   
+                    else if (data.type == "timesUsedLaser") {
+                        leaderBoardData.push(result[x].timesUsedLaser);
+                    }   
+                    else if (data.type == "timesUsedShield3") {
+                        leaderBoardData.push(result[x].timesUsedShield3);
+                    }   
+                    else if (data.type == "timesUsedNuke") {
+                        leaderBoardData.push(result[x].timesUsedNuke);
+                    }                         
+                }
+                if (leaderboardNames.length > 0) {
+                    leaderboardStatus = true;
+                }
+                socket.emit("leaderboardSent", {leaderboardStatus : leaderboardStatus, leaderboardNames : leaderboardNames, leaderBoardData : leaderBoardData});
+            });
+                        
         })
     })
     console.log("Guns1v1 Server Online");

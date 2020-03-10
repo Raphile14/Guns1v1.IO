@@ -24,7 +24,7 @@ function getTimeOnly() {
 $(function(){
     // connect to server. change if ip address changes
     // let socket = io.connect('http://192.168.0.11:3000');
-    let socket = io.connect('192.168.10.104:3000');
+    let socket = io.connect('10.15.8.45:3000');
 
     // Logout
     let logout = $("#logout");
@@ -212,34 +212,50 @@ $(function(){
     leaderboardShow.click(function(){
         let choice = document.getElementById('leaderboardChoices'); 
         socket.emit('leaderboard', {type : choice.options[choice.selectedIndex].value});      
-        console.log("packet sent")
     });
 
     // Receive Table Data
     socket.on("leaderboardSent", (data) => {
         counter = 0;        
         let table = document.getElementById('leaderboardTable');
-        table.innerHTML = "";
-        table.style["verticalAlign"] = "middle";
-        let choice = document.getElementById('leaderboardChoices');        
-        let headerName = document.createElement("TH");
-        let headerType = document.createElement("TH");
-        let row = table.insertRow(counter);
-        let cell1 = row.insertCell(0);
-        let cell2 = row.insertCell(1);
+        console.log("status: " + data.leaderboardStatus);
+        if (data.leaderboardStatus) {
+            table.innerHTML = "";
+            table.style["verticalAlign"] = "middle";
+            let choice = document.getElementById('leaderboardChoices');        
+            let headerName = document.createElement("TH");
+            let headerType = document.createElement("TH");
+            let row = table.insertRow(counter);            
+            
+            headerName.innerHTML = "Name";
+            headerName.style['border'] = "5px solid black";
+            headerName.style['width'] = "50%";
+            headerType.innerHTML = choice.options[choice.selectedIndex].text;
+            headerType.style['border'] = "5px solid black";
+            headerType.style['width'] = "50%";
+            row.appendChild(headerName);
+            row.appendChild(headerType);
+            counter += 1;
+
+            for (let x = 0; x < data.leaderboardNames.length; x++) {
+                row = table.insertRow(counter);
+                let cell1 = row.insertCell(0);
+                let cell2 = row.insertCell(1);
+                cell1.innerHTML = data.leaderboardNames[x];
+                cell2.innerHTML = data.leaderBoardData[x];
+                counter += 1;
+            }
+        }
+        else {
+            table.innerHTML = "No Scores greater than 0";
+        }
         
-        headerName.innerHTML = "Name";
-        headerName.style['border'] = "5px solid black";
-        headerName.style['width'] = "50%";
-        headerType.innerHTML = choice.options[choice.selectedIndex].text;
-        headerType.style['border'] = "5px solid black";
-        headerType.style['width'] = "50%";
-        row.appendChild(headerName);
-        row.appendChild(headerType);
     })
 
     // Go to leaderboard page
     leaderboardButton.click(function(){
+        let choice = document.getElementById('leaderboardChoices'); 
+        socket.emit('leaderboard', {type : choice.options[choice.selectedIndex].value}); 
         show('leaderboard', 'chatRoom');
     });
 
