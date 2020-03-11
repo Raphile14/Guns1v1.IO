@@ -39,9 +39,6 @@
               <!-- <?php if (isset($login_error)): ?> class="form_error" <?php endif ?>  -->            
                 <label for="pass" class="label">Password</label>
                 <input id="passwordLogin" name="loginPassword" type="password" class="input" data-type="password" value="" required/>
-                <?php if (isset($login_error)): ?>
-              <span><?php echo $login_error; ?></span>
-              <?php endif ?>
               </div>
             </div>              
             <div class="group">
@@ -55,7 +52,6 @@
               <p>
                 <center> <a href="#" onclick="return show('registrationPage', 'loginPage');"> Not yet a Member? Sign up </a> </center>
               </p>       
-              <!-- <center> <a href="#" onclick="return show('registrationPage', 'loginPage');"> Not yet a Member? Sign up </a> </center>                             -->
           </div>
         </div>
       </div>   
@@ -84,9 +80,6 @@
                     <div>
                       <label for="user" class="label"> User Email </label>
                       <input id="useremailSignUp" name="email" type="email" class="input"required/>
-                      <!-- <?php if (isset($email_error)): ?>
-                      <span><?php echo $email_error; ?></span>
-                      <?php endif ?> -->
                     </div>
                   </div> 
   
@@ -94,9 +87,6 @@
                     <div>
                       <label for="pass" class="label"> Password </label>
                       <input id="passwordSignUp" name="password_1" type="password" class="input" data-type="password" value="" required/>
-                      <!-- <?php if (isset($password_error)): ?>
-                      <span><?php echo $password_error; ?></span>
-                      <?php endif ?> -->
                     </div>
                   </div>  
 
@@ -104,9 +94,6 @@
                     <div>
                       <label for="pass" class="label"> Confirm Password </label>
                       <input id="passwordSignUpConfirm"name="password_2" type="password" class="input" data-type="password" value="" required/>
-                      <!-- <?php if (isset($password_error)): ?>
-                      <span><?php echo $password_error; ?></span>
-                      <?php endif ?>   -->
                     </div>
                   </div>  
   
@@ -132,8 +119,7 @@
     <div id="chatRoom">      
       <div class="chat-wrap">
         <header>
-          <!-- <input id="tab-5" type="radio" name="tab" class="sign-in" checked/><label for="tab-5" class="tab"> Guns1v1.IO Public Chat Room </label> -->
-          <h1> Guns1v1.IO</h1>
+          <h1> Guns1v1.IO - Main Menu </h1>
           <div class="btn-group">
             <center> <table>
               <tr>
@@ -204,7 +190,7 @@
     <!-- ========================================== LEADERBOARDS ==========================================  -->
     <div id="leaderboard" style="display: none;">
       <header>
-          <h1> <br> <br> Guns1v1.IO</h1>
+          <h1> <br> <br> Guns1v1.IO </h1>
           <p style="font-size: 40px;"> <br> LEADERBOARDS </p>
           <button id="leaderboardMainMenu" type="submit"> Main Menu </button> <br> <br> <br>
 
@@ -231,9 +217,6 @@
               <tr style="border: 5px solid black;">
                 <th style="border: 5px solid black; width: 50%;"> Name </th> <th id="tableType" style="border: 5px solid black; width: 50%;"> Wins </th>
               </tr>
-              <tr>
-                <td> 1. Raphael </td> <td> 100 </td>
-              </tr>
             </center> </table>
       </header>
     </div>
@@ -241,8 +224,8 @@
     <!-- ========================================== PROFILE ==========================================  -->
     <div id="profile" style="display: none;">
       <header>
-        <h1> <br> <br> Guns1v1.IO</h1>
-        <p style="font-size: 40px;"> <br> Profile </p>
+        <h1> <br> <br> Guns1v1.IO </h1>
+        <p style="font-size: 40px;"> <br> PROFILE </p>
         <button id="profileMainMenu" class="rButton" type="submit"> Main Menu </button>
     </header>
     </div>

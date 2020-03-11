@@ -1,5 +1,8 @@
 === CHANGE LOG ===
 
+Update Log 5a: Guns1v1 Alpha 1.0 (03/11/2020)
+- Cleaned Up Code
+
 Update Log 5: Guns1v1 Alpha 1.0 (03/11/2020)
 - Leaderboards page functionality done
 
