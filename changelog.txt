@@ -36,3 +36,4 @@ Update Log 1: Guns1v1 alpha 1.0  (03/03/2020)
 Current Capabilities 
 - Login System with SQL 
 - Working real-time chat system 
+test
