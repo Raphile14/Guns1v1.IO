@@ -13,17 +13,20 @@
     <!-- socket.io script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>    
 
+    <!-- three js -->
+    <script src="three.min.js"></script>
+    
     <!-- title of page -->
     <title> Guns1v1.IO Alphav1.0 </title>
     
   </head>
 
-  <body>
+  <body>    
     <!-- ========================================== LOGIN ==========================================  -->
     <!-- Login Page -->
-    <div id="loginPage" style="display: none;">      
+    <div id="loginPage"> 
+
       <!-- login -->
-      <div class="login-wrap">      
         <div class="login-html">
           <input id="tab-1" type="radio" name="tab" class="sign-in" checked/><label for="tab-1" class="tab"> Sign In </label>
           <input id="tab-2" type="radio" name="tab" class="sign-up"/><label for="tab-2" class="tab"></label>
@@ -54,12 +57,10 @@
               </p>       
           </div>
         </div>
-      </div>   
     </div>
 
     <!-- ========================================== REGISTRATION ==========================================  -->
     <div id="registrationPage" style="display: none;">
-      <div class="signup-wrap">
         <div class="login-html">
           <input id="tab-3" type="radio" name="tab2" class="sign-in" checked/><label for="tab-3" class="tab">Sign Up</label>
           <input id="tab-4" type="radio" name="tab2" class="sign-up"/><label for="tab-4" class="tab"></label>
@@ -111,18 +112,18 @@
             </table>
           </div>          
         </div>        
-      </div>      
     </div>
 
     <!-- ========================================== CHAT ROOM ==========================================  -->
     <!-- chat code -->
-    <div id="chatRoom">      
+    <div id="chatRoom" style="display: none;">      
       <div class="chat-wrap">
         <header>
-          <h1> Guns1v1.IO - Main Menu </h1>
+          <h1 style="color: rgb(180, 180, 180);"> Guns1v1.IO - Main Menu </h1>
           <div class="btn-group">
             <center> <table>
               <tr>
+                <br>
                 <td> <button id="rankedButton" class="rButton" type="submit"> Ranked </button> </td>
                 <td> <button id="casualButton" class="cButton" type="submit"> Casual </button> </td>
                 <td> <button id="leaderboardButton" class="lBoardButton" type="button">Leaderboards </button> </td>
@@ -134,34 +135,18 @@
         </header>  
         <center>
           <br> <br>            
-          <table style="width: 95%; border:5px solid black;margin-left:auto;margin-right:auto;">
-            <tr style="border: 5px solid black;">
-              <td style="width: 15%; border: 5px solid black; vertical-align: text-top;">                
+          <table style="width: 95%; border:5px solid rgb(15, 15, 15);margin-left:auto;margin-right:auto;">
+            <tr style="border: 5px solid rgb(12, 12, 12);">
+              <td style="width: 15%; border: 5px solid rgb(10, 10, 10); vertical-align: text-top; color: rgb(180, 180, 180);">                
                 <center> = PLAYER STATUS = </center>
                 <p> Players Online: <label id="playerCount" for="p_online" class="label"> 0 </label> </p>
                 <p> Players Playing: <label id="ingameCount" for="p_playing" class="label"> 0 </label> </p>
                 <p> Players Queuing in Rank: <label id="rankQueueCount" for="r_queue" class="label"> 0 </label> </p>
                 <p> Players Queuing in Casual: <label id="casualQueueCount" for="c_queue" class="label"> 0 </label></p>                         
               </td>
-              <td style="width: 50%; vertical-align: text-top;">                                
-                <section style="overflow: scroll; height: 10%;">
-                  <br> <center> === CHANGE LOG === </center> <br>          
-                  <p> <center> Update Log 3: Guns1v1 alpha 1.0 </center> </p>
-                  <p> - Reduced sign up values </p>
-                  <p> - Added button onclick change color </p>
-                  <p> - Removed SQL side signup values </p>
-
-                  <p> <center> <br> Update Log 2: Guns1v1 alpha 1.0 </center> </p>
-                  <p> - Added password encryption and decryption </p>
-                  <p> - Improved User Interface </p>
-                  <p> - Sending message now clears the input field </p>
-                  <p> - Added changelog menu in the main menu </p>
-                  <p> - The interface can now show the number of people online, queuing for games, and in-game </p>
-                  
-                  <p> <br> <center> Update Log 1: Guns1v1 alpha 1.0 </center> </p>
-                  <p> Current Capabilities </p>
-                  <p> - Login System with SQL </p>
-                  <p> - Working real-time chat system </p>
+              <td style="width: 50%; vertical-align: text-top;">  
+                <!-- <iframe src="Guns1v1.IO\views\changelog.txt" frameborder="0" height="100%" width="100%"></iframe>                               -->
+                <section id="changelogArea" style="overflow: auto; height: 550px; max-height: 100%; color: rgb(180, 180, 180);">
                 </section>                
               </td>
               <td style="border: 5px solid black;">
@@ -171,7 +156,8 @@
                 <section id="input_zone"> 
                   <br>
                   <input id="message" type="text" maxlength="30" placeholder="Enter Message"/>
-                  <button id="sendMessage" type="button" style="display: none;"> Send </button>                  
+                  <button id="sendMessage" type="button" style="display: none;"> Send </button> 
+  
                 </section>
                 <!-- class="vertical-align" -->
               </td>
@@ -189,36 +175,38 @@
 
     <!-- ========================================== LEADERBOARDS ==========================================  -->
     <div id="leaderboard" style="display: none;">
-      <header>
-          <h1> <br> <br> Guns1v1.IO </h1>
-          <p style="font-size: 40px;"> <br> LEADERBOARDS </p>
-          <button id="leaderboardMainMenu" type="submit"> Main Menu </button> <br> <br> <br>
+        <div class="leaderboard-html">
+          <header>
+              <h1> <br> <br> Guns1v1.IO </h1>
+              <p style="font-size: 40px;"> <br> LEADERBOARDS </p>
 
-          <!-- Leaderboard Filter Choices -->
-          <select id="leaderboardChoices">
-            <option value="userWin"> Wins </option>
-            <option value="userElo"> Elo </option>
-            <option value="timesUsedCharge"> Used Charge </option>
-            <option value="timesUsedPistol"> Used Pistol </option>
-            <option value="timesUsedCounter"> Used Counter </option>
-            <option value="timesUsedShield1"> Used Shield Lvl 1 </option>
-            <option value="timesUsedEvade"> Used Evade </option>
-            <option value="timesUsedBlock"> Used Block </option>
-            <option value="timesUsedDoublePistol"> Used Double Pistol </option>
-            <option value="timesUsedGrenade"> Used Grenade </option>
-            <option value="timesUsedShotgun"> Used Shotgun </option>
-            <option value="timesUsedShield2"> Used Shield Lvl 2 </option>
-            <option value="timesUsedLaser"> Used Laser </option>
-            <option value="timesUsedShield3"> Used Shield Lvl 3 </option>
-            <option value="timesUsedNuke"> Used Nuke </option>
-          </select>
-          <button id="leaderboardShow" type="submit"> Show </button> <br> <br> <br>
-            <center> <table id="leaderboardTable" style="vertical-align: middle; width: 70%; border:5px solid black; margin-left:auto;margin-right:auto;">
-              <tr style="border: 5px solid black;">
-                <th style="border: 5px solid black; width: 50%;"> Name </th> <th id="tableType" style="border: 5px solid black; width: 50%;"> Wins </th>
-              </tr>
-            </center> </table>
-      </header>
+              <!-- Leaderboard Filter Choices -->
+              <select id="leaderboardChoices">
+                <option value="userWin"> Wins </option>
+                <option value="userElo"> Elo </option>
+                <option value="timesUsedCharge"> Used Charge </option>
+                <option value="timesUsedPistol"> Used Pistol </option>
+                <option value="timesUsedCounter"> Used Counter </option>
+                <option value="timesUsedShield1"> Used Shield Lvl 1 </option>
+                <option value="timesUsedEvade"> Used Evade </option>
+                <option value="timesUsedBlock"> Used Block </option>
+                <option value="timesUsedDoublePistol"> Used Double Pistol </option>
+                <option value="timesUsedGrenade"> Used Grenade </option>
+                <option value="timesUsedShotgun"> Used Shotgun </option>
+                <option value="timesUsedShield2"> Used Shield Lvl 2 </option>
+                <option value="timesUsedLaser"> Used Laser </option>
+                <option value="timesUsedShield3"> Used Shield Lvl 3 </option>
+                <option value="timesUsedNuke"> Used Nuke </option>
+              </select>
+              <button id="leaderboardShow" type="submit"> Show </button> <br> <br> <br>
+                <center> <table id="leaderboardTable" style="vertical-align: middle; width: 70%; border:5px solid rgb(226, 225, 225); margin-left:auto;margin-right:auto;">
+                  <tr style="border: 5px solid rgb(221, 220, 220);">
+                    <th style="border: 5px solid rgb(224, 224, 224); width: 50%;"> Name </th> <th id="tableType" style="border: 5px solid rgb(224, 224, 224); width: 50%;"> Wins </th>
+                  </tr>
+                </center> </table>
+                <button id="leaderboardMainMenu"class="menuButton" type="submit"> Return to Main Menu </button> 
+          </header>
+      </div>
     </div>
 
     <!-- ========================================== PROFILE ==========================================  -->
@@ -226,14 +214,72 @@
       <header>
         <h1> <br> <br> Guns1v1.IO </h1>
         <p style="font-size: 40px;"> <br> PROFILE </p>
-        <button id="profileMainMenu" class="rButton" type="submit"> Main Menu </button>
+
+        <br> <br> <br>
+        <center>
+          <p id="profileUserName" style="font-size:20px;"> User </p> 
+          Player Statistics <br>
+          <table style="vertical-align: middle; width: 70%; border:5px solid rgb(206, 206, 206); margin-left:auto;margin-right:auto;">
+            <tr>
+              <th> Wins </th> <th> Lose </th> <th> Games </th> <th> Elo </th>
+            </tr>
+            <tr>
+              <th id="profileWin"> 0 </th> <th id="profileLose"> 0 </th> <th id="profileGames"> 0 </th> <th id="profileElo"> 0 </th>
+            </tr>
+            <tr>
+              <th> Used Charge </th> <th> Used Pistol </th> <th> Used Counter </th> <th> Used Shield1 </th>    
+            </tr>
+            <tr>
+              <th id="profileCharge"> 0 </th> <th id="profilePistol"> 0 </th> <th id="profileCounter"> 0 </th> <th id="profileShield1"> 0 </th>
+            </tr>
+            <tr>
+              <th> Used Evade </th> <th> Used Block </th> <th> Used Double Pistol </th> <th> Used Grenade </th>    
+            </tr>
+            <tr>
+              <th id="profileEvade"> 0 </th> <th id="profileBlock"> 0 </th> <th id="profileDoublePistol"> 0 </th> <th id="profileGrenade"> 0 </th>
+            </tr>
+            <tr>
+              <th> Used Shotgun </th> <th> Used Shield2 </th> <th> Used Laser </th> <th> Used Shield 3 </th>    
+            </tr>
+            <tr>
+              <th id="profileShotgun"> 0 </th> <th id="profileShield2"> 0 </th> <th id="profileLaser"> 0 </th> <th id="profileShield3"> 0 </th>
+            </tr>
+            <tr>
+              <th> Used Nuke </th>
+            </tr>
+            <tr>
+              <th id="profileNuke"> 0 </th>
+            </tr>
+          </table>
+        </center>
+        <button id="profileMainMenu" class="menuButton"type="submit"> Return to Main Menu </button>
     </header>
     </div>
-
     <!-- jQuery and other scripts needed -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="functions.js"></script>
+    <script src="app.js"></script>
+    
     <!-- <script> alert("Fully loaded"); </script> -->
 
   </body>
 </html>
+
+<!-- 
+<br> <center> === CHANGE LOG === </center> <br>          
+                  <p> <center> Update Log 3: Guns1v1 alpha 1.0 </center> </p>
+                  <p> - Reduced sign up values </p>
+                  <p> - Added button onclick change color </p>
+                  <p> - Removed SQL side signup values </p>
+
+                  <p> <center> <br> Update Log 2: Guns1v1 alpha 1.0 </center> </p>
+                  <p> - Added password encryption and decryption </p>
+                  <p> - Improved User Interface </p>
+                  <p> - Sending message now clears the input field </p>
+                  <p> - Added changelog menu in the main menu </p>
+                  <p> - The interface can now show the number of people online, queuing for games, and in-game </p>
+                  
+                  <p> <br> <center> Update Log 1: Guns1v1 alpha 1.0 </center> </p>
+                  <p> Current Capabilities </p>
+                  <p> - Login System with SQL </p>
+                  <p> - Working real-time chat system </p> -->

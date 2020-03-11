@@ -21,6 +21,34 @@ body{
     box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
   }
 
+  #chatRoom {
+    background-color: rgba(0,0,0,0);
+    position:absolute;
+  }
+  #leaderboard {
+    background-color: rgba(0,0,0,0);
+    /* align-content: center; */
+    position:absolute;
+    width:100%;
+    height:100%;
+  }
+  .leaderboard-html{
+    text-align: center;
+
+    position:relative;
+    padding:20px 70px 50px 70px;
+    margin: 0px auto;
+    /* background:rgba(40,57,101,.9); */
+    
+  }
+
+  #profile {
+    background-color: rgba(0,0,0,0);
+    position:absolute;
+    width:100%;
+    height:100%;
+  }
+
   .chat-wrap{
     width:100%;
     height:10%;
@@ -36,20 +64,21 @@ body{
     width:100%;
     height:10%;
     margin:auto;
-    margin-top: 30px;
     max-width:525px;
     min-height:300px;
     position:relative;
+
     box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
   }
 
   /* cube for login */
   .login-html{
-    width:100%;
-    height:180%;
+    width:40%;
+    height:50%;
     position:absolute;
     padding:90px 70px 50px 70px;
-    background:rgba(40,57,101,.9);
+    margin-left:30%;
+    /* background:rgba(40,57,101,.9); */
     
   }
   .login-html .sign-in-htm,
@@ -118,7 +147,7 @@ body{
     -webkit-text-security:circle;
   }
   .login-form .group .label{
-    color:#aaa;
+    color:rgb(245, 243, 243);
     font-size:12px;
   }
   .login-form .group .button{
@@ -179,7 +208,7 @@ body{
   .hr{
     height:2px;
     margin:60px 0 50px 0;
-    background:rgba(255,255,255,.2);
+    background:rgba(236, 231, 231, 0.918);
   }
   .foot-lnk{
     text-align:center;
@@ -232,7 +261,7 @@ body{
   
   h1 {
       font-family: 'Bungee', cursive;
-      font-size: 78px;
+      font-size: 40px;
       margin: 0px;
   }
   
@@ -240,27 +269,25 @@ body{
       border: 5px outset #8258FA;
   }
   
-  div#change_username {
-      height: 3%;
-      display: inline-block;
-      background-color: #BCA9F5;
-  }
+
   
   section#chatroom {
-      /* margin-left: 50%; */
       border: 5px inset #8258FA;
-      height: 800px;
+      height: 465px;
       max-height:100%;
       width: 100%;
-      overflow: auto;
+      overflow: auto;      
   }
+  /* margin-left: 50%; */
   
-  section#input_zone {
-      height: 10%;
+  section#input_zone {  
+      height:10%;
       text-align: center;
       background-color: #BCA9F5;
-      /* margin-left: 50%; */
       width:100%;
+      padding-bottom: 10px;
+      
+
   }
   
   .vertical-align {
@@ -312,8 +339,8 @@ body{
     background-color: rgb(90, 97, 202); 
     border: none;
     color: white;
-    padding: 32px 64px;
-    text-align: left;
+    padding: 16px 64px;
+    text-align: center;
     text-decoration: none;
     display: inline-block;
     font-family: 'Bungee', cursive;
@@ -323,10 +350,10 @@ body{
     -webkit-transition: all 0.1s;
     -moz-transition: all 0.1s;
     transition: all 0.1s;
-    margin:auto;
 
-    width:70%;
-    height: 30%;
+    margin-left: 84px;
+    width:20%;
+    height: 20%;
     
     -webkit-box-shadow: 0px 6px 0px #002966;
     -moz-box-shadow: 0px 6px 0px #002966;
@@ -337,7 +364,7 @@ body{
     background-color: rgb(194, 226, 77); 
     border: none;
     color: white;
-    padding: 32px 64px;
+    padding: 16px 64px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -348,9 +375,8 @@ body{
     -webkit-transition: all 0.1s;
     -moz-transition: all 0.1s;
     transition: all 0.1s;
-
-    width: 70%;
-    height: 30%;
+    width:20%;
+    height: 20%;
 
     -webkit-box-shadow: 0px 6px 0px #a89d00;
     -moz-box-shadow: 0px 6px 0px #a89d00;
@@ -361,7 +387,7 @@ body{
     background-color: #4CAF50; 
     border: none;
     color: white;
-    padding: 32px 64px;
+    padding: 16px 64px;
     text-align: left;
     text-decoration: none;
     display: inline-block;
@@ -374,7 +400,7 @@ body{
     transition: all 0.1s;
     width: 70%;
     height: 30%;
-    margin: auto;
+
     
     -webkit-box-shadow: 0px 6px 0px #006605;
     -moz-box-shadow: 0px 6px 0px #006605;
@@ -385,7 +411,7 @@ body{
     background-color: rgb(219, 69, 212); 
     border: none;
     color: white;
-    padding: 32px 64px;
+    padding: 16px 64px;
     text-align: left;
     text-decoration: none;
     display: inline-block;
@@ -399,6 +425,7 @@ body{
     width: 70%;
     height: 30%;
     
+    
     -webkit-box-shadow: 0px 6px 0px #8b3887;
     -moz-box-shadow: 0px 6px 0px #8b3887;
     box-shadow: 0px 6px 0px #8b3887;
@@ -409,9 +436,7 @@ body{
     background-color: rgb(175, 76, 76); 
     border: none;
     color: white;
-    padding: 32px 64px;
-    text-align: left;
-    margin: auto;
+    padding: 16px 64px;
     text-decoration: none;
     display:inline-block;
     font-family: 'Bungee', cursive;
@@ -428,9 +453,36 @@ body{
     -moz-box-shadow: 0px 6px 0px #660000;
     box-shadow: 0px 6px 0px #660000;
   }
+  .menuButton:hover {background-color: #2d0255}
+  .menuButton {
+    background-color: rgb(90, 104, 235); 
+    border: none;
+    color: white;
+    padding: 16px 64px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 100%;
+    border-radius:5px;
+    border:solid 1px rgb(97, 120, 224);
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+
+    margin-left: 30px;
+    margin-top: 30px;
+    width:30%;
+    height: 20%;
+    
+    -webkit-box-shadow: 0px 6px 0px #002966;
+    -moz-box-shadow: 0px 6px 0px #002966;
+    box-shadow: 0px 6px 0px #002966;
+  }
   .btn-group button {
-    display: flex;
-    flex-direction: row;
+    display: flex;  
+    justify-content: center;
+    
   }
   
   .btn-group button:not(:last-child) {

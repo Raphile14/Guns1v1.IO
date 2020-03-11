@@ -15,6 +15,9 @@ let rankQueue = [];
 let casualQueue = [];
 let inGame = [];
 
+// Require Changelog
+let fs = require('fs');
+
 try {
     // Connecting and Checking SQL server
     let mysql = require('mysql');
@@ -85,6 +88,9 @@ try {
     io.on('connection', (socket) => {
 
         // =============================== New Connection ================================
+        // Load Changelog
+        let changelogContents = fs.readFileSync('changelog.txt', 'utf8');
+
         // Connect Notification
         let address = socket.request.connection.remoteAddress;
 
@@ -237,6 +243,7 @@ try {
         })
         
         // =================================== Login ===================================
+        
         // Sign in user
         socket.on('signIn', (data)=> {            
             // Login Validation
@@ -263,7 +270,7 @@ try {
                     console.log('\n(' + getCurrentTime() + ')' + " UPDATE: Successful Login of " + socket.username);
                     consoleUpdate();                  
                 }                
-                socket.emit('signIn', {signInStatus : signInStatus, username : socket.username});
+                socket.emit('signIn', {signInStatus : signInStatus, username : socket.username, changelogContents : changelogContents});
                 updateCount();
             })            
         })
@@ -343,6 +350,16 @@ try {
             });
                         
         })
+
+        // =============================== Profile ===============================
+        socket.on('profile', function(){
+            let profileQuery = "SELECT username, userElo, userWin, userLose, timesUsedCharge, timesUsedPistol, timesUsedShield1, timesUsedCounter, timesUsedEvade, timesUsedBlock, timesUsedDoublePistol, timesUsedGrenade, timesUsedShotgun, timesUsedShield2, timesUsedLaser, timesUsedShield3, timesUsedNuke FROM tbl_userdata WHERE username = '" + socket.username + "';";
+            conn.query(profileQuery, function(err, result, fields){
+                if (err) throw err;
+                console.log(result);
+                socket.emit('profileConfirm', result);
+            });
+        }) 
     })
     console.log("Guns1v1 Server Online");
 

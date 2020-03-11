@@ -1,5 +1,13 @@
 === CHANGE LOG ===
 
+Update Log 6: Guns1v1 Alpha 1.0 (03/11/2020)
+- Addded 3D Background (used three.js)
+- Profile Page partial functionality
+- Main page UI improvement
+- Leaderboard page UI improvement
+- Login page UI improvement
+- Registration page UI improvement
+
 Update Log 5a: Guns1v1 Alpha 1.0 (03/11/2020)
 - Cleaned Up Code
 

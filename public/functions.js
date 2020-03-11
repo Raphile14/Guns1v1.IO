@@ -1,5 +1,8 @@
 let rankQueueLength = 0;
-let username = "";
+let username = "Anonymous";
+
+//load changelog
+// $("#changelogArea").load("changelog.txt");
 
 // ================================= Functions ==================================
 // swap page script
@@ -24,7 +27,7 @@ function getTimeOnly() {
 $(function(){
     // connect to server. change if ip address changes
     // let socket = io.connect('http://192.168.0.11:3000');
-    let socket = io.connect('10.15.8.45:3000');
+    let socket = io.connect('192.168.150.107:3000');
 
     // Logout
     let logout = $("#logout");
@@ -56,6 +59,7 @@ $(function(){
     casualButton.click(function(){
         socket.emit('casualQueue');
     });
+
     socket.on('casualQueueConfirmation', (data) => {
         if (data.queueWarning.length > 0) {
             document.getElementById("casualButton").style.background = 'rgb(194, 226, 77)';
@@ -98,6 +102,9 @@ $(function(){
         }
         if (data.signInStatus) {           
             username = data.username; 
+            let changelogContents = data.changelogContents;
+            document.getElementById("changelogArea").innerText = changelogContents;
+            // console.log(data.changelogContent);
             return show("chatRoom", "loginPage");
         }
     });
@@ -218,7 +225,6 @@ $(function(){
     socket.on("leaderboardSent", (data) => {
         counter = 0;        
         let table = document.getElementById('leaderboardTable');
-        console.log("status: " + data.leaderboardStatus);
         if (data.leaderboardStatus) {
             table.innerHTML = "";
             table.style["verticalAlign"] = "middle";
@@ -268,10 +274,35 @@ $(function(){
     let profileButton = $("#profileButton");
     let profileMainMenu = $("#profileMainMenu");
 
+    // Go to Profile Page
     profileButton.click(function(){
-        show('profile', 'chatRoom');
+        socket.emit('profile');    
     });
 
+    // Profile Confirmation
+    socket.on('profileConfirm', (data) => {
+        document.getElementById('profileUserName').innerHTML = data[0].username;
+        document.getElementById('profileGames').innerHTML = ((data[0].userWin) + (data[0].userLose));
+        document.getElementById('profileElo').innerHTML = data[0].userElo;
+        document.getElementById('profileWin').innerHTML = data[0].userWin;
+        document.getElementById('profileLose').innerHTML = data[0].userLose;
+        document.getElementById('profileCharge').innerHTML = data[0].timesUsedCharge;
+        document.getElementById('profilePistol').innerHTML = data[0].timesUsedPistol;
+        document.getElementById('profileShield1').innerHTML = data[0].timesUsedShield1;
+        document.getElementById('profileCounter').innerHTML = data[0].timesUsedCounter;
+        document.getElementById('profileEvade').innerHTML = data[0].timesUsedEvade;
+        document.getElementById('profileBlock').innerHTML = data[0].timesUsedBlock;
+        document.getElementById('profileDoublePistol').innerHTML = data[0].timesUsedDoublePistol;
+        document.getElementById('profileGrenade').innerHTML = data[0].timesUsedGrenade;
+        document.getElementById('profileShotgun').innerHTML = data[0].timesUsedShotgun;
+        document.getElementById('profileShield2').innerHTML = data[0].timesUsedShield2;
+        document.getElementById('profileLaser').innerHTML = data[0].timesUsedLaser;
+        document.getElementById('profileShield3').innerHTML = data[0].timesUsedShield3;
+        document.getElementById('profileNuke').innerHTML = data[0].timesUsedNuke;
+        show('profile', 'chatRoom');
+    })
+
+    // Go back to main menu
     profileMainMenu.click(function(){
         show('chatRoom', 'profile');
     })
