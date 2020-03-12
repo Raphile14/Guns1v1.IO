@@ -132,16 +132,17 @@ try {
                 socket.rankQueueStatus = true;
                 if (rankQueue.length > 1) {                    
                     socket.enemy = rankQueue.shift();
+                    rankQueue.splice(rankQueue.indexOf(socket.username), 1);
                     let players = [socket.username, socket.enemy];
-                    lobbyName = socket.username + "vs" + socket.enemy;
+                    lobbyName = "(Rank) " + socket.username + " vs " + socket.enemy;
                     io.sockets.emit('rankQueueFound', {players : players, lobbyName : lobbyName});
+                    console.log('\n(' + getCurrentTime() + ') UPDATE: Rank Match has started.' + socket.username + ' vs ' + socket.enemy);
                 }
             }
             else if (socket.casualQueueStatus) {
                 queueWarning = "Already queuing for a Casual Match!";
             }
-            else {                
-                rankQueue.splice(rankQueue.indexOf(socket.username), 1);
+            else {                                
                 socket.rankQueueStatus = false;
                 queueWarning = "Unqueued from Rank Matchmaking!";
                 console.log('\n(' + getCurrentTime() + ') UPDATE ' + socket.username + ' unqueued for a rank match');
@@ -155,6 +156,7 @@ try {
         socket.on('rankQueueConfirm', (data) => {
             if (data.players.includes(socket.username)) {
                 socket.rankQueueStatus = false;
+                rankQueue.splice(rankQueue.indexOf(socket.username), 1);
                 socket.ingameStatus = true;
                 socket.join(data.lobbyName);
                 socket.emit('rankJoin', {players : data.players, lobbyName : data.lobbyName});
@@ -169,6 +171,14 @@ try {
                 console.log('\n(' + getCurrentTime() + ') UPDATE: ' + socket.username + ' queued for a casual match');
                 console.log('(' + getCurrentTime() + ') UPDATE: Casual Queued Player: ' + casualQueue);
                 socket.casualQueueStatus = true;
+                if (casualQueue.length > 1) {                    
+                    socket.enemy = casualQueue.shift();
+                    casualQueue.splice(casualQueue.indexOf(socket.username), 1);
+                    let players = [socket.username, socket.enemy];
+                    lobbyName = "(Casual) " + socket.username + " vs " + socket.enemy;
+                    io.sockets.emit('casualQueueFound', {players : players, lobbyName : lobbyName});
+                    console.log('\n(' + getCurrentTime() + ') UPDATE: Casual Match has started.' + socket.username + ' vs ' + socket.enemy);
+                }
             }
             else if (socket.rankQueueStatus) {
                 queueCasualWarning = "Already queuing for a Rank Match!";
@@ -182,6 +192,17 @@ try {
             }
             socket.emit('casualQueueConfirmation', {queueWarning : queueCasualWarning});
             updateCount();
+        });
+
+        // Casual Join Lobby
+        socket.on('casualQueueConfirm', (data) => {
+            if (data.players.includes(socket.username)) {
+                socket.casualQueueStatus = false;
+                casualQueue.splice(casualQueue.indexOf(socket.username), 1);
+                socket.ingameStatus = true;
+                socket.join(data.lobbyName);
+                socket.emit('casualJoin', {players : data.players, lobbyName : data.lobbyName});
+            }
         });
 
         // ================================= Game Logic ==================================

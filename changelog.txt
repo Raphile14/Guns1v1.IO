@@ -1,6 +1,9 @@
 === CHANGE LOG ===
 
-Update Log 7a: Guns1v1 Alpha 1.o (03/12/2020)
+Update Log 7b: Guns1v1 Alpha 1.0 (03/12/2020)
+- Applied lobby logic (for casual)
+
+Update Log 7a: Guns1v1 Alpha 1.0 (03/12/2020)
 - Players now able to join a lobby (for rank)
 
 Update Log 7: Guns1v1 Alpha 1.0 (03/12/2020)
