@@ -1,5 +1,10 @@
 === CHANGE LOG ===
 
+Update Log 7: Guns1v1 Alpha 1.0 (03/12/2020)
+- Started Logic for gameplay
+- Improved UI
+- Cleaned Up Code
+
 Update Log 6: Guns1v1 Alpha 1.0 (03/11/2020)
 - Addded 3D Background (used three.js)
 - Profile Page partial functionality
@@ -36,4 +41,12 @@ Update Log 1: Guns1v1 alpha 1.0  (03/03/2020)
 Current Capabilities 
 - Login System with SQL 
 - Working real-time chat system 
-test
+
+to do list
+- cookies for keep me signed in
+- upload profile photo
+- default profile photo
+- upload profile photo
+- remove alerts (change to real on screen notifs)
+- gameplay
+- graphics for gameplay

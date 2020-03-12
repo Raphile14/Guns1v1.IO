@@ -94,8 +94,8 @@ try {
         // Connect Notification
         let address = socket.request.connection.remoteAddress;
 
-        // default username
-        socket.username = "Anonymous";
+        // Default Username
+        socket.username = "Anonymous";        
 
         console.log('\n(' + getCurrentTime() + ') UPDATE: New Connection from ' + address);
         if (!connectedIP.includes(address)) {
@@ -164,6 +164,19 @@ try {
             socket.emit('casualQueueConfirmation', {queueWarning : queueCasualWarning});
             updateCount();
         });
+
+        // ================================= Game Logic ==================================
+        // Ingame Logic
+        socket.ingameStatus = false;
+        socket.enemy = "";
+        socket.charges = 0;
+
+        // Receiving Data from Players
+        socket.on('gameData', function(){
+
+        });
+
+        // Sending Data to Players
 
         // ============================== Client Disconnect ==============================
         // Disconnect
@@ -356,7 +369,6 @@ try {
             let profileQuery = "SELECT username, userElo, userWin, userLose, timesUsedCharge, timesUsedPistol, timesUsedShield1, timesUsedCounter, timesUsedEvade, timesUsedBlock, timesUsedDoublePistol, timesUsedGrenade, timesUsedShotgun, timesUsedShield2, timesUsedLaser, timesUsedShield3, timesUsedNuke FROM tbl_userdata WHERE username = '" + socket.username + "';";
             conn.query(profileQuery, function(err, result, fields){
                 if (err) throw err;
-                console.log(result);
                 socket.emit('profileConfirm', result);
             });
         }) 

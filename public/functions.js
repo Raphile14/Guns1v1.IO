@@ -27,7 +27,7 @@ function getTimeOnly() {
 $(function(){
     // connect to server. change if ip address changes
     // let socket = io.connect('http://192.168.0.11:3000');
-    let socket = io.connect('192.168.150.107:3000');
+    let socket = io.connect('10.15.16.208:3000');
 
     // Logout
     let logout = $("#logout");

@@ -119,9 +119,9 @@
     <div id="chatRoom" style="display: none;">      
       <div class="chat-wrap">
         <header>
-          <h1 style="color: rgb(180, 180, 180);"> Guns1v1.IO - Main Menu </h1>
+          <h1 style="color: rgb(180, 180, 180);"> Guns1v1.IO - Main Menu </h1> <br>
           <div class="btn-group">
-            <center> <table>
+            <center> <table id="actionButtonTable">
               <tr>
                 <br>
                 <td> <button id="rankedButton" class="rButton" type="submit"> Ranked </button> </td>
@@ -137,12 +137,13 @@
           <br> <br>            
           <table style="width: 95%; border:5px solid rgb(15, 15, 15);margin-left:auto;margin-right:auto;">
             <tr style="border: 5px solid rgb(12, 12, 12);">
-              <td style="width: 15%; border: 5px solid rgb(10, 10, 10); vertical-align: text-top; color: rgb(180, 180, 180);">                
-                <center> = PLAYER STATUS = </center>
-                <p> Players Online: <label id="playerCount" for="p_online" class="label"> 0 </label> </p>
-                <p> Players Playing: <label id="ingameCount" for="p_playing" class="label"> 0 </label> </p>
-                <p> Players Queuing in Rank: <label id="rankQueueCount" for="r_queue" class="label"> 0 </label> </p>
-                <p> Players Queuing in Casual: <label id="casualQueueCount" for="c_queue" class="label"> 0 </label></p>                         
+              <td style="width: 20%; border: 5px solid rgb(10, 10, 10); vertical-align: text-top; color: rgb(180, 180, 180);">                
+                <center> == PLAYER STATUS == 
+                <p> Players Online <br> == <label id="playerCount" for="p_online" class="label"> 0 </label> == </p>
+                <p> Players Playing <br> == <label id="ingameCount" for="p_playing" class="label"> 0 </label> == </p>
+                <p> Queuing in Rank <br> == <label id="rankQueueCount" for="r_queue" class="label"> 0 </label> == </p>
+                <p> Queuing in Casual <br> == <label id="casualQueueCount" for="c_queue" class="label"> 0 </label> == </p>                         
+                </center>
               </td>
               <td style="width: 50%; vertical-align: text-top;">  
                 <!-- <iframe src="Guns1v1.IO\views\changelog.txt" frameborder="0" height="100%" width="100%"></iframe>                               -->
