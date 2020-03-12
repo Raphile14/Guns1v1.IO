@@ -1,5 +1,8 @@
 === CHANGE LOG ===
 
+Update Log 7a: Guns1v1 Alpha 1.o (03/12/2020)
+- Players now able to join a lobby (for rank)
+
 Update Log 7: Guns1v1 Alpha 1.0 (03/12/2020)
 - Started Logic for gameplay
 - Improved UI
@@ -50,3 +53,10 @@ to do list
 - remove alerts (change to real on screen notifs)
 - gameplay
 - graphics for gameplay
+
+
+REMEMBER
+- set lobby name to empty after game
+- set ingame to false when disconnect
+- disconnect from lobby/room when disconnected
+- check for bugs

@@ -37,7 +37,7 @@ $(function(){
         show('loginPage', 'chatRoom');
     })
 
-    // ================================= Queuing ==================================
+    // ============================= Queuing and Lobbying =============================
     // Rank Queue
     let rankedButton = $("#rankedButton");    
     rankedButton.click(function(){
@@ -69,6 +69,20 @@ $(function(){
             document.getElementById("casualButton").style.background = '#808080';
             alert("Queuing for a Casual Match");
         }
+    });
+
+    // Found Rank Queue
+    socket.on('rankQueueFound', (data) => {
+        if (data.players.includes(username)) {
+            socket.emit('rankQueueConfirm', {players : data.players, lobbyName : data.lobbyName});
+        }
+    });
+
+    // Join Rank Match
+    socket.on('rankJoin', (data) => {
+        document.getElementById("rankedButton").style.background = 'rgb(90, 97, 202)';
+        document.getElementById("rankMatch").innerText = data.lobbyName;
+        return show("rankMatch", "chatRoom");
     });
 
     // =================================== Login ===================================

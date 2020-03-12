@@ -114,10 +114,13 @@ try {
             console.log('(' + getCurrentTime() + ') UPDATE: Connected IPs: ' + connectedIP);
         }
 
-        // ================================= Queuing ==================================
+        // ============================ Queuing and Lobbying ============================
         // Queue Game Logic
+        let lobbyName = "";
         socket.rankQueueStatus = false;
         socket.casualQueueStatus = false;
+        socket.ingameStatus = false;
+        socket.enemy = "";
 
         // Rank Queue
         socket.on('rankQueue', function(){
@@ -127,6 +130,12 @@ try {
                 console.log('\n(' + getCurrentTime() + ') UPDATE: ' + socket.username + ' queued for a rank match');
                 console.log('(' + getCurrentTime() + ') UPDATE: Rank Queued Player: ' + rankQueue);
                 socket.rankQueueStatus = true;
+                if (rankQueue.length > 1) {                    
+                    socket.enemy = rankQueue.shift();
+                    let players = [socket.username, socket.enemy];
+                    lobbyName = socket.username + "vs" + socket.enemy;
+                    io.sockets.emit('rankQueueFound', {players : players, lobbyName : lobbyName});
+                }
             }
             else if (socket.casualQueueStatus) {
                 queueWarning = "Already queuing for a Casual Match!";
@@ -140,6 +149,16 @@ try {
             }
             socket.emit('rankQueueConfirmation', {queueWarning : queueWarning});
             updateCount();
+        });
+
+        // Rank Join Lobby
+        socket.on('rankQueueConfirm', (data) => {
+            if (data.players.includes(socket.username)) {
+                socket.rankQueueStatus = false;
+                socket.ingameStatus = true;
+                socket.join(data.lobbyName);
+                socket.emit('rankJoin', {players : data.players, lobbyName : data.lobbyName});
+            }
         });
 
         // Casual Queue
@@ -166,10 +185,9 @@ try {
         });
 
         // ================================= Game Logic ==================================
-        // Ingame Logic
-        socket.ingameStatus = false;
-        socket.enemy = "";
+        // Ingame Logic                
         socket.charges = 0;
+        socket.lobby = "";
 
         // Receiving Data from Players
         socket.on('gameData', function(){
@@ -201,8 +219,12 @@ try {
                 console.log('\n(' + getCurrentTime() + ') UPDATE: ' + socket.username + ' unqueued in a casual match for disconnecting');
                 console.log('(' + getCurrentTime() + ') UPDATE: Casual Queued Players: ' + casualQueue);
             }
+            if (socket.ingameStatus) {
+                // add logic if player was ingame (increment 1 lose)
+            }
             socket.rankQueueStatus = false;
             socket.casualQueueStatus = false;
+            socket.ingameStatus = false;
         })  
 
         // =================================== Signup ===================================
