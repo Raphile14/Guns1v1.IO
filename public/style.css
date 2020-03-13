@@ -501,4 +501,93 @@ body{
     clear: both;
     display: table;
   }
+  .uploadButton:hover {background-color: #00472a}
+  .uploadButton {
+    background-color: rgb(40, 214, 127); 
+    border: none;
+    color: white;
+    padding: 16px 64px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 100%;
+    border-radius:5px;
+    border:solid 1px rgb(26, 211, 118);
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+
+    margin-left: 30px;
+    margin-top: 30px;
+    width:20%;
+    height: 10%;
+    
+    -webkit-box-shadow: 0px 6px 0px #00472a;
+    -moz-box-shadow: 0px 6px 0px #00472a;
+    box-shadow: 0px 6px 0px #00472a;
+  }
+  .helpButton:hover {background-color: #006b6b}
+  .helpButton {
+    background-color: rgb(41, 205, 226); 
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 100%;
+    border-radius:5px;
+    border:solid 1px rgb(26, 205, 211);
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+
+    margin-left: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width:100%;
+    height: 100%;
+    
+    -webkit-box-shadow: 0px 6px 0px #006b6b;
+    -moz-box-shadow: 0px 6px 0px #006b6b;
+    box-shadow: 0px 6px 0px #006b6b;
+  }
+  .leaderboardshowButton:hover {background-color: #006b6b}
+  .leaderboardshowButton {
+    background-color: rgb(41, 205, 226); 
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 100%;
+    border-radius:5px;
+    border:solid 1px rgb(26, 205, 211);
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+
+    margin-left: 30px;
+    margin-top: 30px;
+
+    width:10%;
+    height: 10%;
+    
+    -webkit-box-shadow: 0px 6px 0px #006b6b;
+    -moz-box-shadow: 0px 6px 0px #006b6b;
+    box-shadow: 0px 6px 0px #006b6b;
+  }
+  .avatar {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  table, th {
+    border: 1px solid gray;
+  }
   

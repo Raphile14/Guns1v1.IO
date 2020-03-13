@@ -1,5 +1,14 @@
 === CHANGE LOG ===
 
+Update Log 8: Guns1v1 alpha 1.0 (03/13/2020)
+- Website can now be distributed publicly over the internet (used ngrok)
+- Disconnecting mechanism for rank match
+- Enhanced Code
+- Bug fixes (tons of bug fixes)
+- Quiting a rank game results in a lose for the quitter and a win for the remaining player
+- Added Instructions Page
+- Partial Functionality for sending data while ingame
+
 Update Log 7b: Guns1v1 Alpha 1.0 (03/12/2020)
 - Applied lobby logic (for casual)
 
@@ -56,6 +65,7 @@ to do list
 - remove alerts (change to real on screen notifs)
 - gameplay
 - graphics for gameplay
+- fix problem with non 16:9 monitors
 
 
 REMEMBER

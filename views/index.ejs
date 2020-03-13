@@ -124,6 +124,7 @@
             <center> <table id="actionButtonTable">
               <tr>
                 <br>
+                <td> <button id="instructions" class="helpButton" type="submit"> How to Play </button> </td>
                 <td> <button id="rankedButton" class="rButton" type="submit"> Ranked </button> </td>
                 <td> <button id="casualButton" class="cButton" type="submit"> Casual </button> </td>
                 <td> <button id="leaderboardButton" class="lBoardButton" type="button">Leaderboards </button> </td>
@@ -174,6 +175,17 @@
       </div>
     </div>
 
+    <!-- ========================================== INSTRUCTIONS ==========================================  -->
+    <div id="instructionsPage" style="display: none;">
+      <div class="leaderboard-html">
+        <header>
+            <h1> <br> <br> Guns1v1.IO </h1>
+            <p style="font-size: 40px;"> <br> HOW TO PLAY </p>
+            <button id="instructionMainMenu"class="helpButton" type="submit"> Return to Main Menu </button> 
+        </header>
+    </div>
+  </div>
+
     <!-- ========================================== LEADERBOARDS ==========================================  -->
     <div id="leaderboard" style="display: none;">
         <div class="leaderboard-html">
@@ -199,7 +211,7 @@
                 <option value="timesUsedShield3"> Used Shield Lvl 3 </option>
                 <option value="timesUsedNuke"> Used Nuke </option>
               </select>
-              <button id="leaderboardShow" type="submit"> Show </button> <br> <br> <br>
+              <button id="leaderboardShow" class="leaderboardshowButton" type="submit"> Show </button> <br> <br> <br>
                 <center> <table id="leaderboardTable" style="vertical-align: middle; width: 70%; border:5px solid rgb(226, 225, 225); margin-left:auto;margin-right:auto;">
                   <tr style="border: 5px solid rgb(221, 220, 220);">
                     <th style="border: 5px solid rgb(224, 224, 224); width: 50%;"> Name </th> <th id="tableType" style="border: 5px solid rgb(224, 224, 224); width: 50%;"> Wins </th>
@@ -212,15 +224,15 @@
 
     <!-- ========================================== PROFILE ==========================================  -->
     <div id="profile" style="display: none;">
-      <header>
+      <header>  
         <h1> <br> <br> Guns1v1.IO </h1>
-        <p style="font-size: 40px;"> <br> PROFILE </p>
-
-        <br> <br> <br>
+        <p id="profileUserName" style="font-size:40px;"> User </p> 
+        <p><img src="" alt="Avatar" class="avatar"></p>
+        <button id="uploadAvatar"class="uploadButton" type="submit">Upload Avatar </button> 
+        <br> <br>
         <center>
-          <p id="profileUserName" style="font-size:20px;"> User </p> 
           Player Statistics <br>
-          <table style="vertical-align: middle; width: 70%; border:5px solid rgb(206, 206, 206); margin-left:auto;margin-right:auto;">
+          <table style="vertical-align: middle; width: 70%; border:1px solid rgb(206, 206, 206); margin-left:auto;margin-right:auto;">
             <tr>
               <th> Wins </th> <th> Lose </th> <th> Games </th> <th> Elo </th>
             </tr>
@@ -258,9 +270,66 @@
     </div>
 
     <!-- ===================================== RANK MATCHMAKING =====================================  -->
-    <div id="rankMatch">
-
+    <div id="rankMatch" style="display: none;">
+      <center>
+      <div id="rankLobbyName"> </div> <br>
+      <div> <p> Charges: </p> <p id="chargeCount"> 0 </p> </div>
+      <button id="rankDisconnect" type="submit"> Leave Game </button>
+      <table id="matchActions">
+        <tr>
+          <td> <button id="rankCharge" type="submit"> Charge (+1) </button> </td>
+          <td> <button id="rankPistol" type="submit"> Pistol (1) </button> </td>
+          <td> <button id="rankCounter" type="submit"> Counter (1) </button> </td>
+          <td> <button id="rankShield1" type="submit"> Shield 1 (1) </button> </td>
+          <td> <button id="rankEvade" type="submit"> Evade (FREE) </button> </td>
+        </tr>
+        <tr>
+          <td> <button id="rankBlock" type="submit"> Block (FREE) </button> </td>
+          <td> <button id="rankDoublePistol" type="submit"> Double Pistol (2) </button> </td>
+          <td> <button id="rankGrenade" type="submit"> Grenade (2) </button> </td>
+          <td> <button id="rankShotgun" type="submit"> Shotgun (2) </button> </td>
+          <td> <button id="rankShield2" type="submit"> Shield 2 (2) </button> </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td> <button id="rankLaser" type="submit"> Laser (3) </button> </td>
+          <td> <button id="rankShield3" type="submit"> Shield 3 (3) </button> </td>
+          <td> <button id="rankNuke" type="submit"> Nuke (4) </button> </td>
+          <td></td>
+        </tr>
+      </table>
+      </center>
     </div>
+
+    <!-- ===================================== CASUAL MATCHMAKING =====================================  -->
+    <div id="casualMatch" style="display: none;">
+      <div id="casualLobbyName"> </div>
+      <button id="casualDisconnect" type="submit"> Leave Game </button>
+      <table id="matchActions">
+        <tr>
+          <td> <button id="casualCharge" type="submit"> Charge (+1) </button> </td>
+          <td> <button id="casualPistol" type="submit"> Pistol (1) </button> </td>
+          <td> <button id="casualCounter" type="submit"> Counter (1) </button> </td>
+          <td> <button id="casualShield1" type="submit"> Shield 1 (1) </button> </td>
+          <td> <button id="casualEvade" type="submit"> Evade (FREE)  </button> </td>
+        </tr>
+        <tr>
+          <td> <button id="casualBlock" type="submit"> Block (FREE) </button> </td>
+          <td> <button id="casualDoublePistol" type="submit"> Double Pistol (2) </button> </td>
+          <td> <button id="casualGrenade" type="submit"> Grenade (2) </button> </td>
+          <td> <button id="casualShotgun" type="submit"> Shotgun (2) </button> </td>
+          <td> <button id="casualShield2" type="submit"> Shield 2 (2) </button> </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td> <button id="casualLaser" type="submit"> Laser (3) </button> </td>
+          <td> <button id="casualShield3" type="submit"> Shield 3 (3) </button> </td>
+          <td> <button id="casualNuke" type="submit"> Nuke (4) </button> </td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+
     <!-- jQuery and other scripts needed -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="functions.js"></script>

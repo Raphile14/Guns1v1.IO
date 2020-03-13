@@ -1,8 +1,7 @@
 let rankQueueLength = 0;
 let username = "Anonymous";
-
-//load changelog
-// $("#changelogArea").load("changelog.txt");
+let lobbyName = "";
+let enemy = "";
 
 // ================================= Functions ==================================
 // swap page script
@@ -27,7 +26,7 @@ function getTimeOnly() {
 $(function(){
     // connect to server. change if ip address changes
     // let socket = io.connect('http://192.168.0.11:3000');
-    let socket = io.connect('192.168.10.107:3000');
+    let socket = io.connect('58b9112b.ngrok.io');
 
     // Logout
     let logout = $("#logout");
@@ -54,6 +53,70 @@ $(function(){
         }
     });
 
+    // Found Rank Queue
+    socket.on('rankQueueFound', (data) => {
+        if (data.players.includes(username)) {
+            socket.emit('rankQueueConfirm', {players : data.players, lobbyName : data.lobbyName});
+        }
+    });
+
+    // Join Rank Match
+    socket.on('rankJoin', (data) => {
+        document.getElementById("rankedButton").style.background = 'rgb(90, 97, 202)';
+        document.getElementById("rankLobbyName").innerText = data.lobbyName;
+        lobbyName = data.lobbyName;
+        if (data.players[0] == username) {
+            enemy = data.players[1];
+        }   
+        else if (data.players[1] == username) {
+            enemy = data.players[0];
+        }
+        return show("rankMatch", "chatRoom");
+    });
+
+    // Leave/Disconnect from Rank Match
+    let rankDisconnect = $("#rankDisconnect");
+    rankDisconnect.click(function(){
+        console.log("user wants to disconnect");
+        socket.emit('rankDisconnect', {username : username, lobbyName : lobbyName, enemy : enemy});        
+    });
+
+    // Return to Chatroom from Rank Match
+    socket.on('rankDisconnectConfirm', (data) => {
+        if (data.lobbyName == lobbyName) {
+            lobbyName = "";
+            enemy = "";
+            socket.emit('rankRemoveMe', {username : username});
+            return show('chatRoom', 'rankMatch');
+        }        
+    });
+
+    // Rank Match Action 
+    let rankChosen = "";
+    $("#rankCharge").click(function(){rankChosen = "charge"; emitRankAction();});
+    $("#rankPistol").click(function(){rankChosen = "pistol"; emitRankAction();});
+    $("#rankCounter").click(function(){rankChosen = "counter"; emitRankAction();});
+    $("#rankShield1").click(function(){rankChosen = "shield1"; emitRankAction();});
+    $("#rankEvade").click(function(){rankChosen = "evade"; emitRankAction();});
+    $("#rankBlock").click(function(){rankChosen = "block"; emitRankAction();});
+    $("#rankDoublePistol").click(function(){rankChosen = "doublepistol"; emitRankAction();});
+    $("#rankGrenade").click(function(){rankChosen = "grenade"; emitRankAction();});
+    $("#rankShotgun").click(function(){rankChosen = "shotgun"; emitRankAction();});
+    $("#rankShield2").click(function(){rankChosen = "shield2"; emitRankAction();});
+    $("#rankLaser").click(function(){rankChosen = "laser"; emitRankAction();});
+    $("#rankShield3").click(function(){rankChosen = "shield3"; emitRankAction();});
+    $("#rankNuke").click(function(){rankChosen = "nuke"; emitRankAction();});
+
+    function emitRankAction() {
+        console.log("action: " + rankChosen);
+        socket.emit("rankAction", {username : username, lobbyName : lobbyName, rankChosen : rankChosen});
+    }
+    // If chosen input is invalid
+    socket.on('rankErrorChosen', function(){
+        // expound. More specifc error needed
+        alert('Invalid action! Choose Another One');
+    });
+
     // Casual Queue
     let casualButton = $("#casualButton");
     casualButton.click(function(){
@@ -69,21 +132,7 @@ $(function(){
             document.getElementById("casualButton").style.background = '#808080';
             alert("Queuing for a Casual Match");
         }
-    });
-
-    // Found Rank Queue
-    socket.on('rankQueueFound', (data) => {
-        if (data.players.includes(username)) {
-            socket.emit('rankQueueConfirm', {players : data.players, lobbyName : data.lobbyName});
-        }
-    });
-
-    // Join Rank Match
-    socket.on('rankJoin', (data) => {
-        document.getElementById("rankedButton").style.background = 'rgb(90, 97, 202)';
-        document.getElementById("rankMatch").innerText = data.lobbyName;
-        return show("rankMatch", "chatRoom");
-    });
+    });    
 
     // =================================== Login ===================================
     let usernameLogin = $("#usernameLogin");
@@ -111,14 +160,12 @@ $(function(){
     // Listen to server login verification
     socket.on('signIn', (data)=> {
         if (!data.signInStatus) {
-            alert("Account Does not Exist");
-            console.log('false');
+            alert(data.message);
         }
         if (data.signInStatus) {           
             username = data.username; 
             let changelogContents = data.changelogContents;
             document.getElementById("changelogArea").innerText = changelogContents;
-            // console.log(data.changelogContent);
             return show("chatRoom", "loginPage");
         }
     });
@@ -182,6 +229,18 @@ $(function(){
             return show("loginPage", "registrationPage");            
         }
     })
+
+    // =================================== How to Play ===================================
+    let instructions = $("#instructions");
+    let instructionMainMenu = $("#instructionMainMenu");
+
+    instructions.click(function(){
+        return show('instructionsPage', 'chatRoom');
+    });
+    instructionMainMenu.click(function(){
+        return show('chatRoom', 'instructionsPage');
+    })
+
 
     // =================================== Chat ===================================
     // chat

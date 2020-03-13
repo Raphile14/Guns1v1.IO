@@ -1,5 +1,6 @@
 // $ npm run start
 // link https://medium.com/@noufel.gouirhate/build-a-simple-chat-app-with-node-js-and-socket-io-ea716c093088
+// lt --port 3000
 
 function getCurrentTime() {
     let today = new Date();
@@ -8,12 +9,17 @@ function getCurrentTime() {
     return date + ' ' + time;
 }
 
-// Storage for Connected Users
-let connectedIP = [];
+// Storage for Connected Users and other data
 let connectedUsers = [];
 let rankQueue = [];
 let casualQueue = [];
-let inGame = [];
+
+// Player Data Storage
+let inGame = []; // Stringa
+let lobbyOfPlayers = []; // String
+let chargesOfPlayers = []; // Int
+let actionsOfPlayers = []; // String
+let statusOfPlayers = []; // Boolean
 
 // Require Changelog
 let fs = require('fs');
@@ -86,37 +92,28 @@ try {
 
     // listen to every connection
     io.on('connection', (socket) => {
-
-        // =============================== New Connection ================================
-        // Load Changelog
-        let changelogContents = fs.readFileSync('changelog.txt', 'utf8');
-
-        // Connect Notification
-        let address = socket.request.connection.remoteAddress;
-
-        // Default Username
-        socket.username = "Anonymous";        
-
-        console.log('\n(' + getCurrentTime() + ') UPDATE: New Connection from ' + address);
-        if (!connectedIP.includes(address)) {
-            connectedIP.push(address);
-            connectedUsers.push(socket.username);
-        }        
-        consoleUpdate();
-        updateCount();
-
         // ================================= Functions ==================================
         function updateCount() {
             io.sockets.emit('countData', {playerCount : connectedUsers.length, ingameCount : inGame.length, rankQueueCount : rankQueue.length, casualQueueCount : casualQueue.length});
         }
         function consoleUpdate() {
-            console.log('(' + getCurrentTime() + ') UPDATE: Connected Users: ' + connectedUsers);
-            console.log('(' + getCurrentTime() + ') UPDATE: Connected IPs: ' + connectedIP);
+            console.log('(' + getCurrentTime() + ') UPDATE: Connected Users (' + connectedUsers.length + '): ' + connectedUsers);
         }
+
+        // =============================== New Connection ================================
+        // Load Changelog
+        let changelogContents = fs.readFileSync('changelog.txt', 'utf8');
+
+        // Default Username
+        socket.username = "Anonymous";        
+
+        // New Connection Update      
+        consoleUpdate();
+        updateCount();
+        
 
         // ============================ Queuing and Lobbying ============================
         // Queue Game Logic
-        let lobbyName = "";
         socket.rankQueueStatus = false;
         socket.casualQueueStatus = false;
         socket.ingameStatus = false;
@@ -132,11 +129,23 @@ try {
                 socket.rankQueueStatus = true;
                 if (rankQueue.length > 1) {                    
                     socket.enemy = rankQueue.shift();
-                    rankQueue.splice(rankQueue.indexOf(socket.username), 1);
+                    rankQueue.splice(rankQueue.indexOf(socket.username), 1);                                       
                     let players = [socket.username, socket.enemy];
-                    lobbyName = "(Rank) " + socket.username + " vs " + socket.enemy;
+                    let lobbyName = "(Rank) " + socket.username + " vs " + socket.enemy;
+                    
+                    // Initializing Data of the Two Players. Storing them in Arrays
+                    inGame.push(socket.username); inGame.push(socket.enemy); 
+                    lobbyOfPlayers.push(lobbyName); lobbyOfPlayers.push(lobbyName);
+                    chargesOfPlayers.push(0); chargesOfPlayers.push(0);
+                    actionsOfPlayers.push(""); actionsOfPlayers.push("");
+                    statusOfPlayers.push(false); statusOfPlayers.push(false);
                     io.sockets.emit('rankQueueFound', {players : players, lobbyName : lobbyName});
-                    console.log('\n(' + getCurrentTime() + ') UPDATE: Rank Match has started.' + socket.username + ' vs ' + socket.enemy);
+                    console.log('\n(' + getCurrentTime() + ') UPDATE: Rank Match has started. ' + socket.username + ' vs ' + socket.enemy);
+                    // console.log(inGame);
+                    // console.log(lobbyOfPlayers);
+                    // console.log(chargesOfPlayers);
+                    // console.log(actionsOfPlayers);
+                    // console.log(statusOfPlayers);
                 }
             }
             else if (socket.casualQueueStatus) {
@@ -163,6 +172,40 @@ try {
             }
         });
 
+        function removePlayer(name){
+            let index = inGame.indexOf(name);
+            inGame.splice(index, 1);
+            lobbyOfPlayers.splice(index, 1);
+            chargesOfPlayers.splice(index, 1);
+            actionsOfPlayers.splice(index, 1);
+            statusOfPlayers.splice(index, 1);
+        }
+
+        // Rank Disconnect
+        socket.on('rankDisconnect', (data) => {
+            let index = inGame.indexOf(socket.username);
+            // add increment lose here
+            if (data.username == socket.username && lobbyOfPlayers[index] == data.lobbyName) {  
+                let winQuery = "UPDATE tbl_userdata SET userWin = userWin + 1 WHERE username = '" + data.enemy + "';" ;
+                let loseQuery = "UPDATE tbl_userdata SET userLose = userLose + 1 WHERE username = '" + data.username + "';" ;   
+                conn.query(winQuery);
+                conn.query(loseQuery);  
+                removePlayer(socket.username);                         
+                io.to(data.lobbyName).emit('rankDisconnectConfirm', {lobbyName : data.lobbyName});
+                socket.leave(data.lobbyName);
+            }
+            updateCount();          
+        });
+
+        // Rank Remove Other Players
+        socket.on('rankRemoveMe', (data) => {
+            if (inGame.includes(data.username)) {
+                removePlayer(data.username);
+            }
+            updateCount();
+        });
+
+        // SUBJECT FOR CHANGE. EVERYTHING INCORRECT IN CASUAL QUEUING
         // Casual Queue
         socket.on('casualQueue', function(){
             let queueCasualWarning = "";
@@ -177,7 +220,7 @@ try {
                     let players = [socket.username, socket.enemy];
                     lobbyName = "(Casual) " + socket.username + " vs " + socket.enemy;
                     io.sockets.emit('casualQueueFound', {players : players, lobbyName : lobbyName});
-                    console.log('\n(' + getCurrentTime() + ') UPDATE: Casual Match has started.' + socket.username + ' vs ' + socket.enemy);
+                    console.log('\n(' + getCurrentTime() + ') UPDATE: Casual Match has started. ' + socket.username + ' vs ' + socket.enemy);
                 }
             }
             else if (socket.rankQueueStatus) {
@@ -207,12 +250,83 @@ try {
 
         // ================================= Game Logic ==================================
         // Ingame Logic                
-        socket.charges = 0;
-        socket.lobby = "";
 
+        function checkAction(charges, action) {
+            let index = inGame.indexOf(socket.username);
+            let actionStatus = false;
+            let chargeFree = ["evade", "block"];
+            let charge1 = ["pistol", "counter", "shield1"];
+            let charge2 = ["doublepistol", "grenade", "shotgun", "shield2"];
+            let charge3 = ["laser", "shield3"];
+            let charge4 = ["nuke"];
+            let deduction = 0;
+            if (action == "charge") {
+                actionStatus = true;
+            }
+            else if (charge1.includes(action) && charges >= 1) {
+                actionStatus = true;
+                deduction = 1;
+            }
+            else if (charge2.includes(action) && charges >= 2) {
+                actionStatus = true;
+                deduction = 2;
+            }
+            else if (charge3.includes(action) && charges >= 3) {
+                actionStatus = true;
+                deduction = 3;
+            }
+            else if (charge4.includes(action) && charges >= 4) {
+                actionStatus = true;
+                deduction = 4;
+            }
+            else if (chargeFree.includes(action)) {
+                actionStatus = true;
+                deduction = 0;
+            }
+            if (actionStatus) {
+                chargesOfPlayers[index] -= deduction;
+            }
+            return actionStatus;
+        }
         // Receiving Data from Players
-        socket.on('gameData', function(){
-
+        socket.on('rankAction', (data) => {
+            let index = inGame.indexOf(socket.username);
+            if (data.lobbyName == lobbyOfPlayers[index]) {
+                let index = inGame.indexOf(socket.username);
+                let enemyStatus = false;
+                if (data.username == socket.username && !statusOfPlayers[index]) {
+                    actionsOfPlayers[index] = data.rankChosen;
+                    // check charge if action is correct and send error note
+                    let playerConfirmation = checkAction(chargesOfPlayers[index], data.rankChosen);
+                    if (playerConfirmation) {
+                        statusOfPlayers[index] = true;   
+                        console.log("action accepted");
+                    }                    
+                    else if (!playerConfirmation) {
+                        // emit error. expound. exact error needed
+                        console.log("action not accepted");
+                        socket.emit('rankErrorChosen');
+                    }
+                }
+                if (index % 2 == 0) {
+                    enemyStatus = statusOfPlayers[index + 1];
+                }
+                else if (index % 2 != 0) {
+                    enemyStatus = statusOfPlayers[index - 1];
+                }
+                if (statusOfPlayers[index] && enemyStatus) {
+                    console.log("correct player input");
+                    console.log(inGame[index] + " chose " + actionsOfPlayers[index]);
+                    if (index % 2 == 0) {
+                        console.log(inGame[index+1] + " chose " + actionsOfPlayers[index+1]);
+                    }
+                    else if (index % 2 != 0) {
+                        console.log(inGame[index+1] + " chose " + actionsOfPlayers[index-1]);
+                    }
+                }
+            }
+            console.log(data.username);
+            console.log(data.lobbyName);
         });
 
         // Sending Data to Players
@@ -220,32 +334,31 @@ try {
         // ============================== Client Disconnect ==============================
         // Disconnect
         socket.on('disconnect', function() {
-            for (let i = 0; i < connectedIP.length; i++) {
-                if (connectedIP[i] == address) {
-                    connectedIP.splice(i, 1);
-                    connectedUsers.splice(i, 1);
-                }
-            }
-            console.log('\n(' + getCurrentTime() + ')' + " UPDATE: User " + socket.username + " from " + address + " disconnected!");
+            if (connectedUsers.includes(socket.username)) {
+                connectedUsers.splice(connectedUsers.indexOf(socket.username), 1);
+                console.log('\n(' + getCurrentTime() + ')' + " UPDATE: User " + socket.username + " disconnected!");
+            }            
             consoleUpdate();
             if (rankQueue.includes(socket.username)) {
                 rankQueue.splice(rankQueue.indexOf(socket.username), 1);
-                updateCount();
                 console.log('\n(' + getCurrentTime() + ') UPDATE: ' + socket.username + ' unqueued in a rank match for disconnecting');
                 console.log('(' + getCurrentTime() + ') UPDATE: Rank Queued Players: ' + rankQueue);
             }
             if (casualQueue.includes(socket.username)) {
-                casualQueue.splice(casualQueue.indexOf(socket.username), 1);
-                updateCount();
+                casualQueue.splice(casualQueue.indexOf(socket.username), 1);                
                 console.log('\n(' + getCurrentTime() + ') UPDATE: ' + socket.username + ' unqueued in a casual match for disconnecting');
                 console.log('(' + getCurrentTime() + ') UPDATE: Casual Queued Players: ' + casualQueue);
             }
             if (socket.ingameStatus) {
                 // add logic if player was ingame (increment 1 lose)
             }
+            if (inGame.includes(socket.username)) {
+                inGame.splice(inGame.indexOf(socket.username), 1);
+            }
             socket.rankQueueStatus = false;
             socket.casualQueueStatus = false;
             socket.ingameStatus = false;
+            updateCount();
         })  
 
         // =================================== Signup ===================================
@@ -304,7 +417,7 @@ try {
         socket.on('signIn', (data)=> {            
             // Login Validation
             let signInStatus = false;
-            let message = "";
+            let message = "User Account does not exist!";
             conn.query("SELECT * FROM tbl_userData", function(err, result, fields) {
                 for (let x = 0; x < result.length; x++) {
                     // console.log("test input name: " + data.usernameSignUp + "\nresult name: " + result[x].username);  
@@ -318,15 +431,18 @@ try {
                     }                                 
                 }
                 if (signInStatus) {
-                    // add check if log in
-                    // console.log("THE USER NAME IS " + data.usernameLogin);
                     socket.username = data.usernameLogin;
-                    let index = connectedIP.indexOf(address);
-                    connectedUsers[index] = socket.username;
-                    console.log('\n(' + getCurrentTime() + ')' + " UPDATE: Successful Login of " + socket.username);
+                    if (connectedUsers.includes(socket.username)) {
+                        signInStatus = false;
+                        message = "User " + socket.username + " already logged in!"
+                    }
+                    else {
+                        connectedUsers.push(socket.username);
+                        console.log('\n(' + getCurrentTime() + ')' + " UPDATE: Successful Login of " + socket.username);
+                    }                                                                                
                     consoleUpdate();                  
                 }                
-                socket.emit('signIn', {signInStatus : signInStatus, username : socket.username, changelogContents : changelogContents});
+                socket.emit('signIn', {signInStatus : signInStatus, username : socket.username, changelogContents : changelogContents, message : message});
                 updateCount();
             })            
         })
