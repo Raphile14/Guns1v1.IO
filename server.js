@@ -1,6 +1,7 @@
 // $ npm run start
 // link https://medium.com/@noufel.gouirhate/build-a-simple-chat-app-with-node-js-and-socket-io-ea716c093088
 // lt --port 3000
+// ssh -R 80:localhost:8080 ssh.localhost.run
 
 function getCurrentTime() {
     let today = new Date();
@@ -20,6 +21,22 @@ let lobbyOfPlayers = []; // String
 let chargesOfPlayers = []; // Int
 let actionsOfPlayers = []; // String
 let statusOfPlayers = []; // Boolean
+let modeOfPlayers = []; // String
+
+// Game Conditions
+let canBeatCharge = ["pistol", "doublepistol", "grenade", "shotgun", "laser", "nuke"];
+let canBeatCounter = ["pistol", "doublepistol", "grenade", "shotgun", "laser", "nuke"];
+let canBeatEvade = ["doublepistol", "laser", "nuke"];
+let canBeatBlock = ["grenade", "laser", "nuke"];
+let canBeatPistol = ["doublepistol", "grenade", "shotgun", "laser", "nuke", "shield1", "shield2", "shield3"];
+let canBeatDoublePistol = ["laser", "nuke", "shield1", "shield2", "shield3"];
+let canBeatShotgun = ["laser", "nuke", "shield1", "shield2", "shield3"];
+let canBeatGrenade = ["laser", "nuke", "shield1", "shield2", "shield3"];
+let canBeatLaser = ["nuke", "shield2", "shield3"];
+let canBeatNuke = ["shield3"];
+let canBeatShield1 = ["counter", "shotgun", "laser", "nuke"];
+let canBeatShield2 = ["counter", "nuke"];
+let canBeatShield3 = ["counter"];
 
 // Require Changelog
 let fs = require('fs');
@@ -80,7 +97,7 @@ try {
         res.render('index');        
     })
 
-    server = app.listen(3000);
+    server = app.listen(8080);
 
     // socket.io instantiation
     const io = require("socket.io")(server);
@@ -98,6 +115,19 @@ try {
         }
         function consoleUpdate() {
             console.log('(' + getCurrentTime() + ') UPDATE: Connected Users (' + connectedUsers.length + '): ' + connectedUsers);
+        }
+        function removePlayer(name){
+            let index = inGame.indexOf(name);
+            inGame.splice(index, 1);
+            lobbyOfPlayers.splice(index, 1);
+            chargesOfPlayers.splice(index, 1);
+            actionsOfPlayers.splice(index, 1);
+            statusOfPlayers.splice(index, 1);
+            modeOfPlayers.splice(index, 1);
+            socket.ingameStatus = false;
+            console.log("FROM REMOVE FUNCTION");
+            console.log(inGame);
+            updateCount();
         }
 
         // =============================== New Connection ================================
@@ -139,19 +169,18 @@ try {
                     chargesOfPlayers.push(0); chargesOfPlayers.push(0);
                     actionsOfPlayers.push(""); actionsOfPlayers.push("");
                     statusOfPlayers.push(false); statusOfPlayers.push(false);
+                    modeOfPlayers.push("Rank"); modeOfPlayers.push("Rank");
                     io.sockets.emit('rankQueueFound', {players : players, lobbyName : lobbyName});
                     console.log('\n(' + getCurrentTime() + ') UPDATE: Rank Match has started. ' + socket.username + ' vs ' + socket.enemy);
-                    // console.log(inGame);
-                    // console.log(lobbyOfPlayers);
-                    // console.log(chargesOfPlayers);
-                    // console.log(actionsOfPlayers);
-                    // console.log(statusOfPlayers);
+                    console.log(lobbyOfPlayers);
+                    console.log(chargesOfPlayers);
                 }
             }
             else if (socket.casualQueueStatus) {
                 queueWarning = "Already queuing for a Casual Match!";
             }
-            else {                                
+            else {                              
+                rankQueue.splice(rankQueue.indexOf(socket.username), 1);  
                 socket.rankQueueStatus = false;
                 queueWarning = "Unqueued from Rank Matchmaking!";
                 console.log('\n(' + getCurrentTime() + ') UPDATE ' + socket.username + ' unqueued for a rank match');
@@ -170,24 +199,14 @@ try {
                 socket.join(data.lobbyName);
                 socket.emit('rankJoin', {players : data.players, lobbyName : data.lobbyName});
             }
-        });
-
-        function removePlayer(name){
-            let index = inGame.indexOf(name);
-            inGame.splice(index, 1);
-            lobbyOfPlayers.splice(index, 1);
-            chargesOfPlayers.splice(index, 1);
-            actionsOfPlayers.splice(index, 1);
-            statusOfPlayers.splice(index, 1);
-        }
+        });        
 
         // Rank Disconnect
         socket.on('rankDisconnect', (data) => {
             let index = inGame.indexOf(socket.username);
-            // add increment lose here
             if (data.username == socket.username && lobbyOfPlayers[index] == data.lobbyName) {  
-                let winQuery = "UPDATE tbl_userdata SET userWin = userWin + 1 WHERE username = '" + data.enemy + "';" ;
-                let loseQuery = "UPDATE tbl_userdata SET userLose = userLose + 1 WHERE username = '" + data.username + "';" ;   
+                let winQuery = "UPDATE tbl_userdata SET userWin = userWin + 1, userElo = userElo + 25 WHERE username = '" + data.enemy + "';" ;
+                let loseQuery = "UPDATE tbl_userdata SET userLose = userLose + 1, userElo = userElo - 25 WHERE username = '" + data.username + "';" ;   
                 conn.query(winQuery);
                 conn.query(loseQuery);  
                 removePlayer(socket.username);                         
@@ -197,15 +216,22 @@ try {
             updateCount();          
         });
 
+        // Rank Finish Game
+        socket.on('rankGameFinish', (data) => {
+            socket.leave(data.lobbyName);
+        });
+
         // Rank Remove Other Players
         socket.on('rankRemoveMe', (data) => {
             if (inGame.includes(data.username)) {
                 removePlayer(data.username);
             }
+            console.log("FROM REMOVE");
+            console.log(inGame)
+            console.log(chargesOfPlayers);
             updateCount();
         });
 
-        // SUBJECT FOR CHANGE. EVERYTHING INCORRECT IN CASUAL QUEUING
         // Casual Queue
         socket.on('casualQueue', function(){
             let queueCasualWarning = "";
@@ -218,7 +244,15 @@ try {
                     socket.enemy = casualQueue.shift();
                     casualQueue.splice(casualQueue.indexOf(socket.username), 1);
                     let players = [socket.username, socket.enemy];
-                    lobbyName = "(Casual) " + socket.username + " vs " + socket.enemy;
+                    let lobbyName = "(Casual) " + socket.username + " vs " + socket.enemy;
+
+                    // Initializing Data of the Two Players. Storing them in Arrays
+                    inGame.push(socket.username); inGame.push(socket.enemy); 
+                    lobbyOfPlayers.push(lobbyName); lobbyOfPlayers.push(lobbyName);
+                    chargesOfPlayers.push(0); chargesOfPlayers.push(0);
+                    actionsOfPlayers.push(""); actionsOfPlayers.push("");
+                    statusOfPlayers.push(false); statusOfPlayers.push(false);
+                    modeOfPlayers.push("Casual"); modeOfPlayers.push("Casual");
                     io.sockets.emit('casualQueueFound', {players : players, lobbyName : lobbyName});
                     console.log('\n(' + getCurrentTime() + ') UPDATE: Casual Match has started. ' + socket.username + ' vs ' + socket.enemy);
                 }
@@ -248,9 +282,33 @@ try {
             }
         });
 
+        // Casual Disconnect
+        socket.on('casualDisconnect', (data) => {
+            let index = inGame.indexOf(socket.username);
+            if (data.username == socket.username && lobbyOfPlayers[index] == data.lobbyName) {   
+                removePlayer(socket.username);                         
+                io.to(data.lobbyName).emit('casualDisconnectConfirm', {lobbyName : data.lobbyName});
+                socket.leave(data.lobbyName);
+            }
+            updateCount();          
+        });
+
+        // Casual Finish Game
+        socket.on('casualGameFinish', (data) => {
+            socket.leave(data.lobbyName);
+        });
+
+        // Casual Remove Other Players
+        socket.on('casualRemoveMe', (data) => {
+            if (inGame.includes(data.username)) {
+                removePlayer(data.username);
+            }
+            updateCount();
+        });
+
         // ================================= Game Logic ==================================
         // Ingame Logic                
-
+        // Check Action and Deduct Charges
         function checkAction(charges, action) {
             let index = inGame.indexOf(socket.username);
             let actionStatus = false;
@@ -262,6 +320,7 @@ try {
             let deduction = 0;
             if (action == "charge") {
                 actionStatus = true;
+                chargesOfPlayers[index] += 1;                
             }
             else if (charge1.includes(action) && charges >= 1) {
                 actionStatus = true;
@@ -286,50 +345,273 @@ try {
             if (actionStatus) {
                 chargesOfPlayers[index] -= deduction;
             }
+            if (modeOfPlayers[index] == "Rank") {
+                let statTrack = "UPDATE tbl_userdata SET timesUsedCharge = timesUsedCharge + 1 WHERE username = '" + inGame[index] + "';" ;   
+                if (action == "pistol") {
+                    statTrack = "UPDATE tbl_userdata SET timesUsedPistol = timesUsedPistol + 1 WHERE username = '" + inGame[index] + "';" ;   
+                } 
+                else if (action == "counter") {
+                    statTrack = "UPDATE tbl_userdata SET timesUsedCounter = timesUsedCounter + 1 WHERE username = '" + inGame[index] + "';" ;                       
+                }   
+                else if (action == "shield1") {
+                    statTrack = "UPDATE tbl_userdata SET timesUsedShield1 = timesUsedShield1 + 1 WHERE username = '" + inGame[index] + "';" ;                       
+                }
+                else if (action == "evade") {
+                    statTrack = "UPDATE tbl_userdata SET timesUsedEvade = timesUsedEvade + 1 WHERE username = '" + inGame[index] + "';" ;                       
+                }
+                else if (action == "block") {
+                    statTrack = "UPDATE tbl_userdata SET timesUsedBlock = timesUsedBlock + 1 WHERE username = '" + inGame[index] + "';" ;                       
+                }
+                else if (action == "doublepistol") {
+                    statTrack = "UPDATE tbl_userdata SET timesUsedDoublePistol = timesUsedDoublePistol + 1 WHERE username = '" + inGame[index] + "';" ;                       
+                }
+                else if (action == "grenade") {
+                    statTrack = "UPDATE tbl_userdata SET timesUsedGrenade = timesUsedGrenade + 1 WHERE username = '" + inGame[index] + "';" ;                       
+                }
+                else if (action == "shotgun") {
+                    statTrack = "UPDATE tbl_userdata SET timesUsedShotgun = timesUsedShotgun + 1 WHERE username = '" + inGame[index] + "';" ;                       
+                }
+                else if (action == "shield2") {
+                    statTrack = "UPDATE tbl_userdata SET timesUsedShield2 = timesUsedShield2 + 1 WHERE username = '" + inGame[index] + "';" ;                       
+                }
+                else if (action == "laser") {
+                    statTrack = "UPDATE tbl_userdata SET timesUsedLaser = timesUsedLaser + 1 WHERE username = '" + inGame[index] + "';" ;                       
+                }
+                else if (action == "shield3") {
+                    statTrack = "UPDATE tbl_userdata SET timesUsedShield3 = timesUsedShield3 + 1 WHERE username = '" + inGame[index] + "';" ;                       
+                }
+                else if (action == "nuke") {
+                    statTrack = "UPDATE tbl_userdata SET timesUsedNuke= timesUsedNuke + 1 WHERE username = '" + inGame[index] + "';" ;                       
+                }
+                conn.query(statTrack);
+            }
             return actionStatus;
         }
-        // Receiving Data from Players
+        function checkConditions(player1Action, player2Action) {
+            let conditions = [false, false];
+            // Win and Lose Conditions
+            // Charge
+            if (player1Action == "charge" && canBeatCharge.includes(player2Action)){
+                conditions[1] = true;
+            }
+            else if (player2Action == "charge" && canBeatCharge.includes(player1Action)) {
+                conditions[0] = true;
+            }
+            // Counter
+            else if (player1Action == "counter" && canBeatCounter.includes(player2Action)) {
+                conditions[1] = true;
+            }
+            else if (player2Action == "counter" && canBeatCounter.includes(player1Action)) {
+                conditions[0] = true;
+            }
+            // Evade
+            else if (player1Action == "evade" && canBeatEvade.includes(player2Action)) {
+                conditions[1] = true;
+            }
+            else if (player2Action == "evade" && canBeatEvade.includes(player1Action)) {
+                conditions[0] = true;
+            }
+            // Block
+            else if (player1Action == "block" && canBeatBlock.includes(player2Action)) {
+                conditions[1] = true;
+            }
+            else if (player2Action == "block" && canBeatBlock.includes(player1Action)) {
+                conditions[0] = true;
+            }
+            //Pistol
+            else if (player1Action == "pistol" && canBeatPistol.includes(player2Action)) {
+                conditions[1] = true;
+            }
+            else if (player2Action == "pistol" && canBeatPistol.includes(player1Action)) {
+                conditions[0] = true;
+            }
+            // Double Pistol
+            else if (player1Action == "doublepistol" && canBeatDoublePistol.includes(player2Action)) {
+                conditions[1] = true;
+            }
+            else if (player2Action == "doublepistol" && canBeatDoublePistol.includes(player1Action)) {
+                conditions[0] = true;
+            }
+            // Shotgun
+            else if (player1Action == "shotgun" && canBeatShotgun.includes(player2Action)) {
+                conditions[1] = true;
+            }
+            else if (player2Action == "shotgun" && canBeatShotgun.includes(player1Action)) {
+                conditions[0] = true;
+            }
+            // Grenade
+            else if (player1Action == "grenade" && canBeatGrenade.includes(player2Action)) {
+                conditions[1] = true;
+            }
+            else if (player2Action == "grenade" && canBeatGrenade.includes(player1Action)) {
+                conditions[0] = true;
+            }
+            // Laser
+            else if (player1Action == "laser" && canBeatLaser.includes(player2Action)) {
+                conditions[1] = true;
+            }
+            else if (player2Action == "laser" && canBeatLaser.includes(player1Action)) {
+                conditions[0] = true;
+            }
+            // Nuke
+            else if (player1Action == "nuke" && canBeatNuke.includes(player2Action)) {
+                conditions[1] = true;
+            }
+            else if (player2Action == "nuke" && canBeatNuke.includes(player1Action)) {
+                conditions[0] = true;
+            }
+            // Shield 1
+            else if (player1Action == "shield1" && canBeatShield1.includes(player2Action)) {
+                conditions[1] = true;
+            }
+            else if (player2Action == "shield1" && canBeatShield1.includes(player1Action)) {
+                conditions[0] = true;
+            }
+            // Shield 2
+            else if (player1Action == "shield2" && canBeatShield2.includes(player2Action)) {
+                conditions[1] = true;
+            }
+            else if (player2Action == "shield2" && canBeatShield2.includes(player1Action)) {
+                conditions[0] = true;
+            }
+            // Shield 3
+            else if (player1Action == "shield3" && canBeatShield3.includes(player2Action)) {
+                conditions[1] = true;
+            }
+            else if (player2Action == "shield3" && canBeatShield3.includes(player1Action)) {
+                conditions[0] = true;
+            }
+            return conditions;
+        }
+
+        // Receiving Rank Data from Players
         socket.on('rankAction', (data) => {
             let index = inGame.indexOf(socket.username);
+            let enemyIndex;
             if (data.lobbyName == lobbyOfPlayers[index]) {
                 let index = inGame.indexOf(socket.username);
                 let enemyStatus = false;
+                console.log(statusOfPlayers);
                 if (data.username == socket.username && !statusOfPlayers[index]) {
                     actionsOfPlayers[index] = data.rankChosen;
                     // check charge if action is correct and send error note
                     let playerConfirmation = checkAction(chargesOfPlayers[index], data.rankChosen);
                     if (playerConfirmation) {
                         statusOfPlayers[index] = true;   
-                        console.log("action accepted");
+                        console.log("action accepted");                        
                     }                    
                     else if (!playerConfirmation) {
                         // emit error. expound. exact error needed
                         console.log("action not accepted");
                         socket.emit('rankErrorChosen');
                     }
-                }
-                if (index % 2 == 0) {
-                    enemyStatus = statusOfPlayers[index + 1];
-                }
-                else if (index % 2 != 0) {
-                    enemyStatus = statusOfPlayers[index - 1];
-                }
-                if (statusOfPlayers[index] && enemyStatus) {
-                    console.log("correct player input");
-                    console.log(inGame[index] + " chose " + actionsOfPlayers[index]);
                     if (index % 2 == 0) {
-                        console.log(inGame[index+1] + " chose " + actionsOfPlayers[index+1]);
+                        enemyStatus = statusOfPlayers[index + 1];
+                        enemyIndex = index + 1;
                     }
                     else if (index % 2 != 0) {
-                        console.log(inGame[index+1] + " chose " + actionsOfPlayers[index-1]);
+                        enemyStatus = statusOfPlayers[index - 1];
+                        enemyIndex = index - 1;
                     }
-                }
+                    if ((!enemyStatus && statusOfPlayers[index]) || (enemyStatus && !statusOfPlayers[index])) {
+                        io.to(data.lobbyName).emit('rankDataAccepted', {username : data.username});
+                    }
+                    if (statusOfPlayers[index] && enemyStatus) {                      
+
+                        // Logic results for game
+                        let player1Action = actionsOfPlayers[index]; 
+                        let player2Action = actionsOfPlayers[enemyIndex];
+                        let conditionResults = checkConditions(player1Action, player2Action);                        
+
+                        // Transmitting back to the players
+                        let player1 = [inGame[index], chargesOfPlayers[index], conditionResults[0], actionsOfPlayers[index]];
+                        let player2 = [inGame[enemyIndex], chargesOfPlayers[enemyIndex], conditionResults[1], actionsOfPlayers[enemyIndex]];
+                        io.to(data.lobbyName).emit('rankGameData', {player1 : player1, player2 : player2});
+                        statusOfPlayers[index] = false;
+                        statusOfPlayers[enemyIndex] = false;
+
+                        if (conditionResults[0]) {
+                            let winQuery = "UPDATE tbl_userdata SET userWin = userWin + 1, userElo = userElo + 25 WHERE username = '" + inGame[index] + "';" ;
+                            let loseQuery = "UPDATE tbl_userdata SET userLose = userLose + 1, userElo = userElo - 25 WHERE username = '" + inGame[enemyIndex] + "';" ;   
+                            conn.query(winQuery);
+                            conn.query(loseQuery);  
+                            removePlayer(inGame[index]); 
+                            removePlayer(inGame[enemyIndex]); 
+                        }
+                        else if (conditionResults[1]) {
+                            let winQuery = "UPDATE tbl_userdata SET userWin = userWin + 1, userElo = userElo + 25 WHERE username = '" + inGame[enemyIndex] + "';" ;
+                            let loseQuery = "UPDATE tbl_userdata SET userLose = userLose + 1, userElo = userElo - 25 WHERE username = '" + inGame[index] + "';" ;   
+                            conn.query(winQuery);
+                            conn.query(loseQuery); 
+                            removePlayer(inGame[index]); 
+                            removePlayer(inGame[enemyIndex]); 
+                        }
+                    }
+                    console.log(lobbyOfPlayers);
+                    console.log(chargesOfPlayers);
+
+                }                
             }
-            console.log(data.username);
-            console.log(data.lobbyName);
         });
 
-        // Sending Data to Players
+        // Receiving Casual Data from Players
+        socket.on('casualAction', (data) => {
+            let index = inGame.indexOf(socket.username);
+            let enemyIndex;
+            if (data.lobbyName == lobbyOfPlayers[index]) {
+                let index = inGame.indexOf(socket.username);
+                let enemyStatus = false;
+                console.log(statusOfPlayers);
+                if (data.username == socket.username && !statusOfPlayers[index]) {
+                    actionsOfPlayers[index] = data.casualChosen;
+                    // check charge if action is correct and send error note
+                    let playerConfirmation = checkAction(chargesOfPlayers[index], data.casualChosen);
+                    if (playerConfirmation) {
+                        statusOfPlayers[index] = true;   
+                        console.log("action accepted");                        
+                    }                    
+                    else if (!playerConfirmation) {
+                        // emit error. expound. exact error needed
+                        console.log("action not accepted");
+                        socket.emit('rankErrorChosen');
+                    }
+                    if (index % 2 == 0) {
+                        enemyStatus = statusOfPlayers[index + 1];
+                        enemyIndex = index + 1;
+                    }
+                    else if (index % 2 != 0) {
+                        enemyStatus = statusOfPlayers[index - 1];
+                        enemyIndex = index - 1;
+                    }
+                    if ((!enemyStatus && statusOfPlayers[index]) || (enemyStatus && !statusOfPlayers[index])) {
+                        io.to(data.lobbyName).emit('casualDataAccepted', {username : data.username});
+                    }
+                    if (statusOfPlayers[index] && enemyStatus) {                      
+
+                        // Logic results for game
+                        let player1Action = actionsOfPlayers[index]; 
+                        let player2Action = actionsOfPlayers[enemyIndex];
+                        let conditionResults = checkConditions(player1Action, player2Action);
+
+                        // Transmitting back to the players
+                        let player1 = [inGame[index], chargesOfPlayers[index], conditionResults[0], actionsOfPlayers[index]];
+                        let player2 = [inGame[enemyIndex], chargesOfPlayers[enemyIndex], conditionResults[1], actionsOfPlayers[enemyIndex]];
+                        io.to(data.lobbyName).emit('casualGameData', {player1 : player1, player2 : player2});
+                        statusOfPlayers[index] = false;
+                        statusOfPlayers[enemyIndex] = false;
+
+                        if (conditionResults[0]) { 
+                            removePlayer(inGame[index]); 
+                            removePlayer(inGame[enemyIndex]); 
+                        }
+                        else if (conditionResults[1]) {     
+                            removePlayer(inGame[index]); 
+                            removePlayer(inGame[enemyIndex]); 
+                        }
+                    }
+                }                
+            }
+        });
 
         // ============================== Client Disconnect ==============================
         // Disconnect
@@ -353,7 +635,7 @@ try {
                 // add logic if player was ingame (increment 1 lose)
             }
             if (inGame.includes(socket.username)) {
-                inGame.splice(inGame.indexOf(socket.username), 1);
+                removePlayer(socket.username);
             }
             socket.rankQueueStatus = false;
             socket.casualQueueStatus = false;

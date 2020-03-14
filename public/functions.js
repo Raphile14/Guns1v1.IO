@@ -26,7 +26,7 @@ function getTimeOnly() {
 $(function(){
     // connect to server. change if ip address changes
     // let socket = io.connect('http://192.168.0.11:3000');
-    let socket = io.connect('58b9112b.ngrok.io');
+    let socket = io.connect('http://admin-wye3.localhost.run'); //263cba96.ngrok.io
 
     // Logout
     let logout = $("#logout");
@@ -42,6 +42,8 @@ $(function(){
     rankedButton.click(function(){
         socket.emit('rankQueue');
     });    
+
+    // Rank Confirmation
     socket.on('rankQueueConfirmation', (data) => {
         if (data.queueWarning.length > 0) {
             document.getElementById("rankedButton").style.background = 'rgb(90, 97, 202)';
@@ -62,14 +64,17 @@ $(function(){
 
     // Join Rank Match
     socket.on('rankJoin', (data) => {
-        document.getElementById("rankedButton").style.background = 'rgb(90, 97, 202)';
+        document.getElementById("rankedButton").style.background = 'rgb(90, 97, 202)';        
+        document.getElementById("rankPlayerName").innerText = username + "'s";
         document.getElementById("rankLobbyName").innerText = data.lobbyName;
         lobbyName = data.lobbyName;
-        if (data.players[0] == username) {
+        if (data.players[0] == username) {            
             enemy = data.players[1];
+            document.getElementById("rankEnemyName").innerText = enemy;
         }   
         else if (data.players[1] == username) {
             enemy = data.players[0];
+            document.getElementById("rankEnemyName").innerText = enemy;
         }
         return show("rankMatch", "chatRoom");
     });
@@ -87,6 +92,11 @@ $(function(){
             lobbyName = "";
             enemy = "";
             socket.emit('rankRemoveMe', {username : username});
+            document.getElementById("rankLobbyName").innerText = "";
+            document.getElementById("rankEnemyName").innerText = "";
+            document.getElementById("rankEnemyUsed").innerText = "No Actions Yet";
+            document.getElementById("rankPlayerUsed").innerText = "No Actions Yet";
+            document.getElementById("chargeCount").innerText = "0";
             return show('chatRoom', 'rankMatch');
         }        
     });
@@ -117,12 +127,53 @@ $(function(){
         alert('Invalid action! Choose Another One');
     });
 
+    socket.on('rankDataAccepted', (data) => {
+        if (data.username != username) {
+            document.getElementById("rankReady").innerText = "Ready";
+        }
+    })
+
+    socket.on('rankGameData', (data) => {
+        if (data.player1.includes(username)) {
+            document.getElementById("chargeCount").innerText = data.player1[1];
+            document.getElementById("rankPlayerUsed").innerText = data.player1[3];
+            document.getElementById("rankEnemyUsed").innerText = data.player2[3];
+            document.getElementById("rankReady").innerText = "Not Ready";
+            if (data.player1[2] && !data.player2[2]) {
+                socket.emit('rankGameFinish', {lobbyName : lobbyName});
+                lobbyName = "";
+                return show("winPage", "rankMatch");
+            }
+            else if (!data.player1[2] && data.player2[2]) {
+                socket.emit('rankGameFinish', {lobbyName : lobbyName});
+                lobbyName = "";
+                return show("losePage", "rankMatch");
+            }
+        }
+        else if (data.player2.includes(username)) {
+            document.getElementById("chargeCount").innerText = data.player2[1];
+            document.getElementById("rankPlayerUsed").innerText = data.player2[3];
+            document.getElementById("rankEnemyUsed").innerText = data.player1[3];
+            if (data.player2[2] && !data.player1[2]) {
+                socket.emit('rankGameFinish', {lobbyName : lobbyName});
+                lobbyName = "";
+                return show("winPage", "rankMatch");
+            }
+            else if (!data.player2[2] && data.player1[2]) {
+                socket.emit('rankGameFinish', {lobbyName : lobbyName});
+                lobbyName = "";
+                return show("losePage", "rankMatch");
+            }
+        }        
+    });
+
     // Casual Queue
     let casualButton = $("#casualButton");
     casualButton.click(function(){
         socket.emit('casualQueue');
     });
 
+    // Casual Confirmation
     socket.on('casualQueueConfirmation', (data) => {
         if (data.queueWarning.length > 0) {
             document.getElementById("casualButton").style.background = 'rgb(194, 226, 77)';
@@ -132,7 +183,120 @@ $(function(){
             document.getElementById("casualButton").style.background = '#808080';
             alert("Queuing for a Casual Match");
         }
-    });    
+    });  
+    
+    // Found Casual Queue
+    socket.on('casualQueueFound', (data) => {
+        if (data.players.includes(username)) {
+            socket.emit('casualQueueConfirm', {players : data.players, lobbyName : data.lobbyName});
+        }
+    });
+
+    // Join Casual Match
+    socket.on('casualJoin', (data) => {
+        document.getElementById("casualButton").style.background = 'rgb(194, 226, 77)';        
+        document.getElementById("casualPlayerName").innerText = username + "'s";
+        document.getElementById("casualLobbyName").innerText = data.lobbyName;
+        console.log(username);
+        console.log(data.lobbyName);
+        lobbyName = data.lobbyName;
+        if (data.players[0] == username) {            
+            enemy = data.players[1];
+            document.getElementById("casualEnemyName").innerText = enemy;
+        }   
+        else if (data.players[1] == username) {
+            enemy = data.players[0];
+            document.getElementById("casualEnemyName").innerText = enemy;
+        }
+        return show("casualMatch", "chatRoom");
+    });
+
+    // Leave/Disconnect from Casual Match
+    let casualDisconnect = $("#casualDisconnect");
+    casualDisconnect.click(function(){
+        console.log("user wants to disconnect");
+        socket.emit('casualDisconnect', {username : username, lobbyName : lobbyName, enemy : enemy});        
+    });
+
+    // Return to Chatroom from Casual Match
+    socket.on('casualDisconnectConfirm', (data) => {
+        if (data.lobbyName == lobbyName) {
+            lobbyName = "";
+            enemy = "";
+            socket.emit('casualRemoveMe', {username : username});
+            document.getElementById("casualLobbyName").innerText = "";
+            document.getElementById("casualEnemyName").innerText = "";
+            document.getElementById("casualEnemyUsed").innerText = "No Actions Yet";
+            document.getElementById("casualPlayerUsed").innerText = "No Actions Yet";
+            document.getElementById("casualChargeCount").innerText = "0";
+            return show('chatRoom', 'casualMatch');
+        }        
+    });
+
+    // Casual Match Action 
+    let casualChosen = "";
+    $("#casualCharge").click(function(){casualChosen = "charge"; emitCasualAction();});
+    $("#casualPistol").click(function(){casualChosen = "pistol"; emitCasualAction();});
+    $("#casualCounter").click(function(){casualChosen = "counter"; emitCasualAction();});
+    $("#casualShield1").click(function(){casualChosen = "shield1"; emitCasualAction();});
+    $("#casualEvade").click(function(){casualChosen = "evade"; emitCasualAction();});
+    $("#casualBlock").click(function(){casualChosen = "block"; emitCasualAction();});
+    $("#casualDoublePistol").click(function(){casualChosen = "doublepistol"; emitCasualAction();});
+    $("#casualGrenade").click(function(){casualChosen = "grenade"; emitCasualAction();});
+    $("#casualShotgun").click(function(){casualChosen = "shotgun"; emitCasualAction();});
+    $("#casualShield2").click(function(){casualChosen = "shield2"; emitCasualAction();});
+    $("#casualLaser").click(function(){casualChosen = "laser"; emitCasualAction();});
+    $("#casualShield3").click(function(){casualChosen = "shield3"; emitCasualAction();});
+    $("#casualNuke").click(function(){casualChosen = "nuke"; emitCasualAction();});
+
+    function emitCasualAction() {
+        console.log("action: " + casualChosen);
+        socket.emit("casualAction", {username : username, lobbyName : lobbyName, casualChosen : casualChosen});
+    }
+    // If chosen input is invalid
+    socket.on('casualErrorChosen', function(){
+        // expound. More specifc error needed
+        alert('Invalid action! Choose Another One');
+    });
+
+    socket.on('casualDataAccepted', (data) => {
+        if (data.username != username) {
+            document.getElementById("casualReady").innerText = "Ready";
+        }
+    })
+    socket.on('casualGameData', (data) => {
+        if (data.player1.includes(username)) {
+            document.getElementById("casualChargeCount").innerText = data.player1[1];
+            document.getElementById("casualPlayerUsed").innerText = data.player1[3];
+            document.getElementById("casualEnemyUsed").innerText = data.player2[3];
+            document.getElementById("casualReady").innerText = "Not Ready";
+            if (data.player1[2] && !data.player2[2]) {
+                socket.emit('casualGameFinish', {lobbyName : lobbyName});
+                lobbyName = "";
+                return show("winPage", "casualMatch");
+            }
+            else if (!data.player1[2] && data.player2[2]) {
+                socket.emit('casualGameFinish', {lobbyName : lobbyName});
+                lobbyName = "";
+                return show("losePage", "casualMatch");
+            }
+        }
+        else if (data.player2.includes(username)) {
+            document.getElementById("casualChargeCount").innerText = data.player2[1];
+            document.getElementById("casualPlayerUsed").innerText = data.player2[3];
+            document.getElementById("casualEnemyUsed").innerText = data.player1[3];
+            if (data.player2[2] && !data.player1[2]) {
+                socket.emit('casualGameFinish', {lobbyName : lobbyName});
+                lobbyName = "";
+                return show("winPage", "casualMatch");
+            }
+            else if (!data.player2[2] && data.player1[2]) {
+                socket.emit('casualGameFinish', {lobbyName : lobbyName});
+                lobbyName = "";
+                return show("losePage", "casualMatch");
+            }
+        }        
+    });
 
     // =================================== Login ===================================
     let usernameLogin = $("#usernameLogin");
@@ -166,6 +330,8 @@ $(function(){
             username = data.username; 
             let changelogContents = data.changelogContents;
             document.getElementById("changelogArea").innerText = changelogContents;
+            document.getElementById("losePageName").innerText = username;
+            document.getElementById("winPageName").innerText = username;
             return show("chatRoom", "loginPage");
         }
     });
@@ -241,6 +407,17 @@ $(function(){
         return show('chatRoom', 'instructionsPage');
     })
 
+    // ================== Return to Main Menu After Win or Lose ===================
+    $("#winPageMainMenu").click(function(){
+        document.getElementById("chargeCount").innerText = "0";
+        document.getElementById("casualChargeCount").innerText = "0";
+        return show('chatRoom', 'winPage')
+    })
+    $("#losePageMainMenu").click(function(){
+        document.getElementById("chargeCount").innerText = "0";
+        document.getElementById("casualChargeCount").innerText = "0";
+        return show('chatRoom', 'losePage')
+    })
 
     // =================================== Chat ===================================
     // chat

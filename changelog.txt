@@ -1,11 +1,17 @@
 === CHANGE LOG ===
 
+Update Log 8a: Guns1v1 alpha 1.0 (03/14/2020)
+- Changed public distribution to localhost.run
+- Rank gameplay now Working
+- FIXED A TON of BUGS
+- Partial Elo system in place
+
 Update Log 8: Guns1v1 alpha 1.0 (03/13/2020)
 - Website can now be distributed publicly over the internet (used ngrok)
 - Disconnecting mechanism for rank match
 - Enhanced Code
 - Bug fixes (tons of bug fixes)
-- Quiting a rank game results in a lose for the quitter and a win for the remaining player
+- Quiting a rank game results in a loss for the quitter and a win for the remaining player
 - Added Instructions Page
 - Partial Functionality for sending data while ingame
 

@@ -273,28 +273,34 @@
     <div id="rankMatch" style="display: none;">
       <center>
       <div id="rankLobbyName"> </div> <br>
+      <div id="rankEnemyName"> </div> <br>
+      <div> Used: </div> <div id="rankEnemyUsed"> No Actions Yet </div>
+      <div id="rankReady"> Not Ready </div>
+      <br> <div> vs </div> <br>
+      <div id="rankPlayerName"> </div> <br>      
       <div> <p> Charges: </p> <p id="chargeCount"> 0 </p> </div>
-      <button id="rankDisconnect" type="submit"> Leave Game </button>
+      <div> Used: </div> <div id="rankPlayerUsed"> No Actions Yet </div>
+      <button id="rankDisconnect" class="quitButton" type="submit"> Leave Game </button>
       <table id="matchActions">
         <tr>
-          <td> <button id="rankCharge" type="submit"> Charge (+1) </button> </td>
-          <td> <button id="rankPistol" type="submit"> Pistol (1) </button> </td>
-          <td> <button id="rankCounter" type="submit"> Counter (1) </button> </td>
-          <td> <button id="rankShield1" type="submit"> Shield 1 (1) </button> </td>
-          <td> <button id="rankEvade" type="submit"> Evade (FREE) </button> </td>
+          <td> <button id="rankCharge" class="t1Button" type="submit"> Charge (+1) </button> </td>
+          <td> <button id="rankPistol" class="t1Button" type="submit"> Pistol (1) </button> </td>
+          <td> <button id="rankCounter" class="t1Button" type="submit"> Counter (1) </button> </td>
+          <td> <button id="rankShield1" class="t1Button" type="submit"> Shield 1 (1) </button> </td>
+          <td> <button id="rankEvade" class="t1Button" type="submit"> Evade (FREE) </button> </td>
         </tr>
         <tr>
-          <td> <button id="rankBlock" type="submit"> Block (FREE) </button> </td>
-          <td> <button id="rankDoublePistol" type="submit"> Double Pistol (2) </button> </td>
-          <td> <button id="rankGrenade" type="submit"> Grenade (2) </button> </td>
-          <td> <button id="rankShotgun" type="submit"> Shotgun (2) </button> </td>
-          <td> <button id="rankShield2" type="submit"> Shield 2 (2) </button> </td>
+          <td> <button id="rankBlock" class="t2Button" type="submit"> Block (FREE) </button> </td>
+          <td> <button id="rankDoublePistol"class="t2Button"  type="submit"> Double Pistol (2) </button> </td>
+          <td> <button id="rankGrenade"class="t2Button" type="submit"> Grenade (2) </button> </td>
+          <td> <button id="rankShotgun"class="t2Button" type="submit"> Shotgun (2) </button> </td>
+          <td> <button id="rankShield2" class="t2Button"type="submit"> Shield 2 (2) </button> </td>
         </tr>
         <tr>
           <td></td>
-          <td> <button id="rankLaser" type="submit"> Laser (3) </button> </td>
-          <td> <button id="rankShield3" type="submit"> Shield 3 (3) </button> </td>
-          <td> <button id="rankNuke" type="submit"> Nuke (4) </button> </td>
+          <td> <button id="rankLaser"class="t3Button" type="submit"> Laser (3) </button> </td>
+          <td> <button id="rankShield3"class="t3Button" type="submit"> Shield 3 (3) </button> </td>
+          <td> <button id="rankNuke" class="t3Button"type="submit"> Nuke (4) </button> </td>
           <td></td>
         </tr>
       </table>
@@ -303,31 +309,60 @@
 
     <!-- ===================================== CASUAL MATCHMAKING =====================================  -->
     <div id="casualMatch" style="display: none;">
-      <div id="casualLobbyName"> </div>
-      <button id="casualDisconnect" type="submit"> Leave Game </button>
+      <center>
+      <div id="casualLobbyName"> </div> <br>
+      <div id="casualEnemyName"> </div> <br>
+      <div id="casualReady"> Not Ready </div>
+      <div> Used: </div> <div id="casualEnemyUsed"> No Actions Yet </div>
+      <br> <div> vs </div> <br>
+      <div id="casualPlayerName"> test </div> <br>      
+      <div> <p> Charges: </p> <p id="casualChargeCount"> 0 </p> </div>
+      <div> Used: </div> <div id="casualPlayerUsed"> No Actions Yet </div>
+      <button id="casualDisconnect"class="quitButton" type="submit"> Leave Game </button>
       <table id="matchActions">
         <tr>
-          <td> <button id="casualCharge" type="submit"> Charge (+1) </button> </td>
-          <td> <button id="casualPistol" type="submit"> Pistol (1) </button> </td>
-          <td> <button id="casualCounter" type="submit"> Counter (1) </button> </td>
-          <td> <button id="casualShield1" type="submit"> Shield 1 (1) </button> </td>
-          <td> <button id="casualEvade" type="submit"> Evade (FREE)  </button> </td>
+          <td> <button id="casualCharge"class="t1Button" type="submit"> Charge (+1) </button> </td>
+          <td> <button id="casualPistol" class="t1Button"type="submit"> Pistol (1) </button> </td>
+          <td> <button id="casualCounter" class="t1Button"type="submit"> Counter (1) </button> </td>
+          <td> <button id="casualShield1"class="t1Button" type="submit"> Shield 1 (1) </button> </td>
+          <td> <button id="casualEvade"class="t1Button" type="submit"> Evade (FREE)  </button> </td>
         </tr>
         <tr>
-          <td> <button id="casualBlock" type="submit"> Block (FREE) </button> </td>
-          <td> <button id="casualDoublePistol" type="submit"> Double Pistol (2) </button> </td>
-          <td> <button id="casualGrenade" type="submit"> Grenade (2) </button> </td>
-          <td> <button id="casualShotgun" type="submit"> Shotgun (2) </button> </td>
-          <td> <button id="casualShield2" type="submit"> Shield 2 (2) </button> </td>
+          <td> <button id="casualBlock"class="t2Button" type="submit"> Block (FREE) </button> </td>
+          <td> <button id="casualDoublePistol" class="t2Button"type="submit"> Double Pistol (2) </button> </td>
+          <td> <button id="casualGrenade"class="t2Button" type="submit"> Grenade (2) </button> </td>
+          <td> <button id="casualShotgun"class="t2Button" type="submit"> Shotgun (2) </button> </td>
+          <td> <button id="casualShield2"class="t2Button" type="submit"> Shield 2 (2) </button> </td>
         </tr>
         <tr>
           <td></td>
-          <td> <button id="casualLaser" type="submit"> Laser (3) </button> </td>
-          <td> <button id="casualShield3" type="submit"> Shield 3 (3) </button> </td>
-          <td> <button id="casualNuke" type="submit"> Nuke (4) </button> </td>
+          <td> <button id="casualLaser"class="t3Button" type="submit"> Laser (3) </button> </td>
+          <td> <button id="casualShield3" class="t3Button"type="submit"> Shield 3 (3) </button> </td>
+          <td> <button id="casualNuke"class="t3Button"  type="submit"> Nuke (4) </button> </td>
           <td></td>
         </tr>
       </table>
+      </center>
+    </div>
+
+    <!-- ===================================== WIN PAGE =====================================  -->
+    <div id="winPage" style="display: none;">
+      <center>
+        <div> <p> Congratulations! </p> </div>
+        <div id="winPageName"> </div>
+        <div> You Won! </div>
+        <button id="winPageMainMenu" class="menuButton"type="submit"> Return to Main Menu </button>
+      </center>
+    </div>
+
+    <!-- ===================================== LOSS PAGE =====================================  -->
+    <div id="losePage" style="display: none;">
+      <center>
+        <div> <p> Better Luck Next Time! </p> </div>
+        <div id="losePageName"> </div>
+        <div> You Lost! </div>
+        <button id="losePageMainMenu" class="menuButton"type="submit"> Return to Main Menu </button>
+      </center>
     </div>
 
     <!-- jQuery and other scripts needed -->
@@ -339,22 +374,3 @@
 
   </body>
 </html>
-
-<!-- 
-<br> <center> === CHANGE LOG === </center> <br>          
-                  <p> <center> Update Log 3: Guns1v1 alpha 1.0 </center> </p>
-                  <p> - Reduced sign up values </p>
-                  <p> - Added button onclick change color </p>
-                  <p> - Removed SQL side signup values </p>
-
-                  <p> <center> <br> Update Log 2: Guns1v1 alpha 1.0 </center> </p>
-                  <p> - Added password encryption and decryption </p>
-                  <p> - Improved User Interface </p>
-                  <p> - Sending message now clears the input field </p>
-                  <p> - Added changelog menu in the main menu </p>
-                  <p> - The interface can now show the number of people online, queuing for games, and in-game </p>
-                  
-                  <p> <br> <center> Update Log 1: Guns1v1 alpha 1.0 </center> </p>
-                  <p> Current Capabilities </p>
-                  <p> - Login System with SQL </p>
-                  <p> - Working real-time chat system </p> -->
