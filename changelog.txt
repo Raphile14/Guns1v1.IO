@@ -1,8 +1,16 @@
 === CHANGE LOG ===
 
+Update Log 9: Guns1v1 alpha 1.0 (03/16/2020)
+- Major Overhaul
+- Implemented graphics for every page
+- User can now upload their profile pictures (only accepts PNG) and reflects real time
+
+Update Log 8b: Guns1v1 alpha 1.0 (03/14/2020)
+- Cleaned CSS Code
+
 Update Log 8a: Guns1v1 alpha 1.0 (03/14/2020)
 - Changed public distribution to localhost.run
-- Rank gameplay now Working
+- Rank and Casual gameplay now Working
 - FIXED A TON of BUGS
 - Partial Elo system in place
 

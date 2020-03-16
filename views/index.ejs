@@ -14,10 +14,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>    
 
     <!-- three js -->
-    <script src="three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
     
+    <!-- upload script -->
+    <script src="/siofu/client.js"> </script>
+
     <!-- title of page -->
-    <title> Guns1v1.IO Alphav1.0 </title>
+    <title> Guns1v1.IO Alphav1.0 </title>    
     
   </head>
 
@@ -104,11 +107,8 @@
                 </tr>
               </td>
 
-              <div class="hr"></div>
-              <p>
+              <div class="hr"></div>     
                 <center> <a href="#" onclick="return show('loginPage', 'registrationPage');"> Already a Member? Sign In </a></center>
-              </p>
-
             </table>
           </div>          
         </div>        
@@ -117,71 +117,208 @@
     <!-- ========================================== CHAT ROOM ==========================================  -->
     <!-- chat code -->
     <div id="chatRoom" style="display: none;">      
-      <div class="chat-wrap">
-        <header>
-          <h1 style="color: rgb(180, 180, 180);"> Guns1v1.IO - Main Menu </h1> <br>
-          <div class="btn-group">
-            <center> <table id="actionButtonTable">
-              <tr>
-                <br>
-                <td> <button id="instructions" class="helpButton" type="submit"> How to Play </button> </td>
-                <td> <button id="rankedButton" class="rButton" type="submit"> Ranked </button> </td>
-                <td> <button id="casualButton" class="cButton" type="submit"> Casual </button> </td>
-                <td> <button id="leaderboardButton" class="lBoardButton" type="button">Leaderboards </button> </td>
-                <td> <button id="profileButton" class="vButton" type="button"> Profile </button> </td>
-                <td> <button id="logout" class="lButton" type="button"> Logout </button> </td>
-              </tr>
-            </center> </table>                                                                            
-          </div>
-        </header>  
-        <center>
-          <br> <br>            
-          <table style="width: 95%; border:5px solid rgb(15, 15, 15);margin-left:auto;margin-right:auto;">
-            <tr style="border: 5px solid rgb(12, 12, 12);">
-              <td style="width: 20%; border: 5px solid rgb(10, 10, 10); vertical-align: text-top; color: rgb(180, 180, 180);">                
-                <center> == PLAYER STATUS == 
-                <p> Players Online <br> == <label id="playerCount" for="p_online" class="label"> 0 </label> == </p>
-                <p> Players Playing <br> == <label id="ingameCount" for="p_playing" class="label"> 0 </label> == </p>
-                <p> Queuing in Rank <br> == <label id="rankQueueCount" for="r_queue" class="label"> 0 </label> == </p>
-                <p> Queuing in Casual <br> == <label id="casualQueueCount" for="c_queue" class="label"> 0 </label> == </p>                         
-                </center>
-              </td>
-              <td style="width: 50%; vertical-align: text-top;">  
-                <!-- <iframe src="Guns1v1.IO\views\changelog.txt" frameborder="0" height="100%" width="100%"></iframe>                               -->
-                <section id="changelogArea" style="overflow: auto; height: 550px; max-height: 100%; color: rgb(180, 180, 180);">
-                </section>                
-              </td>
-              <td style="border: 5px solid black;">
-                <section id="chatroom" style="overflow: auto;">
-                  <section id="feedback"></section>
-                </section>
-                <section id="input_zone"> 
-                  <br>
-                  <input id="message" type="text" maxlength="30" placeholder="Enter Message"/>
-                  <button id="sendMessage" type="button" style="display: none;"> Send </button> 
-  
-                </section>
-                <!-- class="vertical-align" -->
-              </td>
+      <header>
+        <h1 style="color: rgb(180, 180, 180);"> Guns1v1.IO - Main Menu </h1>
+        <div class="btn-group">
+          <center> <table id="actionButtonTable">
+            <tr>
+              <br>
+              <td> <button id="instructions" class="helpButton" type="submit"> How to Play </button> </td>
+              <td> <button id="rankedButton" class="rButton" type="submit"> Ranked </button> </td>
+              <td> <button id="casualButton" class="cButton" type="submit"> Casual </button> </td>
+              <td> <button id="leaderboardButton" class="lBoardButton" type="button">Leaderboards </button> </td>
+              <td> <button id="profileButton" class="vButton" type="button"> Profile </button> </td>
+              <td> <button id="logout" class="lButton" type="button"> Logout </button> </td>
             </tr>
-          <!-- <section>
-            <div id="changeUsername">
-              <input id="username" type="text" />
-              <button id="sendUserName" type="button"> Change username </button>
-            </div>
-          </section> -->                    
-            </table>
-          </center>
-      </div>
+          </center> </table>                                                                            
+        </div>
+      </header>  
+      <center>        
+        <table id="mainMenuContainer">
+          <tr>
+            <td id="playerStatus">                
+              <center> 
+              WELCOME
+              <p> == <label id="playerUsername"></label> == </p>
+              Rank Elo
+              <p> == <label id="playerElo"> 0 </label> == </p>
+              == PLAYER STATUS ==
+              <p> <label id="playerQueueStatus"> Online </label> </p>
+              == SERVER STATUS == 
+              <p> Players Online <br> == <label id="playerCount" for="p_online" class="label"> 0 </label> == </p>
+              <p> Players Playing <br> == <label id="ingameCount" for="p_playing" class="label"> 0 </label> == </p>
+              <p> Queuing in Rank <br> == <label id="rankQueueCount" for="r_queue" class="label"> 0 </label> == </p>
+              <p> Queuing in Casual <br> == <label id="casualQueueCount" for="c_queue" class="label"> 0 </label> == </p>                         
+              </center>
+            </td>
+            <td style="width: 50%; vertical-align: text-top;">  
+              <!-- <iframe src="Guns1v1.IO\views\changelog.txt" frameborder="0" height="100%" width="100%"></iframe>                               -->
+              <section id="changelogArea">
+              </section>                
+            </td>
+            <td>
+              <section id="chatroom" style="overflow: auto;">
+                <section id="feedback"></section>
+              </section>
+              <section id="input_zone"> 
+                <br>
+                <input id="message" type="text" maxlength="30" placeholder="Enter Message"/>
+                <button id="sendMessage" type="button" style="display: none;"> Send </button> 
+
+              </section>
+              <!-- class="vertical-align" -->
+            </td>
+          </tr>
+        <!-- <section>
+          <div id="changeUsername">
+            <input id="username" type="text" />
+            <button id="sendUserName" type="button"> Change username </button>
+          </div>
+        </section> -->                    
+          </table>
+        </center>
     </div>
 
     <!-- ========================================== INSTRUCTIONS ==========================================  -->
     <div id="instructionsPage" style="display: none;">
-      <div class="leaderboard-html">
-        <header>
-            <h1> <br> <br> Guns1v1.IO </h1>
-            <p style="font-size: 40px;"> <br> HOW TO PLAY </p>
-            <button id="instructionMainMenu"class="helpButton" type="submit"> Return to Main Menu </button> 
+      <div id="instructionsHead"> 
+        <h1 style="font-size: 40px;"> Guns1v1.IO HOW TO PLAY </h1>
+        <!-- <p style="font-size: 40px;"> <br> HOW TO PLAY </p>  -->
+      </div>      
+      <div class="instructionspage-html">
+        <header> 
+       
+            <center>
+
+            <table id="instructionsActions">
+              <tr>
+                <span class="mechanics">
+Mechanics:
+Guns1v1 is the next level Rock, Paper, Scissors.
+
+Almost every action requires 
+certain amounts of charges.
+
+Use the actions to win.
+You only have one life. Make the most of it.
+
+Similar actions will result in a draw. No one dies!</span>
+                <td> <button id="instructionsCharge"class="t1InstructionButton" type="submit"> Charge (+1) 
+                  <span class="tooltiptext">
+Action Name: Charge  
+Cost: Free
+Description: Gives the Player 1 Charge
+Beats: None
+Can Be Defeated by: Pistol, Double Pistol, Grenade, Shotgun, Laser, and Nuke</span></button> </td>
+
+                <td> <button id="instructionsPistol" class="t1InstructionButton"type="submit"> Pistol (1) 
+                  <span class="tooltiptext">
+Action Name: Pistol
+Cost: 1 Charge
+Description: Shoots 1 Bullet
+Beats: Charge and Counter
+Can Be Defeated by: Double Pistol, Grenade, Shotgun, Laser, Nuke, Shield 1, Shield 2, and Shield 3</span> </button> </td>
+
+                <td> <button id="instructionsCounter" class="t1InstructionButton"type="submit"> Counter (1)
+
+                  <span class="tooltiptext">
+Action Name: Counter  
+Cost: 1 Charge
+Description: Defeats any Shield
+Beats: Shield Level 1, Shield Level 2, Shield Level 3
+Can Be Defeated by: Pistol, Double Pistol, Grenade, Shotgun, Laser, and Nuke</span>  </button></td>
+
+                <td> <button id="instructionsShield1"class="t1InstructionButton" type="submit"> Shield 1 (1)
+
+
+                  <span class="tooltiptext">
+Action Name: Shield level 1
+Cost: 1 Charge
+Description: Simple Protection
+Beats: Pistol, Double Pistol, and Grenade
+Can Be Defeated by: Counter, Shotgun, Laser and Nuke</span> </button> </td>
+
+                <td> <button id="instructionsEvade"class="evadeInstructionButton" type="submit"> Evade (FREE)
+
+                  <span class="tooltiptext">
+Action Name: Evade
+Cost: Free
+Description: Evades almost every Action
+Beats: None
+Can Be Defeated by: Double Pistol, Laser, Nuke</span>  </button> </td>
+              </tr>
+
+              <tr>
+                <td> <button id="instructionsBlock"class="freeInstructionButton" type="submit"> Block (FREE)
+                  <span class="tooltiptext">
+Action Name: Block
+Cost: Free
+Description: Evades almost every Action
+Beats: None
+Can Be Defeated by: Grenade, Laser, Nuke</span> </button> </td>
+
+                <td> <button id="instructionsDoublePistol" class="t2InstructionButton"type="submit"> Double Pistol (2)
+                  <span class="tooltiptext">
+Action Name: Double Pistol
+Cost: 2 Charges
+Description: Shoots 1 Bullet
+Beats: Charge, Counter, Evade, and Pistol
+Can Be Defeated by: Laser, Nuke, Shield 1, Shield 2, and Shield 3</span> </button> </td>
+
+                <td> <button id="instructionsGrenade"class="t2InstructionButton" type="submit"> Grenade (2)
+                  <span class="tooltiptext">
+Action Name: Grenade
+Cost: 2 Charges
+Description: Throw a nade! (Kobe!)
+Beats: Charge, Counter, Block, and Pistol
+Can Be Defeated by: Laser, Nuke, Shield 1, Shield 2, and Shield 3</span> </button> </td>
+
+                <td> <button id="instructionsShotgun"class="t2InstructionButton" type="submit"> Shotgun (2)
+                  <span class="tooltiptext">
+Action Name: Shotgun
+Cost: 2 Charges
+Description: Shoots a Buckshot
+Beats: Charge, Counter, Pistol, and Shield 1
+Can Be Defeated by: Laser, Nuke, Shield 2, and Shield 3</span> </button> </td>
+
+                <td> <button id="instructionsShield2"class="t2InstructionButton" type="submit"> Shield 2 (2)
+                  <span class="tooltiptext">
+Action Name: Shield Level 2
+Cost: 2 Charges
+Description: Adequate Protection
+Beats: Pistol, Double Pistol, Shotgun, Grenade, and Laser
+Can Be Defeated by: Counter, and Nuke</span> </button> </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td> <button id="instructionsLaser"class="t3InstructionButton" type="submit"> Laser (3)
+                  <span class="tooltiptext">
+Action Name: Laser
+Cost: 3 Charges
+Description: Shoot a very bright light!
+Beats: Charge, Counter, Block, Evade, Pistol, Double Pistol, Shotgun, Grenade, and Shield 1
+Can Be Defeated by: Nuke, Shield 2, and Shield 3</span> </button> </td>
+                <td> <button id="instructionsShield3" class="t3InstructionButton"type="submit"> Shield 3 (3)
+                  <span class="tooltiptext">
+Action Name: Shield Level 3
+Cost: 3 Charges
+Description: Ultimate Protection
+Beats: Pistol, Double Pistol, Shotgun, Grenade, Laser, and Nuke
+Can Be Defeated by: Counter</span> </button> </td>
+
+                <td> <button id="instructionsNuke"class="t4InstructionButton"  type="submit"> Nuke (4)
+                  <span class="tooltiptext">
+Action Name: Nuke
+Cost: 4 Charges
+Description: The motherlode
+Beats: Charge, Counter, Block, Evade, Pistol, Double Pistol, Shotgun, Grenade, Shield 1, and Shield 2
+Can Be Defeated by: Shield 3</span> </button> </td>
+                <td></td>
+              </tr>
+            </div>
+            </table>
+            </center>
+            <button id="instructionMainMenu"class="menuButton" type="submit"> Return to Main Menu </button> 
         </header>
     </div>
   </div>
@@ -226,10 +363,11 @@
     <div id="profile" style="display: none;">
       <header>  
         <h1> <br> <br> Guns1v1.IO </h1>
-        <p id="profileUserName" style="font-size:40px;"> User </p> 
-        <p><img src="" alt="Avatar" class="avatar"></p>
-        <button id="uploadAvatar"class="uploadButton" type="submit">Upload Avatar </button> 
-        <br> <br>
+        <p id="profileUserName" style="font-size:40px;"> User </p>
+        <p><img src="public/profileImages/default.png" accept="image/png" id="profilePicture" alt="Avatar" class="avatar"></p>
+        <input id="changeUserName" name="changeUser" type="text" placeholder="Change Username">
+        <button id="leaderboardMainMenu"class="okButton" type="submit">OK </button> 
+        <input type="file" name="" id="siofu_input">
         <center>
           Player Statistics <br>
           <table style="vertical-align: middle; width: 70%; border:1px solid rgb(206, 206, 206); margin-left:auto;margin-right:auto;">
@@ -270,78 +408,114 @@
     </div>
 
     <!-- ===================================== RANK MATCHMAKING =====================================  -->
+    <center>
     <div id="rankMatch" style="display: none;">
       <center>
       <div id="rankLobbyName"> </div> <br>
-      <div id="rankEnemyName"> </div> <br>
-      <div> Used: </div> <div id="rankEnemyUsed"> No Actions Yet </div>
-      <div id="rankReady"> Not Ready </div>
-      <br> <div> vs </div> <br>
-      <div id="rankPlayerName"> </div> <br>      
-      <div> <p> Charges: </p> <p id="chargeCount"> 0 </p> </div>
-      <div> Used: </div> <div id="rankPlayerUsed"> No Actions Yet </div>
+      <div id="rankOtherDetails">
+                             
+      <table id="rankGUI">
+        <tr>
+          <!-- Enemy Data -->
+          <td id="rankEnemyStats">
+            <p> == ENEMY == </p>
+            <div id="rankEnemyName"> </div> <br>
+            <div> Used: </div> <div id="rankEnemyUsed"> No Actions Yet </div>
+            <div id="rankReady"> Not Ready </div> 
+          </td>
+          <!-- Middle -->
+          <td> <table id="matchActions">
+            <tr>
+              <td> <button id="rankCharge" class="t1Button" type="submit"> Charge (+1) </button> </td>
+              <td> <button id="rankPistol" class="t1Button" type="submit"> Pistol (1) </button> </td>
+              <td> <button id="rankCounter" class="t1Button" type="submit"> Counter (1) </button> </td>
+              <td> <button id="rankShield1" class="t1Button" type="submit"> Shield 1 (1) </button> </td>
+              <td> <button id="rankEvade" class="freeButton" type="submit"> Evade (FREE) </button> </td>
+            </tr>
+            <tr>
+              <td> <button id="rankBlock" class="freeButton" type="submit"> Block (FREE) </button> </td>
+              <td> <button id="rankDoublePistol"class="t2Button"  type="submit"> Double Pistol (2) </button> </td>
+              <td> <button id="rankGrenade"class="t2Button" type="submit"> Grenade (2) </button> </td>
+              <td> <button id="rankShotgun"class="t2Button" type="submit"> Shotgun (2) </button> </td>
+              <td> <button id="rankShield2" class="t2Button"type="submit"> Shield 2 (2) </button> </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td> <button id="rankLaser"class="t3Button" type="submit"> Laser (3) </button> </td>
+              <td> <button id="rankShield3"class="t3Button" type="submit"> Shield 3 (3) </button> </td>
+              <td> <button id="rankNuke" class="t4Button"type="submit"> Nuke (4) </button> </td>
+              <td></td>
+            </tr>          
+          </table> 
+          </td>
+          <!-- User Data -->
+          <td id="rankPlayerStats">
+            <p> == YOU == </p>
+            <div id="rankPlayerName"> </div>  
+            <div> <p> Charges: </p> <p id="chargeCount"> 0 </p> </div>
+            <div> Used: </div> <div id="rankPlayerUsed"> No Actions Yet </div>  
+          </td>
+        </tr>
+      </table>    
+         
       <button id="rankDisconnect" class="quitButton" type="submit"> Leave Game </button>
-      <table id="matchActions">
-        <tr>
-          <td> <button id="rankCharge" class="t1Button" type="submit"> Charge (+1) </button> </td>
-          <td> <button id="rankPistol" class="t1Button" type="submit"> Pistol (1) </button> </td>
-          <td> <button id="rankCounter" class="t1Button" type="submit"> Counter (1) </button> </td>
-          <td> <button id="rankShield1" class="t1Button" type="submit"> Shield 1 (1) </button> </td>
-          <td> <button id="rankEvade" class="t1Button" type="submit"> Evade (FREE) </button> </td>
-        </tr>
-        <tr>
-          <td> <button id="rankBlock" class="t2Button" type="submit"> Block (FREE) </button> </td>
-          <td> <button id="rankDoublePistol"class="t2Button"  type="submit"> Double Pistol (2) </button> </td>
-          <td> <button id="rankGrenade"class="t2Button" type="submit"> Grenade (2) </button> </td>
-          <td> <button id="rankShotgun"class="t2Button" type="submit"> Shotgun (2) </button> </td>
-          <td> <button id="rankShield2" class="t2Button"type="submit"> Shield 2 (2) </button> </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td> <button id="rankLaser"class="t3Button" type="submit"> Laser (3) </button> </td>
-          <td> <button id="rankShield3"class="t3Button" type="submit"> Shield 3 (3) </button> </td>
-          <td> <button id="rankNuke" class="t3Button"type="submit"> Nuke (4) </button> </td>
-          <td></td>
-        </tr>
-      </table>
       </center>
+      </div>
     </div>
+    </center>
 
     <!-- ===================================== CASUAL MATCHMAKING =====================================  -->
     <div id="casualMatch" style="display: none;">
       <center>
       <div id="casualLobbyName"> </div> <br>
-      <div id="casualEnemyName"> </div> <br>
-      <div id="casualReady"> Not Ready </div>
-      <div> Used: </div> <div id="casualEnemyUsed"> No Actions Yet </div>
-      <br> <div> vs </div> <br>
-      <div id="casualPlayerName"> test </div> <br>      
-      <div> <p> Charges: </p> <p id="casualChargeCount"> 0 </p> </div>
-      <div> Used: </div> <div id="casualPlayerUsed"> No Actions Yet </div>
-      <button id="casualDisconnect"class="quitButton" type="submit"> Leave Game </button>
-      <table id="matchActions">
+      <div id="casualOtherDetails">
+      <table id="casualGUI">
         <tr>
-          <td> <button id="casualCharge"class="t1Button" type="submit"> Charge (+1) </button> </td>
-          <td> <button id="casualPistol" class="t1Button"type="submit"> Pistol (1) </button> </td>
-          <td> <button id="casualCounter" class="t1Button"type="submit"> Counter (1) </button> </td>
-          <td> <button id="casualShield1"class="t1Button" type="submit"> Shield 1 (1) </button> </td>
-          <td> <button id="casualEvade"class="t1Button" type="submit"> Evade (FREE)  </button> </td>
+          <!-- Enemy Data -->
+          <td id="casualEnemyStats">
+            <p> == ENEMY == </p>
+            <div id="casualEnemyName"> </div>
+            <div id="casualEnemyName"> </div> <br>
+            <div id="casualReady"> Not Ready </div>
+            <p><div> Used: <div id="casualEnemyUsed"> No Actions Yet </div></div></p>
+          </td>
+          <!-- Middle -->
+          <td>
+            <table id="matchActions">
+              <tr>
+                <td> <button id="casualCharge"class="t1Button" type="submit"> Charge (+1) </button> </td>
+                <td> <button id="casualPistol" class="t1Button"type="submit"> Pistol (1) </button> </td>
+                <td> <button id="casualCounter" class="t1Button"type="submit"> Counter (1) </button> </td>
+                <td> <button id="casualShield1"class="t1Button" type="submit"> Shield 1 (1) </button> </td>
+                <td> <button id="casualEvade"class="freeButton" type="submit"> Evade (FREE)  </button> </td>
+              </tr>
+              <tr>
+                <td> <button id="casualBlock"class="freeButton" type="submit"> Block (FREE) </button> </td>
+                <td> <button id="casualDoublePistol" class="t2Button"type="submit"> Double Pistol (2) </button> </td>
+                <td> <button id="casualGrenade"class="t2Button" type="submit"> Grenade (2) </button> </td>
+                <td> <button id="casualShotgun"class="t2Button" type="submit"> Shotgun (2) </button> </td>
+                <td> <button id="casualShield2"class="t2Button" type="submit"> Shield 2 (2) </button> </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td> <button id="casualLaser"class="t3Button" type="submit"> Laser (3) </button> </td>
+                <td> <button id="casualShield3" class="t3Button"type="submit"> Shield 3 (3) </button> </td>
+                <td> <button id="casualNuke"class="t4Button"  type="submit"> Nuke (4) </button> </td>
+                <td></td>
+              </tr>
+            </table>
+          </td>
+          <!-- Player Data -->
+          <td id="casualPlayerStats">
+            <p> == YOU == </p>
+            <div id="casualPlayerName"> </div>
+            <div> <p> Charges: </p> <p id="casualChargeCount"> 0 </p> </div>
+            <div> Used: </div> <div id="casualPlayerUsed"> No Actions Yet </div>
+          </td>
         </tr>
-        <tr>
-          <td> <button id="casualBlock"class="t2Button" type="submit"> Block (FREE) </button> </td>
-          <td> <button id="casualDoublePistol" class="t2Button"type="submit"> Double Pistol (2) </button> </td>
-          <td> <button id="casualGrenade"class="t2Button" type="submit"> Grenade (2) </button> </td>
-          <td> <button id="casualShotgun"class="t2Button" type="submit"> Shotgun (2) </button> </td>
-          <td> <button id="casualShield2"class="t2Button" type="submit"> Shield 2 (2) </button> </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td> <button id="casualLaser"class="t3Button" type="submit"> Laser (3) </button> </td>
-          <td> <button id="casualShield3" class="t3Button"type="submit"> Shield 3 (3) </button> </td>
-          <td> <button id="casualNuke"class="t3Button"  type="submit"> Nuke (4) </button> </td>
-          <td></td>
-        </tr>
-      </table>
+      </table>   
+      <button id="casualDisconnect"class="quitButton" type="submit"> Leave Game </button> 
+      </div>                              
       </center>
     </div>
 
@@ -367,8 +541,9 @@
 
     <!-- jQuery and other scripts needed -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="functions.js"></script>
+    <script src="OrbitControls.js"></script>
     <script src="app.js"></script>
+    <script src="functions.js"></script>    
     
     <!-- <script> alert("Fully loaded"); </script> -->
 

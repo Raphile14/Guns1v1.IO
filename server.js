@@ -30,7 +30,7 @@ let canBeatEvade = ["doublepistol", "laser", "nuke"];
 let canBeatBlock = ["grenade", "laser", "nuke"];
 let canBeatPistol = ["doublepistol", "grenade", "shotgun", "laser", "nuke", "shield1", "shield2", "shield3"];
 let canBeatDoublePistol = ["laser", "nuke", "shield1", "shield2", "shield3"];
-let canBeatShotgun = ["laser", "nuke", "shield1", "shield2", "shield3"];
+let canBeatShotgun = ["laser", "nuke", "shield2", "shield3"];
 let canBeatGrenade = ["laser", "nuke", "shield1", "shield2", "shield3"];
 let canBeatLaser = ["nuke", "shield2", "shield3"];
 let canBeatNuke = ["shield3"];
@@ -40,6 +40,7 @@ let canBeatShield3 = ["counter"];
 
 // Require Changelog
 let fs = require('fs');
+let fsExtra = require("fs-extra");
 
 try {
     // Connecting and Checking SQL server
@@ -75,7 +76,7 @@ try {
         // if (err) throw err;
         console.log("UPDATE: Established Connection to SQL");        
         try {
-            let createTable = "CREATE TABLE tbl_userData (userID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), password VARCHAR(255), userEmail VARCHAR(255), userElo int, userWin int, userLose int, timesUsedCharge int, timesUsedPistol int, timesUsedShield1 int, timesUsedCounter int, timesUsedEvade int, timesUsedBlock int, timesUsedDoublePistol int, timesUsedGrenade int, timesUsedShotgun int, timesUsedShield2 int, timesUsedLaser int, timesUsedShield3 int, timesUsedNuke int);";
+            let createTable = "CREATE TABLE tbl_userData (userID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), password VARCHAR(255), userEmail VARCHAR(255), userElo int, userWin int, userLose int, timesUsedCharge int, timesUsedPistol int, timesUsedShield1 int, timesUsedCounter int, timesUsedEvade int, timesUsedBlock int, timesUsedDoublePistol int, timesUsedGrenade int, timesUsedShotgun int, timesUsedShield2 int, timesUsedLaser int, timesUsedShield3 int, timesUsedNuke int, isAdmin VARCHAR(255), isBanned VARCHAR(255));";
             conn.query(createTable, function(err, result){
                 // if (err) throw err;
                 console.log("UPDATE: tbl_userData created");
@@ -85,12 +86,16 @@ try {
         }        
     })
 
-    // Operating Server
-    const express = require('express');
-    const app = express();
+    // Operating Server and requirements
+    const express = require('express');    
+    
+    // Image handling
+    const siofu = require("socketio-file-upload");
+    const app = express().use(siofu.router);
+
 
     app.set('view engine', 'ejs');
-    app.use(express.static('public'));
+    app.use('/', express.static(__dirname + '/public'));
 
     // Routes
     app.get('*', (req, res) => {
@@ -129,6 +134,23 @@ try {
             console.log(inGame);
             updateCount();
         }
+        // =============================== Uploading Files ================================
+        let uploader = new siofu();
+        uploader.dir = __dirname + "/public/profileImages";
+        uploader.listen(socket);
+        let ID;
+        uploader.on("saved", function(event){            
+            conn.query("SELECT userID FROM tbl_userdata WHERE username = '" + socket.username + "';", function(err, result, fields){
+                ID = result[0].userID;
+                let file = event.file.pathName.split('\\').pop().split('/').pop();
+                let lastIndex = file.lastIndexOf(".");
+                fs.renameSync(event.file.pathName, __dirname +'/public/profileImages/' + result[0].userID + '.' + file.substr(lastIndex + 1));
+                fs.readFile(__dirname +'/public/profileImages/' + ID + '.' + file.substr(lastIndex + 1), function(err, data){
+                    socket.emit('profileChange', {image : true, buffer : data});
+                    // socket.emit('profileChange', {username : socket.username, userID : result[0].userID});
+                })                 
+            });            
+        })
 
         // =============================== New Connection ================================
         // Load Changelog
@@ -207,11 +229,19 @@ try {
             if (data.username == socket.username && lobbyOfPlayers[index] == data.lobbyName) {  
                 let winQuery = "UPDATE tbl_userdata SET userWin = userWin + 1, userElo = userElo + 25 WHERE username = '" + data.enemy + "';" ;
                 let loseQuery = "UPDATE tbl_userdata SET userLose = userLose + 1, userElo = userElo - 25 WHERE username = '" + data.username + "';" ;   
+                let newEloLoser;
+                let newEloWinner;
                 conn.query(winQuery);
                 conn.query(loseQuery);  
-                removePlayer(socket.username);                         
-                io.to(data.lobbyName).emit('rankDisconnectConfirm', {lobbyName : data.lobbyName});
-                socket.leave(data.lobbyName);
+                conn.query("SELECT userElo FROM tbl_userdata WHERE username = '" + data.enemy + "';", function(err, result, fields){
+                    newEloWinner = result[0].userElo;
+                });    
+                conn.query("SELECT userElo FROM tbl_userdata WHERE username = '" + socket.username + "';", function(err, result, fields){
+                    newEloLoser = result[0].userElo;
+                    removePlayer(socket.username);                         
+                    io.to(data.lobbyName).emit('rankDisconnectConfirm', {userWinner : data.enemy, userLoser : data.username, lobbyName : data.lobbyName, userEloLoser : newEloLoser, userEloWinner : newEloWinner});
+                    socket.leave(data.lobbyName);
+                });                
             }
             updateCount();          
         });
@@ -535,6 +565,8 @@ try {
                             let loseQuery = "UPDATE tbl_userdata SET userLose = userLose + 1, userElo = userElo - 25 WHERE username = '" + inGame[enemyIndex] + "';" ;   
                             conn.query(winQuery);
                             conn.query(loseQuery);  
+                            socket.emit('updateElo', {username : inGame[index], value : 25});
+                            socket.emit('updateElo', {username : inGame[enemyIndex], value : -25});
                             removePlayer(inGame[index]); 
                             removePlayer(inGame[enemyIndex]); 
                         }
@@ -543,13 +575,12 @@ try {
                             let loseQuery = "UPDATE tbl_userdata SET userLose = userLose + 1, userElo = userElo - 25 WHERE username = '" + inGame[index] + "';" ;   
                             conn.query(winQuery);
                             conn.query(loseQuery); 
+                            socket.emit('updateElo', {username : inGame[enemyIndex], value : 25});
+                            socket.emit('updateElo', {username : inGame[index], value : -25});
                             removePlayer(inGame[index]); 
                             removePlayer(inGame[enemyIndex]); 
                         }
                     }
-                    console.log(lobbyOfPlayers);
-                    console.log(chargesOfPlayers);
-
                 }                
             }
         });
@@ -680,13 +711,17 @@ try {
                 // If data is unique and ready for registration on database
                 if (statusSignUp) {
                     let encryptedPassword = simpleCrypto.encrypt(data.passwordSignUp);
-                    let insertQuery = "INSERT INTO tbl_userData (username, password, userEmail, userElo, userWin, userLose, timesUsedCharge, timesUsedPistol, timesUsedShield1, timesUsedCounter, timesUsedEvade, timesUsedBlock, timesUsedDoublePistol, timesUsedGrenade, timesUsedShotgun, timesUsedShield2, timesUsedLaser, timesUsedShield3, timesUsedNuke)";
-                    let insertValuesQuery = " VALUES ('" + data.usernameSignUp + "', '" + encryptedPassword + "', '" + data.useremailSignUp + "', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0')";
+                    let insertQuery = "INSERT INTO tbl_userData (username, password, userEmail, userElo, userWin, userLose, timesUsedCharge, timesUsedPistol, timesUsedShield1, timesUsedCounter, timesUsedEvade, timesUsedBlock, timesUsedDoublePistol, timesUsedGrenade, timesUsedShotgun, timesUsedShield2, timesUsedLaser, timesUsedShield3, timesUsedNuke, isAdmin, isBanned)";
+                    let insertValuesQuery = " VALUES ('" + data.usernameSignUp + "', '" + encryptedPassword + "', '" + data.useremailSignUp + "', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'false', 'false')";
                     let fullQuery = insertQuery + insertValuesQuery;
                     conn.query(fullQuery, function(err, result){
                         if (err) throw err;
                         console.log("\n(" + getCurrentTime() + ") UPDATE: User " + data.usernameSignUp + " registered!");
                         statusSignUp = true;
+                        conn.query("SELECT userID FROM tbl_userdata WHERE username = '" + data.usernameSignUp + "';", function(err, result, fields){
+                            fs.copyFileSync(__dirname + '/public/textures/default.png', __dirname + '/public/profileImages/' + result[0].userID + ".png");
+                        });
+                        
                     });
                 }          
                 socket.emit('signUp', {statusSignUp : statusSignUp, signUpWarning : signUpWarning});        
@@ -700,6 +735,7 @@ try {
             // Login Validation
             let signInStatus = false;
             let message = "User Account does not exist!";
+            let userElo;
             conn.query("SELECT * FROM tbl_userData", function(err, result, fields) {
                 for (let x = 0; x < result.length; x++) {
                     // console.log("test input name: " + data.usernameSignUp + "\nresult name: " + result[x].username);  
@@ -707,7 +743,8 @@ try {
                         if (data.usernameLogin == result[x].username) {
                             let decryptedPassword = simpleCrypto.decrypt(result[x].password);
                             if(data.passwordLogin == decryptedPassword) {
-                                signInStatus = true;
+                                signInStatus = true;           
+                                userElo = result[x].userElo;                     
                             }   
                         } 
                     }                                 
@@ -724,7 +761,7 @@ try {
                     }                                                                                
                     consoleUpdate();                  
                 }                
-                socket.emit('signIn', {signInStatus : signInStatus, username : socket.username, changelogContents : changelogContents, message : message});
+                socket.emit('signIn', {signInStatus : signInStatus, username : socket.username, changelogContents : changelogContents, message : message, userElo : userElo});
                 updateCount();
             })            
         })
@@ -807,10 +844,11 @@ try {
 
         // =============================== Profile ===============================
         socket.on('profile', function(){
-            let profileQuery = "SELECT username, userElo, userWin, userLose, timesUsedCharge, timesUsedPistol, timesUsedShield1, timesUsedCounter, timesUsedEvade, timesUsedBlock, timesUsedDoublePistol, timesUsedGrenade, timesUsedShotgun, timesUsedShield2, timesUsedLaser, timesUsedShield3, timesUsedNuke FROM tbl_userdata WHERE username = '" + socket.username + "';";
+            let profileQuery = "SELECT userID, username, userElo, userWin, userLose, timesUsedCharge, timesUsedPistol, timesUsedShield1, timesUsedCounter, timesUsedEvade, timesUsedBlock, timesUsedDoublePistol, timesUsedGrenade, timesUsedShotgun, timesUsedShield2, timesUsedLaser, timesUsedShield3, timesUsedNuke FROM tbl_userdata WHERE username = '" + socket.username + "';";
             conn.query(profileQuery, function(err, result, fields){
                 if (err) throw err;
-                socket.emit('profileConfirm', result);
+                let profileSrc = __dirname + '/public/profileImages/';
+                socket.emit('profileConfirm', {result : result, profileSrc : profileSrc});
             });
         }) 
     })

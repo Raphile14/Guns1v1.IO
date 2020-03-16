@@ -1,14 +1,636 @@
+/* ========================================== Main Body ========================================== */
 body{
     margin:0;
     color:#6a6f8c;
     background:#c8c8c8;
-    font:600 16px/18px 'Bungee',cursive;
-    /* background:url("cube2.gif"); */
+    font: 600 16px/18px 'Bungee', cursive;
+    width: 100vw;
+    height: 100vh;
+    /* to remove unnecessary scroll bar */
+    overflow: hidden; 
   }
-  *,:after,:before{box-sizing:border-box}
-  .clearfix:after,.clearfix:before{content:'';display:table}
-  .clearfix:after{clear:both;display:block}
-  a{color:inherit;text-decoration:none}
+
+/* ===================================== Three.js background ===================================== */
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+/* ========================================== Login Page ========================================== */
+#loginPage {  
+  transform: translate(0%, 35%);
+}
+
+.login-html{
+  width:40%;
+  height:50%;
+  margin: 0 auto;
+}
+
+/* ======================================= Registration Page ======================================= */
+#registrationPage {  
+  transform: translate(0%, 15%);
+}
+
+/* ======================================= Chatroom Page ======================================= */
+#chatRoom {
+  background-color: rgba(0,0,0,0);
+  width:100%;
+  height:100%;
+  margin:auto;
+  transform: translate(0%, 5%);
+}
+
+#mainMenuContainer {
+  width: 95%; 
+  border: 0;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+#changelogArea {
+  overflow: auto; 
+  height: 460px; 
+  width: 100%;
+  max-height: 100%; 
+  table-layout: fixed;
+  color: rgb(180, 180, 180);
+}
+
+#playerStatus {
+  width: 20%; 
+  /* border: 5px solid rgb(10, 10, 10);  */
+  vertical-align: text-top; 
+  color: rgb(180, 180, 180);
+}
+
+section#chatroom {
+  border: 5px inset #8258FA;
+  height: 390px;
+  max-height:100%;
+  width: 100%;
+  overflow: auto;    
+  /* display: none;   */
+}
+
+section#input_zone {  
+  text-align: center;
+  background-color: #BCA9F5;
+  width:100%;
+  padding-bottom: 10px;      
+  /* display: none;   */
+}
+
+/* ======================================= Rank and Casual Page ======================================= */
+
+#rankMatch, #casualMatch {
+  color: white;
+}
+#rankLobbyName, #casualLobbyName {
+  margin-top: 5%;
+  font-size: 150%;
+}
+#rankOtherDetails, #casualOtherDetails {  
+  width: 100%;
+  bottom: 0;
+  margin: auto;
+  text-align: center;
+  position: fixed;
+}
+#rankGUI, #casualGUI {
+  margin: auto;
+}
+#matchActions {
+  margin: auto;
+}
+#rankEnemyStats, #casualEnemyStats {
+  text-align: left;
+  vertical-align: top;
+}
+
+#rankPlayerStats, #casualPlayerStats {
+  text-align: right;
+  vertical-align: top;
+}
+
+/* ======================================= Instructions Page ======================================= */
+#instructionspage {
+  background-color: rgba(0,0,0,0);
+  /* align-content: center; */
+  position:absolute;
+  width:100%;
+  height:100%;
+}
+#instructionsHead {
+  text-align: center;
+  margin-top: 5%;
+  font-size: 150%;
+}
+.instructionspage-html{
+  text-align: right;
+  bottom: 0;
+  position: fixed;
+  right: 0;
+  padding-right: 10%;
+  /* margin: 0px auto; */
+  /* background:rgba(40,57,101,.9); */
+}
+
+.t1InstructionButton:hover {background-color: rgb(1, 129, 119)}
+.t1InstructionButton {
+  background:none;
+  /* background-color: rgb(49, 255, 245);  */
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-family: 'Bungee', cursive;
+  font-size: 100%;
+  border-radius:5px;
+  border:solid 1px rgb(49, 255, 245);
+  -webkit-transition: all 0.1s;
+  -moz-transition: all 0.1s;
+  transition: all 0.1s;
+
+
+
+  width:100%;
+  height: 10%;
+  
+  -webkit-box-shadow: 0px 6px 0px #008079;
+  -moz-box-shadow: 0px 6px 0px #008079;
+  box-shadow: 0px 6px 0px #008079;
+}
+.mechanics {
+  display: inline-block;
+  width: 600px;
+  background:none;
+  color: #fff;
+  text-align: justify;
+  padding: 5px 0;
+  border-radius: 6px;
+  white-space:pre-wrap;
+  position: absolute;
+  top:-10%;
+  left:-60%;
+  z-index: 1;
+}
+.t1InstructionButton .tooltiptext {
+  visibility: hidden;
+  width: 600px;
+  background:none;
+  color: #fff;
+  text-align: justify;
+  padding: 5px 0;
+  border-radius: 6px;
+  white-space:pre-wrap;
+  position: absolute;
+  top:-100%;
+  left:10%;
+  z-index: 1;
+}
+.t1InstructionButton:hover .tooltiptext {
+  visibility: visible;
+
+}
+
+.t1InstructionButton:hover .mechanics {
+  display: none;
+}
+
+.t2InstructionButton:hover {background-color:#25006b}
+.t2InstructionButton {
+  background:none;
+  /* background-color: rgb(90, 41, 226);  */
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-family: 'Bungee', cursive;
+  font-size: 100%;
+  border-radius:5px;
+  border:solid 1px rgb(28, 57, 224);
+  -webkit-transition: all 0.1s;
+  -moz-transition: all 0.1s;
+  transition: all 0.1s;
+
+
+  width:100%;
+  height: 5%;
+  
+  -webkit-box-shadow: 0px 6px 0px #25006b;
+  -moz-box-shadow: 0px 6px 0px #25006b;
+  box-shadow: 0px 6px 0px #25006b;
+}
+.t2InstructionButton .tooltiptext {
+  visibility: hidden;
+  width: 600px;
+  background:none;
+  color: #fff;
+  text-align: justify;
+  padding: 5px 0;
+  border-radius: 6px;
+  white-space:pre-wrap;
+  position: absolute;
+  top:-100%;
+  left:10%;
+  z-index: 1;
+
+}
+.t2InstructionButton:hover .tooltiptext {
+  visibility: visible;
+}
+.t2InstructionButton:hover .t1InstructionButton.mechanics {
+  visibility: hidden;
+}
+
+.t3InstructionButton:hover {background-color: #979500}
+.t3InstructionButton {
+  background:none;
+  /* background-color: rgb(223, 226, 41);  */
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-family: 'Bungee', cursive;
+  font-size: 100%;
+  border-radius:5px;
+  border:solid 1px rgb(223, 226, 41);
+  -webkit-transition: all 0.1s;
+  -moz-transition: all 0.1s;
+  transition: all 0.1s;
+
+  width:100%;
+  height: 5%;
+  
+  -webkit-box-shadow: 0px 6px 0px #979500;
+  -moz-box-shadow: 0px 6px 0px #979500;
+  box-shadow: 0px 6px 0px #979500;
+}
+.t3InstructionButton .tooltiptext {
+  visibility: hidden;
+  width: 600px;
+  background:none;
+  color: #fff;
+  text-align: justify;
+  padding: 5px 0;
+  border-radius: 6px;
+  white-space:pre-wrap;
+  position: absolute;
+  top:-100%;
+  left:10%;
+  z-index: 1;
+}
+.t3InstructionButton:hover .tooltiptext {
+  visibility: visible;
+}
+.t3InstructionButton:hover .mechanics {
+  visibility: hidden;
+}
+.t4InstructionButton:hover {background-color: #973c00}
+.t4InstructionButton {
+  background:none;
+  /* background-color: rgb(255, 126, 51);  */
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-family: 'Bungee', cursive;
+  font-size: 100%;
+  border-radius:5px;
+  border:solid 1px rgb(226, 109, 41);
+  -webkit-transition: all 0.1s;
+  -moz-transition: all 0.1s;
+  transition: all 0.1s;
+
+  width:100%;
+  height: 5%;
+  
+  -webkit-box-shadow: 0px 6px 0px #973c00;
+  -moz-box-shadow: 0px 6px 0px #973c00;
+  box-shadow: 0px 6px 0px #973c00;
+}
+.t4InstructionButton .tooltiptext {
+  visibility: hidden;
+  width: 600px;
+  background:none;
+  color: #fff;
+  text-align: justify;
+  padding: 5px 0;
+  border-radius: 6px;
+  white-space:pre-wrap;
+  position: absolute;
+  top:-100%;
+  left:10%;
+  z-index: 1;
+}
+.t4InstructionButton:hover .tooltiptext {
+  visibility: visible;
+}
+
+.t4InstructionButton:hover .mechanics {
+  visibility: hidden;
+}
+.evadeInstructionButton:hover {background-color: rgb(2, 114, 2)}
+.evadeInstructionButton {
+  background:none;
+  /* background-color: rgb(35, 216, 75);  */
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-family: 'Bungee', cursive;
+  font-size: 100%;
+  border-radius:5px;
+  border:solid 1px rgb(26, 211, 66);
+  -webkit-transition: all 0.1s;
+  -moz-transition: all 0.1s;
+  transition: all 0.1s;
+
+
+
+
+  width:100%;
+  height: 10%;
+  
+  -webkit-box-shadow: 0px 6px 0px #0dc545;
+  -moz-box-shadow: 0px 6px 0px #0dc545;
+  box-shadow: 0px 6px 0px #0dc545;
+}
+.evadeInstructionButton .tooltiptext {
+  visibility: hidden;
+  width: 450px;
+  background:none;
+  color: #fff;
+  text-align: justify;
+  padding: 5px 0;
+  border-radius: 6px;
+  white-space:pre-wrap;
+  position: absolute;
+  top:-100%;
+  left:10%;
+  z-index: 1;
+}
+.evadeInstructionButton:hover .tooltiptext {
+  visibility: visible;
+}
+
+.evadeInstructionButton:hover .mechanics {
+  visibility: hidden;
+}
+.freeInstructionButton:hover {background-color: rgb(2, 114, 2)}
+.freeInstructionButton {
+  background:none;
+  /* background-color: rgb(35, 216, 75);  */
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-family: 'Bungee', cursive;
+  font-size: 100%;
+  border-radius:5px;
+  border:solid 1px rgb(26, 211, 66);
+  -webkit-transition: all 0.1s;
+  -moz-transition: all 0.1s;
+  transition: all 0.1s;
+
+
+  width:100%;
+  height: 10%;
+  
+  -webkit-box-shadow: 0px 6px 0px #0dc545;
+  -moz-box-shadow: 0px 6px 0px #0dc545;
+  box-shadow: 0px 6px 0px #0dc545;
+}
+.freeInstructionButton .tooltiptext {
+  visibility: hidden;
+  width: 450px;
+  background:none;
+  color: #fff;
+  text-align: justify;
+  padding: 5px 0;
+  border-radius: 6px;
+  white-space:pre-wrap;
+  position: absolute;
+  top:-100%;
+  left:10%;
+  z-index: 1;
+}
+.freeInstructionButton:hover .tooltiptext {
+  visibility: visible;
+}
+.freeInstructionButton:hover .t1InstructionButton .mechanics {
+  visibility: hidden;
+}
+
+.t1Button:hover {background-color: rgb(1, 129, 119)}
+  .t1Button {
+    background:none;
+    /* background-color: rgb(49, 255, 245);  */
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 100%;
+    border-radius:5px;
+    border:solid 1px rgb(49, 255, 245);
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+
+    width:100%;
+    height: 5%;
+    
+    -webkit-box-shadow: 0px 6px 0px #008079;
+    -moz-box-shadow: 0px 6px 0px #008079;
+    box-shadow: 0px 6px 0px #008079;
+  }
+  .t2Button:hover {background-color:#25006b}
+  .t2Button {
+    background:none;
+    /* background-color: rgb(90, 41, 226);  */
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 100%;
+    border-radius:5px;
+    border:solid 1px rgb(28, 57, 224);
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+
+    width:100%;
+    height: 5%;
+    
+    -webkit-box-shadow: 0px 6px 0px #25006b;
+    -moz-box-shadow: 0px 6px 0px #25006b;
+    box-shadow: 0px 6px 0px #25006b;
+  }
+  .t3Button:hover {background-color: #979500}
+  .t3Button {
+    background:none;
+    /* background-color: rgb(223, 226, 41);  */
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 100%;
+    border-radius:5px;
+    border:solid 1px rgb(223, 226, 41);
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+    
+    width:100%;
+    height: 5%;
+    
+    -webkit-box-shadow: 0px 6px 0px #979500;
+    -moz-box-shadow: 0px 6px 0px #979500;
+    box-shadow: 0px 6px 0px #979500;
+  }
+  .t4Button:hover {background-color: #973c00}
+  .t4Button {
+    background:none;
+    /* background-color: rgb(255, 126, 51);  */
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 100%;
+    border-radius:5px;
+    border:solid 1px rgb(226, 109, 41);
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+
+    width:100%;
+    height: 5%;
+    
+    -webkit-box-shadow: 0px 6px 0px #973c00;
+    -moz-box-shadow: 0px 6px 0px #973c00;
+    box-shadow: 0px 6px 0px #973c00;
+  }
+  .freeButton:hover {background-color: rgb(2, 114, 2)}
+  .freeButton {
+    background:none;
+    /* background-color: rgb(35, 216, 75);  */
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 100%;
+    border-radius:5px;
+    border:solid 1px rgb(26, 211, 66);
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+
+    width:100%;
+    height: 10%;
+    
+    -webkit-box-shadow: 0px 6px 0px #0dc545;
+    -moz-box-shadow: 0px 6px 0px #0dc545;
+    box-shadow: 0px 6px 0px #0dc545;
+  }
+  .quitButton:hover {background-color: #750a0a}
+  .quitButton {
+    background:none;
+    /* background-color: rgb(175, 76, 76);  */
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    display:inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 80%;
+    border-radius:5px;
+    border:solid 1px rgb(175, 76, 76);
+    width: 10%;
+    height: 5%;
+
+    /* margin-top: 5%; */
+
+    margin-bottom:5px;
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+    -webkit-box-shadow: 0px 6px 0px #660000;
+    -moz-box-shadow: 0px 6px 0px #660000;
+    box-shadow: 0px 6px 0px #660000;
+  }
+  
+
+/* #rankLobbyName {
+  text-align: center;
+} */
+
+div#change_username, section#input_zone {
+  border: 5px outset #8258FA;
+}      
+
+.vertical-align {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+input#username {
+  font-family: 'Comfortaa', sans-serif;
+}
+
+input#message {
+  display: inline-block;
+  width: 88%;
+  height: 50%;
+  font-family: 'Bungee', cursive;
+  font-size: 2vh;
+}
+
+.message:nth-child(even) {
+  background: none;
+}
+
+.message:nth-child(odd) {
+  background: none;
+}
+
+
+*,:after,:before{box-sizing:border-box}
+.clearfix:after,.clearfix:before{content:'';display:table}
+.clearfix:after{clear:both;display:block}
+a{color:inherit;text-decoration:none}
 
   .signup-wrap{
     width:100%;
@@ -24,13 +646,11 @@ body{
   #actionButtonTable {
     border:0px;
     border-collapse:collapse;
-    border-spacing:0px;
+    border-spacing: 0;    
+    min-height: 10%;
   }
 
-  #chatRoom {
-    background-color: rgba(0,0,0,0);
-    position:absolute;
-  }
+  
   #leaderboard {
     background-color: rgba(0,0,0,0);
     /* align-content: center; */
@@ -55,16 +675,7 @@ body{
     height:100%;
   }
 
-  .chat-wrap{
-    width:100%;
-    height:10%;
-    margin:auto;
-    margin-top: 30px;
-    max-width:90%;
-    min-height:300px;
-    /* max-height: 100%; */
-    position:relative;
-  }
+  
 
   .login-wrap{
     width:100%;
@@ -77,16 +688,7 @@ body{
     box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
   }
 
-  /* cube for login */
-  .login-html{
-    width:40%;
-    height:50%;
-    position:absolute;
-    padding:90px 70px 50px 70px;
-    margin-left:30%;
-    /* background:rgba(40,57,101,.9); */
-    
-  }
+  
   .login-html .sign-in-htm,
   .login-html .sign-up-htm{
     top:0;
@@ -271,57 +873,6 @@ body{
       margin: 0px;
   }
   
-  div#change_username, section#input_zone {
-      border: 5px outset #8258FA;
-  }
-  
-
-  
-  section#chatroom {
-      border: 5px inset #8258FA;
-      height: 465px;
-      max-height:100%;
-      width: 100%;
-      overflow: auto;      
-  }
-  /* margin-left: 50%; */
-  
-  section#input_zone {  
-      height:10%;
-      text-align: center;
-      background-color: #BCA9F5;
-      width:100%;
-      padding-bottom: 10px;
-      
-
-  }
-  
-  .vertical-align {
-      position: relative;
-      top: 50%;
-      -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%);
-  }
-  
-  input#username {
-      font-family: 'Comfortaa', sans-serif;
-  }
-  
-  input#message {
-      display: inline-block;
-      width: 88%;
-      height: 70%;
-      font-family: 'Bungee', cursive;
-      font-size: 2vh;
-  }
-  
-  button#send_message {
-      display: inline-block;
-      height: 70%;
-      width: 10%;
-  }
-  
   p.message {
       margin: 0px;
       width: 100%;
@@ -330,14 +881,6 @@ body{
       font-family: 'Bungee', cursive;
       padding: 1vh;
       color: white;
-  }
-  
-  .message:nth-child(even) {
-      background-color:rgba(40,57,101,.9);;
-  }
-  
-  .message:nth-child(odd) {
-      background-color: rgb(97, 125, 247);
   }
   
   .rButton:hover {background-color: #022f55}
@@ -478,12 +1021,38 @@ body{
 
     margin-left: 30px;
     margin-top: 30px;
-    width:30%;
-    height: 20%;
+    width:50%;
+    height: 10%;
     
     -webkit-box-shadow: 0px 6px 0px #002966;
     -moz-box-shadow: 0px 6px 0px #002966;
     box-shadow: 0px 6px 0px #002966;
+  }
+  .okButton:hover {background-color: rgb(0, 95, 16)}
+  .okButton {
+    background-color: rgb(90, 235, 97); 
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Bungee', cursive;
+    font-size: 100%;
+    border-radius:5px;
+    border:solid 1px rgb(98, 235, 127);
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s;
+
+    margin-left: 30px;
+    margin-top: 30px;
+    width:10%;
+    height: 10%;
+    
+    -webkit-box-shadow: 0px 6px 0px #00940c;
+    -moz-box-shadow: 0px 6px 0px #00940c;
+    box-shadow: 0px 6px 0px #00940c;
   }
   .btn-group button {
     display: flex;  
@@ -554,6 +1123,7 @@ body{
     -moz-box-shadow: 0px 6px 0px #006b6b;
     box-shadow: 0px 6px 0px #006b6b;
   }
+
   .leaderboardshowButton:hover {background-color: #006b6b}
   .leaderboardshowButton {
     background-color: rgb(41, 205, 226); 
@@ -587,111 +1157,13 @@ body{
     height: 50px;
     border-radius: 50%;
   }
-  table, th {
-    border: 1px solid gray;
-  }
-
-  .t1Button:hover {background-color: rgb(2, 114, 2)}
-  .t1Button {
-    background-color: rgb(35, 216, 75); 
-    border: none;
-    color: white;
-    padding: 16px 32px;
-    text-align: center;
-    text-decoration: none;
+  input#changeUserName {
     display: inline-block;
+    width: 10%;
+    height:5%;
     font-family: 'Bungee', cursive;
-    font-size: 100%;
-    border-radius:5px;
-    border:solid 1px rgb(26, 211, 66);
-    -webkit-transition: all 0.1s;
-    -moz-transition: all 0.1s;
-    transition: all 0.1s;
-
-    margin-left: 30px;
-    margin-top: 30px;
-
-    width:60%;
-    height: 10%;
-    
-    -webkit-box-shadow: 0px 6px 0px #0dc545;
-    -moz-box-shadow: 0px 6px 0px #0dc545;
-    box-shadow: 0px 6px 0px #0dc545;
+    font-size: 16px;
   }
-  .t2Button:hover {background-color:#25006b}
-  .t2Button {
-    background-color: rgb(90, 41, 226); 
-    border: none;
-    color: white;
-    padding: 16px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-family: 'Bungee', cursive;
-    font-size: 100%;
-    border-radius:5px;
-    border:solid 1px rgb(28, 57, 224);
-    -webkit-transition: all 0.1s;
-    -moz-transition: all 0.1s;
-    transition: all 0.1s;
 
-    margin-left: 30px;
-    margin-top: 30px;
 
-    width:60%;
-    height: 10%;
-    
-    -webkit-box-shadow: 0px 6px 0px #25006b;
-    -moz-box-shadow: 0px 6px 0px #25006b;
-    box-shadow: 0px 6px 0px #25006b;
-  }
-  .t3Button:hover {background-color: #979500}
-  .t3Button {
-    background-color: rgb(223, 226, 41); 
-    border: none;
-    color: white;
-    padding: 16px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-family: 'Bungee', cursive;
-    font-size: 100%;
-    border-radius:5px;
-    border:solid 1px rgb(223, 226, 41);
-    -webkit-transition: all 0.1s;
-    -moz-transition: all 0.1s;
-    transition: all 0.1s;
-
-    margin-left: 30px;
-    margin-top: 30px;
-
-    width:60%;
-    height: 10%;
-    
-    -webkit-box-shadow: 0px 6px 0px #979500;
-    -moz-box-shadow: 0px 6px 0px #979500;
-    box-shadow: 0px 6px 0px #979500;
-  }
-  .quitButton:hover {background-color: #750a0a}
-  .quitButton {
-    background-color: rgb(175, 76, 76); 
-    border: none;
-    color: white;
-    padding: 16px 64px;
-    text-decoration: none;
-    display:inline-block;
-    font-family: 'Bungee', cursive;
-    font-size: 100%;
-    border-radius:5px;
-    border:solid 1px rgb(175, 76, 76);
-    width: 20%;
-    height: 10%;
-    
-    -webkit-transition: all 0.1s;
-    -moz-transition: all 0.1s;
-    transition: all 0.1s;
-    -webkit-box-shadow: 0px 6px 0px #660000;
-    -moz-box-shadow: 0px 6px 0px #660000;
-    box-shadow: 0px 6px 0px #660000;
-  }
   

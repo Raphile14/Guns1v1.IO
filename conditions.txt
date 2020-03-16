@@ -1,0 +1,88 @@
+Action Name: Charge
+Cost: Free
+Description: Gives the Player 1 Charge
+Beats: None
+Can Be Defeated by: Pistol, Double Pistol, Grenade, Shotgun, Laser, and Nuke
+
+Action Name: Counter
+Cost: 1 Charge
+Description: Defeats any Shield
+Beats: Shield Level 1, Shield Level 2, Shield Level 3
+Can Be Defeated by: Pistol, Double Pistol, Grenade, Shotgun, Laser, and Nuke
+
+Action Name: Evade
+Cost: Free
+Description: Evades almost every Action
+Beats: None
+Can Be Defeated by: Double Pistol, Laser, Nuke
+
+Action Name: Block
+Cost: Free
+Description: Evades almost every Action
+Beats: None
+Can Be Defeated by: Grenade, Laser, Nuke
+
+Action Name: Pistol
+Cost: 1 Charge
+Description: Shoots 1 Bullet
+Beats: Charge and Counter
+Can Be Defeated by: Double Pistol, Grenade, Shotgun, Laser, Nuke, Shield 1, Shield 2, and Shield 3
+ 
+Action Name: Double Pistol
+Cost: 2 Charges
+Description: Shoots 1 Bullet
+Beats: Charge, Counter, Evade, and Pistol
+Can Be Defeated by: Laser, Nuke, Shield 1, Shield 2, and Shield 3
+
+Action Name: Shotgun
+Cost: 2 Charges
+Description: Shoots a Buckshot
+Beats: Charge, Counter, Pistol, and Shield 1
+Can Be Defeated by: Laser, Nuke, Shield 2, and Shield 3
+
+Action Name: Grenade
+Cost: 2 Charges
+Description: Throw a nade! (Kobe!)
+Beats: Charge, Counter, Block, and Pistol
+Can Be Defeated by: Laser, Nuke, Shield 1, Shield 2, and Shield 3
+
+Action Name: Laser
+Cost: 3 Charges
+Description: Shoot a very bright light!
+Beats: Charge, Counter, Block, Evade, Pistol, Double Pistol, Shotgun, Grenade, and Shield 1
+Can Be Defeated by: Nuke, Shield 2, and Shield 3
+
+Action Name: Nuke
+Cost: 4 Charges
+Description: The motherlode
+Beats: Charge, Counter, Block, Evade, Pistol, Double Pistol, Shotgun, Grenade, Shield 1, and Shield 2
+Can Be Defeated by: Shield 3
+
+Action Name: Shield level 1
+Cost: 1 Charge
+Description: Simple Protection
+Beats: Pistol, Double Pistol, and Grenade
+Can Be Defeated by: Counter, Shotgun, Laser and Nuke
+
+Action Name: Shield Level 2
+Cost: 2 Charges
+Description: Adequate Protection
+Beats: Pistol, Double Pistol, Shotgun, Grenade, and Laser
+Can Be Defeated by: Counter, and Nuke
+
+Action Name: Shield Level 3
+Cost: 3 Charges
+Description: Ultimate Protection
+Beats: Pistol, Double Pistol, Shotgun, Grenade, Laser, and Nuke
+Can Be Defeated by: Counter
+
+Mechanics:
+
+Guns1v1 is the next level Rock, Paper, Scissors.
+
+Almost every action requires certain amounts of charges.
+Use the actions to win.
+
+You only have one life. Make the most of it.
+
+Similar actions will result in a draw. No one dies!

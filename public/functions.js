@@ -23,10 +23,107 @@ function getTimeOnly() {
     return time;
 }
 
+function showAnimation(actionName, isEnemy) {
+    if (!isEnemy) {
+        if (actionName == "charge") {
+            hoverCharge = true; hoverPistol = false; hoverCounter = false; hoverShield1 = false; hoverEvade = false; hoverBlock = false; hoverDoublePistol = false; hoverGrenade = false; hoverShotgun = false; hoverShield2 = false; hoverLaser = false; hoverShield3 = false; hoverNuke = false;
+        }
+        else if (actionName == "pistol") {
+            hoverCharge = false; hoverPistol = true; hoverCounter = false; hoverShield1 = false; hoverEvade = false; hoverBlock = false; hoverDoublePistol = false; hoverGrenade = false; hoverShotgun = false; hoverShield2 = false; hoverLaser = false; hoverShield3 = false; hoverNuke = false;
+        }
+        else if (actionName == "counter") {
+            hoverCharge = false; hoverPistol = false; hoverCounter = true; hoverShield1 = false; hoverEvade = false; hoverBlock = false; hoverDoublePistol = false; hoverGrenade = false; hoverShotgun = false; hoverShield2 = false; hoverLaser = false; hoverShield3 = false; hoverNuke = false;
+        }
+        else if (actionName == "shield1") {
+            hoverCharge = false; hoverPistol = false; hoverCounter = false; hoverShield1 = true; hoverEvade = false; hoverBlock = false; hoverDoublePistol = false; hoverGrenade = false; hoverShotgun = false; hoverShield2 = false; hoverLaser = false; hoverShield3 = false; hoverNuke = false;
+        }
+        else if (actionName == "evade") {
+            hoverCharge = false; hoverPistol = false; hoverCounter = false; hoverShield1 = false; hoverEvade = true; hoverBlock = false; hoverDoublePistol = false; hoverGrenade = false; hoverShotgun = false; hoverShield2 = false; hoverLaser = false; hoverShield3 = false; hoverNuke = false;
+        }
+        else if (actionName == "block") {
+            hoverCharge = false; hoverPistol = false; hoverCounter = false; hoverShield1 = false; hoverEvade = false; hoverBlock = true; hoverDoublePistol = false; hoverGrenade = false; hoverShotgun = false; hoverShield2 = false; hoverLaser = false; hoverShield3 = false; hoverNuke = false;
+        }
+        else if (actionName == "doublepistol") {
+            hoverCharge = false; hoverPistol = false; hoverCounter = false; hoverShield1 = false; hoverEvade = false; hoverBlock = false; hoverDoublePistol = true; hoverGrenade = false; hoverShotgun = false; hoverShield2 = false; hoverLaser = false; hoverShield3 = false; hoverNuke = false;
+        }
+        else if (actionName == "grenade") {
+            hoverCharge = false; hoverPistol = false; hoverCounter = false; hoverShield1 = false; hoverEvade = false; hoverBlock = false; hoverDoublePistol = false; hoverGrenade = true; hoverShotgun = false; hoverShield2 = false; hoverLaser = false; hoverShield3 = false; hoverNuke = false;
+        }
+        else if (actionName == "shotgun") {
+            hoverCharge = false; hoverPistol = false; hoverCounter = false; hoverShield1 = false; hoverEvade = false; hoverBlock = false; hoverDoublePistol = false; hoverGrenade = false; hoverShotgun = true; hoverShield2 = false; hoverLaser = false; hoverShield3 = false; hoverNuke = false;
+        }
+        else if (actionName == "shield2") {
+            hoverCharge = false; hoverPistol = false; hoverCounter = false; hoverShield1 = false; hoverEvade = false; hoverBlock = false; hoverDoublePistol = false; hoverGrenade = false; hoverShotgun = false; hoverShield2 = true; hoverLaser = false; hoverShield3 = false; hoverNuke = false;
+        }
+        else if (actionName == "laser") {
+            hoverCharge = false; hoverPistol = false; hoverCounter = false; hoverShield1 = false; hoverEvade = false; hoverBlock = false; hoverDoublePistol = false; hoverGrenade = false; hoverShotgun = false; hoverShield2 = false; hoverLaser = true; hoverShield3 = false; hoverNuke = false;
+        }
+        else if (actionName == "shield3") {
+            hoverCharge = false; hoverPistol = false; hoverCounter = false; hoverShield1 = false; hoverEvade = false; hoverBlock = false; hoverDoublePistol = false; hoverGrenade = false; hoverShotgun = false; hoverShield2 = false; hoverLaser = false; hoverShield3 = true; hoverNuke = false;
+        }
+        else if (actionName == "nuke") {
+            hoverCharge = false; hoverPistol = false; hoverCounter = false; hoverShield1 = false; hoverEvade = false; hoverBlock = false; hoverDoublePistol = false; hoverGrenade = false; hoverShotgun = false; hoverShield2 = false; hoverLaser = false; hoverShield3 = false; hoverNuke = true;
+        }
+        else {
+            hoverCharge = false; hoverPistol = false; hoverCounter = false; hoverShield1 = false; hoverEvade = false; hoverBlock = false; hoverDoublePistol = false; hoverGrenade = false; hoverShotgun = false; hoverShield2 = false; hoverLaser = false; hoverShield3 = false; hoverNuke = false;
+        }
+        console.log("PLAYER");
+        console.log(actionName);
+    }
+    else if (isEnemy) {
+        if (actionName == "charge") {
+            hoverChargeE = true; hoverPistolE = false; hoverCounterE = false; hoverShield1E = false; hoverEvadeE = false; hoverBlockE = false; hoverDoublePistolE = false; hoverGrenadeE = false; hoverShotgunE = false; hoverShield2E = false; hoverLaserE = false; hoverShield3E = false; hoverNukeE = false;
+        }
+        else if (actionName == "pistol") {
+            hoverChargeE = false; hoverPistolE = true; hoverCounterE = false; hoverShield1E = false; hoverEvadeE = false; hoverBlockE = false; hoverDoublePistolE = false; hoverGrenadeE = false; hoverShotgunE = false; hoverShield2E = false; hoverLaserE = false; hoverShield3E = false; hoverNukeE = false;
+        }
+        else if (actionName == "counter") {
+            hoverChargeE = false; hoverPistolE = false; hoverCounterE = true; hoverShield1E = false; hoverEvadeE = false; hoverBlockE = false; hoverDoublePistolE = false; hoverGrenadeE = false; hoverShotgunE = false; hoverShield2E = false; hoverLaserE = false; hoverShield3E = false; hoverNukeE = false;
+        }
+        else if (actionName == "shield1") {
+            hoverChargeE = false; hoverPistolE = false; hoverCounterE = false; hoverShield1E = true; hoverEvadeE = false; hoverBlockE = false; hoverDoublePistolE = false; hoverGrenadeE = false; hoverShotgunE = false; hoverShield2E = false; hoverLaserE = false; hoverShield3E = false; hoverNukeE = false;
+        }
+        else if (actionName == "evade") {
+            hoverChargeE = false; hoverPistolE = false; hoverCounterE = false; hoverShield1E = false; hoverEvadeE = true; hoverBlockE = false; hoverDoublePistolE = false; hoverGrenadeE = false; hoverShotgunE = false; hoverShield2E = false; hoverLaserE = false; hoverShield3E = false; hoverNukeE = false;
+        }
+        else if (actionName == "block") {
+            hoverChargeE = false; hoverPistolE = false; hoverCounterE = false; hoverShield1E = false; hoverEvadeE = false; hoverBlockE = true; hoverDoublePistolE = false; hoverGrenadeE = false; hoverShotgunE = false; hoverShield2E = false; hoverLaserE = false; hoverShield3E = false; hoverNukeE = false;
+        }
+        else if (actionName == "doublepistol") {
+            hoverChargeE = false; hoverPistolE = false; hoverCounterE = false; hoverShield1E = false; hoverEvadeE = false; hoverBlockE = false; hoverDoublePistolE = true; hoverGrenadeE = false; hoverShotgunE = false; hoverShield2E = false; hoverLaserE = false; hoverShield3E = false; hoverNukeE = false;
+        }
+        else if (actionName == "grenade") {
+            hoverChargeE = false; hoverPistolE = false; hoverCounterE = false; hoverShield1E = false; hoverEvadeE = false; hoverBlockE = false; hoverDoublePistolE = false; hoverGrenadeE = true; hoverShotgunE = false; hoverShield2E = false; hoverLaserE = false; hoverShield3E = false; hoverNukeE = false;
+        }
+        else if (actionName == "shotgun") {
+            hoverChargeE = false; hoverPistolE = false; hoverCounterE = false; hoverShield1E = false; hoverEvadeE = false; hoverBlockE = false; hoverDoublePistolE = false; hoverGrenadeE = false; hoverShotgunE = true; hoverShield2E = false; hoverLaserE = false; hoverShield3E = false; hoverNukeE = false;
+        }
+        else if (actionName == "shield2") {
+            hoverChargeE = false; hoverPistolE = false; hoverCounterE = false; hoverShield1E = false; hoverEvadeE = false; hoverBlockE = false; hoverDoublePistolE = false; hoverGrenadeE = false; hoverShotgunE = false; hoverShield2E = true; hoverLaserE = false; hoverShield3E = false; hoverNukeE = false;
+        }
+        else if (actionName == "laser") {
+            hoverChargeE = false; hoverPistolE = false; hoverCounterE = false; hoverShield1E = false; hoverEvadeE = false; hoverBlockE = false; hoverDoublePistolE = false; hoverGrenadeE = false; hoverShotgunE = false; hoverShield2E = false; hoverLaserE = true; hoverShield3E = false; hoverNukeE = false;
+        }
+        else if (actionName == "shield3") {
+            hoverChargeE = false; hoverPistolE = false; hoverCounterE = false; hoverShield1E = false; hoverEvadeE = false; hoverBlockE = false; hoverDoublePistolE = false; hoverGrenadeE = false; hoverShotgunE = false; hoverShield2E = false; hoverLaserE = false; hoverShield3E = true; hoverNukeE = false;
+        }
+        else if (actionName == "nuke") {
+            hoverChargeE = false; hoverPistolE = false; hoverCounterE = false; hoverShield1E = false; hoverEvadeE = false; hoverBlockE = false; hoverDoublePistolE = false; hoverGrenadeE = false; hoverShotgunE = false; hoverShield2E = false; hoverLaserE = false; hoverShield3E = false; hoverNukeE = true;
+        }
+        else {
+            hoverChargeE = false; hoverPistolE = false; hoverCounterE = false; hoverShield1E = false; hoverEvadeE = false; hoverBlockE = false; hoverDoublePistolE = false; hoverGrenadeE = false; hoverShotgunE = false; hoverShield2E = false; hoverLaserE = false; hoverShield3E = false; hoverNukeE = false;
+        }
+        console.log("ENEMY");
+        console.log(actionName);
+    }
+}
+
 $(function(){
     // connect to server. change if ip address changes
     // let socket = io.connect('http://192.168.0.11:3000');
-    let socket = io.connect('http://admin-wye3.localhost.run'); //263cba96.ngrok.io
+    let socket = io.connect('http://localhost:8080'); //263cba96.ngrok.io
+    let uploader = new SocketIOFileUpload(socket);
+    uploader.listenOnInput(document.getElementById("siofu_input"));
 
     // Logout
     let logout = $("#logout");
@@ -47,11 +144,13 @@ $(function(){
     socket.on('rankQueueConfirmation', (data) => {
         if (data.queueWarning.length > 0) {
             document.getElementById("rankedButton").style.background = 'rgb(90, 97, 202)';
-            alert(data.queueWarning);
+            document.getElementById("playerQueueStatus").innerText = "ONLINE";
+            document.getElementById("playerQueueStatus").style.color = 'rgb(180, 180, 180)';  
         }
         else {
             document.getElementById("rankedButton").style.background = '#808080';
-            alert("Queuing for a Rank Match");
+            document.getElementById("playerQueueStatus").innerText = "QUEUING: RANK";
+            document.getElementById("playerQueueStatus").style.color = '#0dc545';            
         }
     });
 
@@ -65,7 +164,7 @@ $(function(){
     // Join Rank Match
     socket.on('rankJoin', (data) => {
         document.getElementById("rankedButton").style.background = 'rgb(90, 97, 202)';        
-        document.getElementById("rankPlayerName").innerText = username + "'s";
+        document.getElementById("rankPlayerName").innerText = username;
         document.getElementById("rankLobbyName").innerText = data.lobbyName;
         lobbyName = data.lobbyName;
         if (data.players[0] == username) {            
@@ -76,6 +175,10 @@ $(function(){
             enemy = data.players[0];
             document.getElementById("rankEnemyName").innerText = enemy;
         }
+        inGamePage = true;
+        mainMenuPage = false;
+        showAnimation("", false);
+        showAnimation("", true);
         return show("rankMatch", "chatRoom");
     });
 
@@ -96,7 +199,17 @@ $(function(){
             document.getElementById("rankEnemyName").innerText = "";
             document.getElementById("rankEnemyUsed").innerText = "No Actions Yet";
             document.getElementById("rankPlayerUsed").innerText = "No Actions Yet";
-            document.getElementById("chargeCount").innerText = "0";
+            document.getElementById("chargeCount").innerText = "0";  
+            document.getElementById("playerQueueStatus").innerText = "ONLINE";
+            document.getElementById("playerQueueStatus").style.color = 'rgb(180, 180, 180)'; 
+            if (data.userWinner == username) {
+                document.getElementById("playerElo").innerText = data.userEloWinner;
+            }
+            else if (data.userLoser == username) {
+                document.getElementById("playerElo").innerText = data.userEloLoser;
+            }                
+            inGamePage = false;
+            mainMenuPage = true;          
             return show('chatRoom', 'rankMatch');
         }        
     });
@@ -139,14 +252,28 @@ $(function(){
             document.getElementById("rankPlayerUsed").innerText = data.player1[3];
             document.getElementById("rankEnemyUsed").innerText = data.player2[3];
             document.getElementById("rankReady").innerText = "Not Ready";
+            showAnimation(data.player1[3], false);
+            showAnimation(data.player2[3], true);
             if (data.player1[2] && !data.player2[2]) {
                 socket.emit('rankGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
+                inGamePage = false;
+                mainMenuPage = true;   
+                showAnimation("", false);
+                showAnimation("", true);
+                document.getElementById("playerQueueStatus").innerText = "ONLINE";
+                document.getElementById("playerQueueStatus").style.color = 'rgb(180, 180, 180)';  
                 return show("winPage", "rankMatch");
             }
             else if (!data.player1[2] && data.player2[2]) {
                 socket.emit('rankGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
+                inGamePage = false;
+                mainMenuPage = true;   
+                showAnimation("", false);
+                showAnimation("", true);
+                document.getElementById("playerQueueStatus").innerText = "ONLINE";
+                document.getElementById("playerQueueStatus").style.color = 'rgb(180, 180, 180)';  
                 return show("losePage", "rankMatch");
             }
         }
@@ -154,18 +281,39 @@ $(function(){
             document.getElementById("chargeCount").innerText = data.player2[1];
             document.getElementById("rankPlayerUsed").innerText = data.player2[3];
             document.getElementById("rankEnemyUsed").innerText = data.player1[3];
+            document.getElementById("rankReady").innerText = "Not Ready";
+            showAnimation(data.player2[3], false);
+            showAnimation(data.player1[3], true);
             if (data.player2[2] && !data.player1[2]) {
                 socket.emit('rankGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
+                inGamePage = false;
+                mainMenuPage = true; 
+                showAnimation("", false);
+                showAnimation("", true);  
+                document.getElementById("playerQueueStatus").innerText = "ONLINE";
+                document.getElementById("playerQueueStatus").style.color = 'rgb(180, 180, 180)';  
                 return show("winPage", "rankMatch");
             }
             else if (!data.player2[2] && data.player1[2]) {
                 socket.emit('rankGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
+                inGamePage = false;
+                mainMenuPage = true; 
+                showAnimation("", false);
+                showAnimation("", true);  
+                document.getElementById("playerQueueStatus").innerText = "ONLINE";
+                document.getElementById("playerQueueStatus").style.color = 'rgb(180, 180, 180)';  
                 return show("losePage", "rankMatch");
             }
         }        
     });
+
+    socket.on('updateElo', (data) => {
+        if (data.username == username) {
+            document.getElementById('playerElo').innerText -= data.value;
+        }
+    })
 
     // Casual Queue
     let casualButton = $("#casualButton");
@@ -177,11 +325,13 @@ $(function(){
     socket.on('casualQueueConfirmation', (data) => {
         if (data.queueWarning.length > 0) {
             document.getElementById("casualButton").style.background = 'rgb(194, 226, 77)';
-            alert(data.queueWarning);
+            document.getElementById("playerQueueStatus").innerText = "ONLINE";
+            document.getElementById("playerQueueStatus").style.color = 'rgb(180, 180, 180)'; 
         }
         else {
             document.getElementById("casualButton").style.background = '#808080';
-            alert("Queuing for a Casual Match");
+            document.getElementById("playerQueueStatus").innerText = "QUEUING: CASUAL";
+            document.getElementById("playerQueueStatus").style.color = '#0dc545'; 
         }
     });  
     
@@ -208,6 +358,10 @@ $(function(){
             enemy = data.players[0];
             document.getElementById("casualEnemyName").innerText = enemy;
         }
+        inGamePage = true;
+        mainMenuPage = false;
+        showAnimation("", false);
+        showAnimation("", true);
         return show("casualMatch", "chatRoom");
     });
 
@@ -229,6 +383,10 @@ $(function(){
             document.getElementById("casualEnemyUsed").innerText = "No Actions Yet";
             document.getElementById("casualPlayerUsed").innerText = "No Actions Yet";
             document.getElementById("casualChargeCount").innerText = "0";
+            document.getElementById("playerQueueStatus").innerText = "ONLINE";
+            document.getElementById("playerQueueStatus").style.color = 'rgb(180, 180, 180)'; 
+            inGamePage = false;
+            mainMenuPage = true;   
             return show('chatRoom', 'casualMatch');
         }        
     });
@@ -270,14 +428,28 @@ $(function(){
             document.getElementById("casualPlayerUsed").innerText = data.player1[3];
             document.getElementById("casualEnemyUsed").innerText = data.player2[3];
             document.getElementById("casualReady").innerText = "Not Ready";
+            showAnimation(data.player1[3], false);
+            showAnimation(data.player2[3], true);
             if (data.player1[2] && !data.player2[2]) {
                 socket.emit('casualGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
+                inGamePage = false;
+                mainMenuPage = true;   
+                showAnimation("", false);
+                showAnimation("", true);
+                document.getElementById("playerQueueStatus").innerText = "ONLINE";
+                document.getElementById("playerQueueStatus").style.color = 'rgb(180, 180, 180)';  
                 return show("winPage", "casualMatch");
             }
             else if (!data.player1[2] && data.player2[2]) {
                 socket.emit('casualGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
+                inGamePage = false;
+                mainMenuPage = true;   
+                showAnimation("", false);
+                showAnimation("", true);
+                document.getElementById("playerQueueStatus").innerText = "ONLINE";
+                document.getElementById("playerQueueStatus").style.color = 'rgb(180, 180, 180)';  
                 return show("losePage", "casualMatch");
             }
         }
@@ -285,17 +457,32 @@ $(function(){
             document.getElementById("casualChargeCount").innerText = data.player2[1];
             document.getElementById("casualPlayerUsed").innerText = data.player2[3];
             document.getElementById("casualEnemyUsed").innerText = data.player1[3];
+            document.getElementById("casualReady").innerText = "Not Ready";
+            showAnimation(data.player2[3], false);
+            showAnimation(data.player1[3], true);
             if (data.player2[2] && !data.player1[2]) {
                 socket.emit('casualGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
+                inGamePage = false;
+                mainMenuPage = true;   
+                showAnimation("", false);
+                showAnimation("", true);
+                document.getElementById("playerQueueStatus").innerText = "ONLINE";
+                document.getElementById("playerQueueStatus").style.color = 'rgb(180, 180, 180)';  
                 return show("winPage", "casualMatch");
             }
             else if (!data.player2[2] && data.player1[2]) {
                 socket.emit('casualGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
+                inGamePage = false;
+                mainMenuPage = true;  
+                showAnimation("", false);
+                showAnimation("", true);      
+                document.getElementById("playerQueueStatus").innerText = "ONLINE";
+                document.getElementById("playerQueueStatus").style.color = 'rgb(180, 180, 180)';             
                 return show("losePage", "casualMatch");
             }
-        }        
+        }
     });
 
     // =================================== Login ===================================
@@ -332,6 +519,10 @@ $(function(){
             document.getElementById("changelogArea").innerText = changelogContents;
             document.getElementById("losePageName").innerText = username;
             document.getElementById("winPageName").innerText = username;
+            document.getElementById("playerUsername").innerText = username + "!";            
+            document.getElementById("playerElo").innerText = data.userElo; 
+            loginRegistrationPage = false;
+            mainMenuPage = true;            
             return show("chatRoom", "loginPage");
         }
     });
@@ -401,11 +592,44 @@ $(function(){
     let instructionMainMenu = $("#instructionMainMenu");
 
     instructions.click(function(){
+        instructionsPage = true;
+        mainMenuPage = false;
+        useWaiting();
         return show('instructionsPage', 'chatRoom');
     });
     instructionMainMenu.click(function(){
+        instructionsPage = false;
+        mainMenuPage = true;
         return show('chatRoom', 'instructionsPage');
     })
+
+    // Hover Input 
+    document.getElementById("instructionsCharge").onmouseover = function(){hoverCharge = true;};
+    document.getElementById("instructionsCharge").onmouseout = function(){hoverCharge = false;};
+    document.getElementById("instructionsPistol").onmouseover = function(){hoverPistol= true;};
+    document.getElementById("instructionsPistol").onmouseout = function(){hoverPistol = false;};
+    document.getElementById("instructionsCounter").onmouseover = function(){hoverCounter= true;};
+    document.getElementById("instructionsCounter").onmouseout = function(){hoverCounter = false;};    
+    document.getElementById("instructionsShield1").onmouseover = function(){hoverShield1= true;};
+    document.getElementById("instructionsShield1").onmouseout = function(){hoverShield1 = false;};
+    document.getElementById("instructionsEvade").onmouseover = function(){hoverEvade= true;};
+    document.getElementById("instructionsEvade").onmouseout = function(){hoverEvade = false;};
+    document.getElementById("instructionsBlock").onmouseover = function(){hoverBlock= true;};
+    document.getElementById("instructionsBlock").onmouseout = function(){hoverBlock = false;};
+    document.getElementById("instructionsDoublePistol").onmouseover = function(){hoverDoublePistol= true;};
+    document.getElementById("instructionsDoublePistol").onmouseout = function(){hoverDoublePistol = false;};
+    document.getElementById("instructionsGrenade").onmouseover = function(){hoverGrenade= true;};
+    document.getElementById("instructionsGrenade").onmouseout = function(){hoverGrenade = false;};
+    document.getElementById("instructionsShotgun").onmouseover = function(){hoverShotgun= true;};
+    document.getElementById("instructionsShotgun").onmouseout = function(){hoverShotgun = false;};
+    document.getElementById("instructionsShield2").onmouseover = function(){hoverShield2= true;};
+    document.getElementById("instructionsShield2").onmouseout = function(){hoverShield2 = false;};
+    document.getElementById("instructionsLaser").onmouseover = function(){hoverLaser= true;};
+    document.getElementById("instructionsLaser").onmouseout = function(){hoverLaser = false;};
+    document.getElementById("instructionsShield3").onmouseover = function(){hoverShield3= true;};
+    document.getElementById("instructionsShield3").onmouseout = function(){hoverShield3 = false;};
+    document.getElementById("instructionsNuke").onmouseover = function(){hoverNuke= true;};
+    document.getElementById("instructionsNuke").onmouseout = function(){hoverNuke = false;};
 
     // ================== Return to Main Menu After Win or Lose ===================
     $("#winPageMainMenu").click(function(){
@@ -448,6 +672,9 @@ $(function(){
     socket.on("newMessage", (data) => {
         console.log(data);
         chatroom.append("<p class = 'message'> (" + getTimeOnly() + ") " + data.username + ": " + data.message + "</p>")
+        $('#chatroom').stop ().animate ({
+            scrollTop: $('#chatroom')[0].scrollHeight
+          });
     })
 
     // Emit a username
@@ -531,26 +758,32 @@ $(function(){
 
     // Profile Confirmation
     socket.on('profileConfirm', (data) => {
-        document.getElementById('profileUserName').innerHTML = data[0].username;
-        document.getElementById('profileGames').innerHTML = ((data[0].userWin) + (data[0].userLose));
-        document.getElementById('profileElo').innerHTML = data[0].userElo;
-        document.getElementById('profileWin').innerHTML = data[0].userWin;
-        document.getElementById('profileLose').innerHTML = data[0].userLose;
-        document.getElementById('profileCharge').innerHTML = data[0].timesUsedCharge;
-        document.getElementById('profilePistol').innerHTML = data[0].timesUsedPistol;
-        document.getElementById('profileShield1').innerHTML = data[0].timesUsedShield1;
-        document.getElementById('profileCounter').innerHTML = data[0].timesUsedCounter;
-        document.getElementById('profileEvade').innerHTML = data[0].timesUsedEvade;
-        document.getElementById('profileBlock').innerHTML = data[0].timesUsedBlock;
-        document.getElementById('profileDoublePistol').innerHTML = data[0].timesUsedDoublePistol;
-        document.getElementById('profileGrenade').innerHTML = data[0].timesUsedGrenade;
-        document.getElementById('profileShotgun').innerHTML = data[0].timesUsedShotgun;
-        document.getElementById('profileShield2').innerHTML = data[0].timesUsedShield2;
-        document.getElementById('profileLaser').innerHTML = data[0].timesUsedLaser;
-        document.getElementById('profileShield3').innerHTML = data[0].timesUsedShield3;
-        document.getElementById('profileNuke').innerHTML = data[0].timesUsedNuke;
+        document.getElementById('profileUserName').innerHTML = data.result[0].username;
+        document.getElementById('profileGames').innerHTML = ((data.result[0].userWin) + (data.result[0].userLose));
+        document.getElementById('profileElo').innerHTML = data.result[0].userElo;
+        document.getElementById('profileWin').innerHTML = data.result[0].userWin;
+        document.getElementById('profileLose').innerHTML = data.result[0].userLose;
+        document.getElementById('profileCharge').innerHTML = data.result[0].timesUsedCharge;
+        document.getElementById('profilePistol').innerHTML = data.result[0].timesUsedPistol;
+        document.getElementById('profileShield1').innerHTML = data.result[0].timesUsedShield1;
+        document.getElementById('profileCounter').innerHTML = data.result[0].timesUsedCounter;
+        document.getElementById('profileEvade').innerHTML = data.result[0].timesUsedEvade;
+        document.getElementById('profileBlock').innerHTML = data.result[0].timesUsedBlock;
+        document.getElementById('profileDoublePistol').innerHTML = data.result[0].timesUsedDoublePistol;
+        document.getElementById('profileGrenade').innerHTML = data.result[0].timesUsedGrenade;
+        document.getElementById('profileShotgun').innerHTML = data.result[0].timesUsedShotgun;
+        document.getElementById('profileShield2').innerHTML = data.result[0].timesUsedShield2;
+        document.getElementById('profileLaser').innerHTML = data.result[0].timesUsedLaser;
+        document.getElementById('profileShield3').innerHTML = data.result[0].timesUsedShield3;
+        document.getElementById('profileNuke').innerHTML = data.result[0].timesUsedNuke;
+        document.getElementById("profilePicture").src = 'profileImages/' + data.result[0].userID + '.png';
         show('profile', 'chatRoom');
     })
+
+    socket.on('profileChange', function(data) {
+        $("#profilePicture").attr("src", "data:image/png;base64," + b64(data.buffer));
+    })
+    function b64(e){var t="";var n=new Uint8Array(e);var r=n.byteLength;for(var i=0;i<r;i++){t+=String.fromCharCode(n[i])}return window.btoa(t)}
 
     // Go back to main menu
     profileMainMenu.click(function(){
