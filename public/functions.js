@@ -1,3 +1,4 @@
+
 let rankQueueLength = 0;
 let username = "Anonymous";
 let lobbyName = "";
@@ -121,7 +122,7 @@ function showAnimation(actionName, isEnemy) {
 $(function(){
     // connect to server. change if ip address changes
     // let socket = io.connect('http://192.168.0.11:3000');
-    let socket = io.connect('http://localhost:8080'); //263cba96.ngrok.io
+    let socket = io.connect('http://admin-ylyp.localhost.run/'); //263cba96.ngrok.io
     let uploader = new SocketIOFileUpload(socket);
     uploader.listenOnInput(document.getElementById("siofu_input"));
 
@@ -157,12 +158,12 @@ $(function(){
     // Found Rank Queue
     socket.on('rankQueueFound', (data) => {
         if (data.players.includes(username)) {
-            socket.emit('rankQueueConfirm', {players : data.players, lobbyName : data.lobbyName});
+            socket.emit('rankQueueConfirm', {players : data.players, lobbyName : data.lobbyName});            
         }
     });
 
     // Join Rank Match
-    socket.on('rankJoin', (data) => {
+    socket.on('rankJoin', (data) => {        
         document.getElementById("rankedButton").style.background = 'rgb(90, 97, 202)';        
         document.getElementById("rankPlayerName").innerText = username;
         document.getElementById("rankLobbyName").innerText = data.lobbyName;
@@ -170,16 +171,26 @@ $(function(){
         if (data.players[0] == username) {            
             enemy = data.players[1];
             document.getElementById("rankEnemyName").innerText = enemy;
+            socket.emit('getEnemyProfilePicture', {enemy : enemy, username : username});
         }   
         else if (data.players[1] == username) {
             enemy = data.players[0];
             document.getElementById("rankEnemyName").innerText = enemy;
+            socket.emit('getEnemyProfilePicture', {enemy : enemy, username : username});
         }
         inGamePage = true;
         mainMenuPage = false;
         showAnimation("", false);
         showAnimation("", true);
         return show("rankMatch", "chatRoom");
+    });
+
+    // Receive Enemy Profile Picture
+    socket.on('enemyProfileChange', (data) => {   
+        $("#enemyPicture").attr("src", "data:image/png;base64," + b64(data.buffer));  
+        $("#enemyPictureCasual").attr("src", "data:image/png;base64," + b64(data.buffer));             
+        console.log("loaded texture");
+        // textureFace.load("data:image/png;base64," + b64(data.buffer));
     });
 
     // Leave/Disconnect from Rank Match
@@ -242,7 +253,8 @@ $(function(){
 
     socket.on('rankDataAccepted', (data) => {
         if (data.username != username) {
-            document.getElementById("rankReady").innerText = "Ready";
+            document.getElementById("rankReady").innerText = "Ready"; 
+            document.getElementById("rankReady").style.color = "#0dc545";
         }
     })
 
@@ -252,13 +264,14 @@ $(function(){
             document.getElementById("rankPlayerUsed").innerText = data.player1[3];
             document.getElementById("rankEnemyUsed").innerText = data.player2[3];
             document.getElementById("rankReady").innerText = "Not Ready";
+            document.getElementById("rankReady").style.color = "#750a0a";
             showAnimation(data.player1[3], false);
             showAnimation(data.player2[3], true);
             if (data.player1[2] && !data.player2[2]) {
                 socket.emit('rankGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
-                inGamePage = false;
-                mainMenuPage = true;   
+                inGamePage = true;
+                mainMenuPage = false;   
                 showAnimation("", false);
                 showAnimation("", true);
                 document.getElementById("playerQueueStatus").innerText = "ONLINE";
@@ -268,8 +281,8 @@ $(function(){
             else if (!data.player1[2] && data.player2[2]) {
                 socket.emit('rankGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
-                inGamePage = false;
-                mainMenuPage = true;   
+                inGamePage = true;
+                mainMenuPage = false;   
                 showAnimation("", false);
                 showAnimation("", true);
                 document.getElementById("playerQueueStatus").innerText = "ONLINE";
@@ -282,13 +295,14 @@ $(function(){
             document.getElementById("rankPlayerUsed").innerText = data.player2[3];
             document.getElementById("rankEnemyUsed").innerText = data.player1[3];
             document.getElementById("rankReady").innerText = "Not Ready";
+            document.getElementById("rankReady").style.color = "#750a0a";
             showAnimation(data.player2[3], false);
             showAnimation(data.player1[3], true);
             if (data.player2[2] && !data.player1[2]) {
                 socket.emit('rankGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
-                inGamePage = false;
-                mainMenuPage = true; 
+                inGamePage = true;
+                mainMenuPage = false; 
                 showAnimation("", false);
                 showAnimation("", true);  
                 document.getElementById("playerQueueStatus").innerText = "ONLINE";
@@ -298,8 +312,8 @@ $(function(){
             else if (!data.player2[2] && data.player1[2]) {
                 socket.emit('rankGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
-                inGamePage = false;
-                mainMenuPage = true; 
+                inGamePage = true;
+                mainMenuPage = false; 
                 showAnimation("", false);
                 showAnimation("", true);  
                 document.getElementById("playerQueueStatus").innerText = "ONLINE";
@@ -345,7 +359,7 @@ $(function(){
     // Join Casual Match
     socket.on('casualJoin', (data) => {
         document.getElementById("casualButton").style.background = 'rgb(194, 226, 77)';        
-        document.getElementById("casualPlayerName").innerText = username + "'s";
+        document.getElementById("casualPlayerName").innerText = username;
         document.getElementById("casualLobbyName").innerText = data.lobbyName;
         console.log(username);
         console.log(data.lobbyName);
@@ -353,10 +367,12 @@ $(function(){
         if (data.players[0] == username) {            
             enemy = data.players[1];
             document.getElementById("casualEnemyName").innerText = enemy;
+            socket.emit('getEnemyProfilePicture', {enemy : enemy, username : username});
         }   
         else if (data.players[1] == username) {
             enemy = data.players[0];
             document.getElementById("casualEnemyName").innerText = enemy;
+            socket.emit('getEnemyProfilePicture', {enemy : enemy, username : username});
         }
         inGamePage = true;
         mainMenuPage = false;
@@ -420,6 +436,7 @@ $(function(){
     socket.on('casualDataAccepted', (data) => {
         if (data.username != username) {
             document.getElementById("casualReady").innerText = "Ready";
+            document.getElementById("casualReady").style.color = "#0dc545";
         }
     })
     socket.on('casualGameData', (data) => {
@@ -428,13 +445,14 @@ $(function(){
             document.getElementById("casualPlayerUsed").innerText = data.player1[3];
             document.getElementById("casualEnemyUsed").innerText = data.player2[3];
             document.getElementById("casualReady").innerText = "Not Ready";
+            document.getElementById("casualReady").style.color = "#750a0a";
             showAnimation(data.player1[3], false);
             showAnimation(data.player2[3], true);
             if (data.player1[2] && !data.player2[2]) {
                 socket.emit('casualGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
-                inGamePage = false;
-                mainMenuPage = true;   
+                inGamePage = true;
+                mainMenuPage = false;   
                 showAnimation("", false);
                 showAnimation("", true);
                 document.getElementById("playerQueueStatus").innerText = "ONLINE";
@@ -444,8 +462,8 @@ $(function(){
             else if (!data.player1[2] && data.player2[2]) {
                 socket.emit('casualGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
-                inGamePage = false;
-                mainMenuPage = true;   
+                inGamePage = true;
+                mainMenuPage = false;   
                 showAnimation("", false);
                 showAnimation("", true);
                 document.getElementById("playerQueueStatus").innerText = "ONLINE";
@@ -458,13 +476,14 @@ $(function(){
             document.getElementById("casualPlayerUsed").innerText = data.player2[3];
             document.getElementById("casualEnemyUsed").innerText = data.player1[3];
             document.getElementById("casualReady").innerText = "Not Ready";
+            document.getElementById("casualReady").style.color = "#750a0a";
             showAnimation(data.player2[3], false);
             showAnimation(data.player1[3], true);
             if (data.player2[2] && !data.player1[2]) {
                 socket.emit('casualGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
-                inGamePage = false;
-                mainMenuPage = true;   
+                inGamePage = true;
+                mainMenuPage = false;   
                 showAnimation("", false);
                 showAnimation("", true);
                 document.getElementById("playerQueueStatus").innerText = "ONLINE";
@@ -474,8 +493,8 @@ $(function(){
             else if (!data.player2[2] && data.player1[2]) {
                 socket.emit('casualGameFinish', {lobbyName : lobbyName});
                 lobbyName = "";
-                inGamePage = false;
-                mainMenuPage = true;  
+                inGamePage = true;
+                mainMenuPage = false;  
                 showAnimation("", false);
                 showAnimation("", true);      
                 document.getElementById("playerQueueStatus").innerText = "ONLINE";
@@ -523,6 +542,9 @@ $(function(){
             document.getElementById("playerElo").innerText = data.userElo; 
             loginRegistrationPage = false;
             mainMenuPage = true;            
+            if (data.isAdmin == "true") {
+                document.getElementById("adminButton").style.display = 'block';
+            }
             return show("chatRoom", "loginPage");
         }
     });
@@ -543,19 +565,18 @@ $(function(){
     let signUpButton = $("#signUpButton");
     
     signUpButton.click(function(){
-        console.log("test");
         let warningSignUp = "";
         // console.log(usernameLogin.val() + " with password: " + passwordLogin.val() + " signed in!");
-        if (usernameSignUp.val().length == 0) {
+        if (usernameSignUp.val().trim().length == 0) {
             warningSignUp += ("Empty Username Field\n");
         }
-        if (useremailSignUp.val().length == 0) {
+        if (useremailSignUp.val().trim().length == 0) {
             warningSignUp += ("Empty Email Field\n");
         }
-        if (passwordSignUp.val().length == 0) {
+        if (passwordSignUp.val().trim().length == 0) {
             warningSignUp += ("Empty Password Field\n");
         }
-        if (passwordSignUpConfirm.val().length == 0) {
+        if (passwordSignUpConfirm.val().trim().length == 0) {
             warningSignUp += ("Empty Confirm Password Field\n");
         }
         if (passwordSignUp.val() != passwordSignUpConfirm.val()) {
@@ -565,7 +586,6 @@ $(function(){
             alert(warningSignUp);
         }        
         else if (warningSignUp.length == 0) {
-            console.log("test2");
             socket.emit('signUp', {usernameSignUp : usernameSignUp.val(), 
             useremailSignUp : useremailSignUp.val(), passwordSignUp : passwordSignUp.val()});
         }        
@@ -635,11 +655,19 @@ $(function(){
     $("#winPageMainMenu").click(function(){
         document.getElementById("chargeCount").innerText = "0";
         document.getElementById("casualChargeCount").innerText = "0";
+        inGamePage = false;
+        instructionsPage = false;
+        mainMenuPage = true;
+        loginRegistrationPage = false;
         return show('chatRoom', 'winPage')
     })
     $("#losePageMainMenu").click(function(){
         document.getElementById("chargeCount").innerText = "0";
         document.getElementById("casualChargeCount").innerText = "0";
+        inGamePage = false;
+        instructionsPage = false;
+        mainMenuPage = true;
+        loginRegistrationPage = false;
         return show('chatRoom', 'losePage')
     })
 
@@ -678,10 +706,55 @@ $(function(){
     })
 
     // Emit a username
-    sendUserName.click(function(){
-        console.log(username.val());
-        socket.emit('changeUserName', {username : username.val()});
-    })    
+    $("#changeUserNameButton").click(function(){
+        let newUsername = document.getElementById("changeUserName").value;
+        newUsername = newUsername.trim();
+        if (newUsername.length == 0) {
+            alert("Username field empty!");
+        }
+        else {
+            socket.emit('changeUserName', {oldUsername : username, username : newUsername});
+        }        
+    })        
+
+    // Receive change username confirmation
+    socket.on('changeUsernameConfirm', (data) => {
+        if (!data.changeStatus && data.oldUsername == username) {
+            alert("Invalid New Username Input");
+        }
+        else if (data.changeStatus && data.oldUsername == username) {
+            username = data.newUsername;
+            console.log(username);
+            document.getElementById("winPageName").innerText = username;
+            document.getElementById("losePageName").innerText = username;
+            document.getElementById("playerUsername").innerText = username + "!";  
+            document.getElementById('profileUserName').innerHTML = username;
+            document.getElementById("rankPlayerName").innerText = username;
+            document.getElementById("casualPlayerName").innerText = username;
+            document.getElementById("changeUserName").value = "";
+            alert("Change Username Success!")
+        }
+    })
+
+    // Emit New Password
+    $("#passwordChange").click(function(){
+        let newPassword = document.getElementById("changePassword").value;
+        let confirmPassword = document.getElementById("changePasswordConfirm").value;
+        let oldPassword = document.getElementById("oldPassword").value;
+        if (newPassword != confirmPassword) {
+            alert("Password and Confirm Password not identical");
+        }
+        else {
+            socket.emit('changePassword', {username : username, password : newPassword, oldPassword : oldPassword});
+        }
+    })
+
+    // Receive change password confirmation
+    socket.on('changePasswordConfirm', function(){
+        document.getElementById("changePassword").value = "";
+        document.getElementById("changePasswordConfirm").value = "";
+        alert("Password Change Success");
+    })
 
     register.click(function(){
         socket.emit('register', {register : true});
@@ -701,6 +774,7 @@ $(function(){
     // Receive Table Data
     socket.on("leaderboardSent", (data) => {
         counter = 0;        
+        length = 0;
         let table = document.getElementById('leaderboardTable');
         if (data.leaderboardStatus) {
             table.innerHTML = "";
@@ -719,8 +793,13 @@ $(function(){
             row.appendChild(headerName);
             row.appendChild(headerType);
             counter += 1;
-
-            for (let x = 0; x < data.leaderboardNames.length; x++) {
+            if (data.leaderboardNames.length > 10) {
+                length = 10;
+            }
+            else {
+                length = data.leaderboardNames.length;
+            }
+            for (let x = 0; x < length; x++) {
                 row = table.insertRow(counter);
                 let cell1 = row.insertCell(0);
                 let cell2 = row.insertCell(1);
@@ -746,6 +825,104 @@ $(function(){
     leaderboardMainMenu.click(function(){
         show('chatRoom', 'leaderboard');
     })
+    // =================================== Admin Controls ===================================
+    function adminQuery(name, type, status) {
+        socket.emit('adminQuery', {name : name, type : type, status : status});
+    }
+    $("#adminButton").click(function(){
+        socket.emit('retrieveAdmin', {username : username});
+        show('adminControls', 'chatRoom');
+    });
+
+    $("#adminShow").click(function(){
+        socket.emit('retrieveAdmin');
+    });
+    socket.on('adminData', (data) => {
+        if (data.username == username) {
+            let counter = 0;
+            let table = document.getElementById("adminTable");
+            table.innerHTML = "";
+            table.style["verticalAlign"] = "middle";
+            table.style["overflow-x"] = "auto"; 
+            let headerName = document.createElement("TH");
+            let headerIsAdmin = document.createElement("TH");
+            let headerAdminStatus = document.createElement("TH");
+            let headerIsBanned = document.createElement("TH");
+            let headerBannedStatus = document.createElement("TH");
+            let row = table.insertRow(counter);
+
+            headerName.innerHTML = "Name";
+            headerName.style['border'] = "5px solid black";
+            headerName.style['width'] = "20%";
+            headerIsAdmin.innerHTML = "isAdmin";
+            headerIsAdmin.style['border'] = "5px solid black";
+            headerIsAdmin.style['width'] = "20%";
+            headerAdminStatus.innerHTML = "Status";
+            headerAdminStatus.style['border'] = "5px solid black";
+            headerAdminStatus.style['width'] = "20%";
+            headerIsBanned.innerHTML = "isBanned";
+            headerIsBanned.style['border'] = "5px solid black";
+            headerIsBanned.style['width'] = "20%";
+            headerBannedStatus.innerHTML = "Status";
+            headerBannedStatus.style['border'] = "5px solid black";
+            headerBannedStatus.style['width'] = "20%";
+            row.appendChild(headerName);
+            row.appendChild(headerIsAdmin);
+            row.appendChild(headerAdminStatus);
+            row.appendChild(headerIsBanned);
+            row.appendChild(headerBannedStatus);
+            counter += 1;
+
+            // while (counter < 1000) {
+            //     row = table.insertRow(counter);
+            //     let cell1 = row.insertCell(0);
+            //     cell1.innerHTML = "Raphael Gwapo";
+            //     counter += 1;
+            // }
+
+            for (let x = 0; x < data.result.length; x++) {
+                row = table.insertRow(counter);
+                let cellName = row.insertCell(0);
+                let cellIsAdmin = row.insertCell(1);
+                let cellIsAdminStatus = row.insertCell(2);
+                let cellIsBanned = row.insertCell(3);
+                let cellIsBannedStatus = row.insertCell(4);
+
+                let adminButton = document.createElement("Button");
+                adminButton.addEventListener('click', function() { 
+                    socket.emit('adminQuery', {name : data.result[x].username, type : "isAdmin", status : data.result[x].isAdmin}); 
+                }, false);                                
+                let banButton = document.createElement("Button");
+                banButton.addEventListener('click', function() { 
+                    socket.emit('adminQuery', {name : data.result[x].username, type : "isBanned", status : data.result[x].isBanned}); 
+                }, false);   
+
+                if (data.result[x].isAdmin == "true") {
+                    adminButton.appendChild(document.createTextNode("Remove Admin"));
+                    cellIsAdminStatus.innerHTML = "Admin";
+                }
+                else if (data.result[x].isAdmin == "false") {
+                    adminButton.appendChild(document.createTextNode("Make Admin"));
+                    cellIsAdminStatus.innerHTML = "non-Admin";
+                }
+                if (data.result[x].isBanned == "true") {
+                    banButton.appendChild(document.createTextNode("Unban User"));
+                    cellIsBannedStatus.innerHTML = "Banned";
+                }
+                else if (data.result[x].isBanned == "false") {
+                    banButton.appendChild(document.createTextNode("Ban User"));
+                    cellIsBannedStatus.innerHTML = "Not Banned";
+                }
+                cellName.innerHTML = data.result[x].username;
+                cellIsAdmin.appendChild(adminButton);                
+                cellIsBanned.appendChild(banButton);                
+            }
+        }
+    });
+
+    $("#adminControlsMainMenu").click(function(){
+        show('chatRoom', 'adminControls');
+    });
 
     // =================================== Profile ===================================
     let profileButton = $("#profileButton");

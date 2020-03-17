@@ -1,5 +1,12 @@
 === CHANGE LOG ===
 
+Update Log 10: Guns1v1 alpha 1.0 (03/17/2020)
+- Added Admin Page
+- Admin Page fully working
+- An Admin Account is generated whenere the website is initially loaded
+- User now able to change username and password
+- Overhaul to graphics
+
 Update Log 9: Guns1v1 alpha 1.0 (03/16/2020)
 - Major Overhaul
 - Implemented graphics for every page

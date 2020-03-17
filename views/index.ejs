@@ -56,7 +56,7 @@
             </div>            
             <div class="hr"> </div>
               <p>
-                <center> <a href="#" onclick="return show('registrationPage', 'loginPage');"> Not yet a Member? Sign up </a> </center>
+                <center> <a id="regis" href="#" onclick="return show('registrationPage', 'loginPage');"> Not yet a Member? Sign up </a> </center>
               </p>       
           </div>
         </div>
@@ -129,6 +129,7 @@
               <td> <button id="leaderboardButton" class="lBoardButton" type="button">Leaderboards </button> </td>
               <td> <button id="profileButton" class="vButton" type="button"> Profile </button> </td>
               <td> <button id="logout" class="lButton" type="button"> Logout </button> </td>
+              <!-- <td> <button id="adminButton" class="adminButton" type="submit"> Admin Controls </button> </td> -->
             </tr>
           </center> </table>                                                                            
         </div>
@@ -149,6 +150,7 @@
               <p> Players Playing <br> == <label id="ingameCount" for="p_playing" class="label"> 0 </label> == </p>
               <p> Queuing in Rank <br> == <label id="rankQueueCount" for="r_queue" class="label"> 0 </label> == </p>
               <p> Queuing in Casual <br> == <label id="casualQueueCount" for="c_queue" class="label"> 0 </label> == </p>                         
+              <p> <a href='#' id='adminButton' style="display: none;"> Open Admin Controls </a> </p>
               </center>
             </td>
             <td style="width: 50%; vertical-align: text-top;">  
@@ -327,7 +329,7 @@ Can Be Defeated by: Shield 3</span> </button> </td>
     <div id="leaderboard" style="display: none;">
         <div class="leaderboard-html">
           <header>
-              <h1> <br> <br> Guns1v1.IO </h1>
+              <!-- <h1> <br> <br> Guns1v1.IO </h1> -->
               <p style="font-size: 40px;"> <br> LEADERBOARDS </p>
 
               <!-- Leaderboard Filter Choices -->
@@ -359,15 +361,42 @@ Can Be Defeated by: Shield 3</span> </button> </td>
       </div>
     </div>
 
+    <!-- ========================================== ADMIN CONTROLS ==========================================  -->
+    <div id="adminControls" style="display: none;">
+      <div class="leaderboard-html">
+        <header>
+            <p style="font-size: 40px;"> <br> ADMIN CONTROLS </p>
+            <!-- Leaderboard Filter Choices -->
+            <button id="adminShow" class="adminshowButton" type="submit"> Refresh </button> <br> <br> <br>
+            <div style="overflow-y: scroll; width: 100%; height: 300px;">            
+              <center> <table id="adminTable" style="border:5px solid rgb(226, 225, 225);">
+                <tr style="border: 5px solid rgb(221, 220, 220);">
+                  <th id="adminName"> Name </th> 
+                  <th id="adminStatusHead"> isAdmin </th> 
+                  <th id="adminButtonsHead" >  </th>
+                  <th id="banStatusHead" > isBanned </th>
+                  <th id="banButtonHead" >  </th>
+                </tr>
+              </center> </table>
+            </div>
+              <button id="adminControlsMainMenu"class="menuButton" type="submit"> Return to Main Menu </button> 
+        </header>
+    </div>
+  </div>
+
     <!-- ========================================== PROFILE ==========================================  -->
-    <div id="profile" style="display: none;">
+    <div id="profile" style="display: none; color: white;">
       <header>  
-        <h1> <br> <br> Guns1v1.IO </h1>
-        <p id="profileUserName" style="font-size:40px;"> User </p>
-        <p><img src="public/profileImages/default.png" accept="image/png" id="profilePicture" alt="Avatar" class="avatar"></p>
-        <input id="changeUserName" name="changeUser" type="text" placeholder="Change Username">
-        <button id="leaderboardMainMenu"class="okButton" type="submit">OK </button> 
-        <input type="file" name="" id="siofu_input">
+        <p id="profileUserName"> User </p>
+        <p><img src="public/profileImages/default.png" accept="image/x-png" id="profilePicture" alt="Avatar" class="avatar" height="300" width="300"></p>
+        <center> <p> <input type="file" name="" id="siofu_input"> *only png file types will be saved! </p> </center>
+        <input id="changeUserName" name="changeUser" type="text" placeholder="Change Username (uppercase)">
+        <button id="changeUserNameButton"class="okButton" type="submit">OK </button> 
+        <p> <input id="oldPassword" name="changePass" type="password" data-type="password" placeholder="Old Password">
+        <input id="changePassword" name="changePass" type="password" data-type="password" placeholder="Change Password">
+        <input id="changePasswordConfirm" name="changePass" type="password" data-type="password" placeholder="Confirm Password">
+        <button id="passwordChange"class="okButton" type="submit">OK </button>  </p>
+        <br>
         <center>
           Player Statistics <br>
           <table style="vertical-align: middle; width: 70%; border:1px solid rgb(206, 206, 206); margin-left:auto;margin-right:auto;">
@@ -412,16 +441,20 @@ Can Be Defeated by: Shield 3</span> </button> </td>
     <div id="rankMatch" style="display: none;">
       <center>
       <div id="rankLobbyName"> </div> <br>
+      <p><img src="public/profileImages/default.png" accept="image/x-png" id="enemyPicture" alt="Avatar" class="avatar" height="300" width="300"></p>
+      <p><div id="rankReady" style="color: #750a0a;"> Not Ready </div> </p>
       <div id="rankOtherDetails">
                              
       <table id="rankGUI">
+        <tr>
+          <div> <p> Charges: </p> <p id="chargeCount"> 0 </p> </div>
+        </tr>
         <tr>
           <!-- Enemy Data -->
           <td id="rankEnemyStats">
             <p> == ENEMY == </p>
             <div id="rankEnemyName"> </div> <br>
-            <div> Used: </div> <div id="rankEnemyUsed"> No Actions Yet </div>
-            <div id="rankReady"> Not Ready </div> 
+            <div> Used: </div> <div id="rankEnemyUsed"> No Actions Yet </div>            
           </td>
           <!-- Middle -->
           <td> <table id="matchActions">
@@ -451,9 +484,8 @@ Can Be Defeated by: Shield 3</span> </button> </td>
           <!-- User Data -->
           <td id="rankPlayerStats">
             <p> == YOU == </p>
-            <div id="rankPlayerName"> </div>  
-            <div> <p> Charges: </p> <p id="chargeCount"> 0 </p> </div>
-            <div> Used: </div> <div id="rankPlayerUsed"> No Actions Yet </div>  
+            <div id="rankPlayerName"> </div>              
+            <p> <div> Used: </div> <div id="rankPlayerUsed"> No Actions Yet </div> </p>
           </td>
         </tr>
       </table>    
@@ -468,15 +500,19 @@ Can Be Defeated by: Shield 3</span> </button> </td>
     <div id="casualMatch" style="display: none;">
       <center>
       <div id="casualLobbyName"> </div> <br>
+      <p><img src="public/profileImages/default.png" accept="image/x-png" id="enemyPictureCasual" alt="Avatar" class="avatar" height="300" width="300"></p>
+      <p><div id="casualReady" style="color: #750a0a;"> Not Ready </div></p>
       <div id="casualOtherDetails">
       <table id="casualGUI">
+        <tr>
+          <div> <p> Charges: </p> <p id="casualChargeCount"> 0 </p> </div>
+        </tr>
         <tr>
           <!-- Enemy Data -->
           <td id="casualEnemyStats">
             <p> == ENEMY == </p>
             <div id="casualEnemyName"> </div>
-            <div id="casualEnemyName"> </div> <br>
-            <div id="casualReady"> Not Ready </div>
+            <div id="casualEnemyName"> </div> <br>            
             <p><div> Used: <div id="casualEnemyUsed"> No Actions Yet </div></div></p>
           </td>
           <!-- Middle -->
@@ -508,9 +544,8 @@ Can Be Defeated by: Shield 3</span> </button> </td>
           <!-- Player Data -->
           <td id="casualPlayerStats">
             <p> == YOU == </p>
-            <div id="casualPlayerName"> </div>
-            <div> <p> Charges: </p> <p id="casualChargeCount"> 0 </p> </div>
-            <div> Used: </div> <div id="casualPlayerUsed"> No Actions Yet </div>
+            <div id="casualPlayerName"> </div>            
+            <p> <div> Used: </div> <div id="casualPlayerUsed"> No Actions Yet </div> </p>
           </td>
         </tr>
       </table>   

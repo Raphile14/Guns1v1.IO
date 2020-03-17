@@ -78,8 +78,25 @@ try {
         try {
             let createTable = "CREATE TABLE tbl_userData (userID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), password VARCHAR(255), userEmail VARCHAR(255), userElo int, userWin int, userLose int, timesUsedCharge int, timesUsedPistol int, timesUsedShield1 int, timesUsedCounter int, timesUsedEvade int, timesUsedBlock int, timesUsedDoublePistol int, timesUsedGrenade int, timesUsedShotgun int, timesUsedShield2 int, timesUsedLaser int, timesUsedShield3 int, timesUsedNuke int, isAdmin VARCHAR(255), isBanned VARCHAR(255));";
             conn.query(createTable, function(err, result){
-                // if (err) throw err;
-                console.log("UPDATE: tbl_userData created");
+                if (err) {
+                    console.log("UPDATE: tbl_userData already exists!");
+                }
+                else {
+                    let encryptedPassword = simpleCrypto.encrypt("admin");
+                    console.log("UPDATE: tbl_userData created and an Admin account is inserted");
+                    let insertQuery = "INSERT INTO tbl_userData (username, password, userEmail, userElo, userWin, userLose, timesUsedCharge, timesUsedPistol, timesUsedShield1, timesUsedCounter, timesUsedEvade, timesUsedBlock, timesUsedDoublePistol, timesUsedGrenade, timesUsedShotgun, timesUsedShield2, timesUsedLaser, timesUsedShield3, timesUsedNuke, isAdmin, isBanned)";
+                    let insertValuesQuery = " VALUES ('Admin', '" + encryptedPassword + "', 'admin@gmail.com', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'true', 'false')";
+                    let fullQuery = insertQuery + insertValuesQuery;
+                    conn.query(fullQuery, function(err, result){
+                        if (err) throw err;
+                        console.log("\n(" + getCurrentTime() + ") UPDATE: User Admin registered!");
+                        statusSignUp = true;
+                        conn.query("SELECT userID FROM tbl_userdata WHERE username = 'Admin';", function(err, result, fields){
+                            fs.copyFileSync(__dirname + '/public/textures/default.png', __dirname + '/public/profileImages/' + result[0].userID + ".png");
+                        });                        
+                    });
+                }
+                
             })
         } catch (error) {
             console.log("ERROR: Table already exists or error in creating table");
@@ -130,8 +147,6 @@ try {
             statusOfPlayers.splice(index, 1);
             modeOfPlayers.splice(index, 1);
             socket.ingameStatus = false;
-            console.log("FROM REMOVE FUNCTION");
-            console.log(inGame);
             updateCount();
         }
         // =============================== Uploading Files ================================
@@ -147,9 +162,18 @@ try {
                 fs.renameSync(event.file.pathName, __dirname +'/public/profileImages/' + result[0].userID + '.' + file.substr(lastIndex + 1));
                 fs.readFile(__dirname +'/public/profileImages/' + ID + '.' + file.substr(lastIndex + 1), function(err, data){
                     socket.emit('profileChange', {image : true, buffer : data});
-                    // socket.emit('profileChange', {username : socket.username, userID : result[0].userID});
                 })                 
             });            
+        })
+
+        // Get Image of Enemy
+        socket.on('getEnemyProfilePicture', (data) => {
+            conn.query("SELECT userID FROM tbl_userdata WHERE username = '" + data.enemy + "';", function(err, result, fields){
+                let idEnemy = result[0].userID;
+                fs.readFile(__dirname +'/public/profileImages/' + idEnemy + '.png', function(err, data){
+                    socket.emit('enemyProfileChange', {image : true, buffer : data});
+                })
+            });
         })
 
         // =============================== New Connection ================================
@@ -194,8 +218,6 @@ try {
                     modeOfPlayers.push("Rank"); modeOfPlayers.push("Rank");
                     io.sockets.emit('rankQueueFound', {players : players, lobbyName : lobbyName});
                     console.log('\n(' + getCurrentTime() + ') UPDATE: Rank Match has started. ' + socket.username + ' vs ' + socket.enemy);
-                    console.log(lobbyOfPlayers);
-                    console.log(chargesOfPlayers);
                 }
             }
             else if (socket.casualQueueStatus) {
@@ -256,9 +278,6 @@ try {
             if (inGame.includes(data.username)) {
                 removePlayer(data.username);
             }
-            console.log("FROM REMOVE");
-            console.log(inGame)
-            console.log(chargesOfPlayers);
             updateCount();
         });
 
@@ -521,18 +540,15 @@ try {
             if (data.lobbyName == lobbyOfPlayers[index]) {
                 let index = inGame.indexOf(socket.username);
                 let enemyStatus = false;
-                console.log(statusOfPlayers);
                 if (data.username == socket.username && !statusOfPlayers[index]) {
                     actionsOfPlayers[index] = data.rankChosen;
                     // check charge if action is correct and send error note
                     let playerConfirmation = checkAction(chargesOfPlayers[index], data.rankChosen);
                     if (playerConfirmation) {
-                        statusOfPlayers[index] = true;   
-                        console.log("action accepted");                        
+                        statusOfPlayers[index] = true;                          
                     }                    
                     else if (!playerConfirmation) {
                         // emit error. expound. exact error needed
-                        console.log("action not accepted");
                         socket.emit('rankErrorChosen');
                     }
                     if (index % 2 == 0) {
@@ -592,18 +608,15 @@ try {
             if (data.lobbyName == lobbyOfPlayers[index]) {
                 let index = inGame.indexOf(socket.username);
                 let enemyStatus = false;
-                console.log(statusOfPlayers);
                 if (data.username == socket.username && !statusOfPlayers[index]) {
                     actionsOfPlayers[index] = data.casualChosen;
                     // check charge if action is correct and send error note
                     let playerConfirmation = checkAction(chargesOfPlayers[index], data.casualChosen);
                     if (playerConfirmation) {
-                        statusOfPlayers[index] = true;   
-                        console.log("action accepted");                        
+                        statusOfPlayers[index] = true;                         
                     }                    
                     else if (!playerConfirmation) {
                         // emit error. expound. exact error needed
-                        console.log("action not accepted");
                         socket.emit('rankErrorChosen');
                     }
                     if (index % 2 == 0) {
@@ -720,8 +733,7 @@ try {
                         statusSignUp = true;
                         conn.query("SELECT userID FROM tbl_userdata WHERE username = '" + data.usernameSignUp + "';", function(err, result, fields){
                             fs.copyFileSync(__dirname + '/public/textures/default.png', __dirname + '/public/profileImages/' + result[0].userID + ".png");
-                        });
-                        
+                        });                        
                     });
                 }          
                 socket.emit('signUp', {statusSignUp : statusSignUp, signUpWarning : signUpWarning});        
@@ -734,19 +746,24 @@ try {
         socket.on('signIn', (data)=> {            
             // Login Validation
             let signInStatus = false;
-            let message = "User Account does not exist!";
+            let message = "User Account does not exist or incorrect credentials!";
             let userElo;
+            let isAdmin = "false";
             conn.query("SELECT * FROM tbl_userData", function(err, result, fields) {
                 for (let x = 0; x < result.length; x++) {
                     // console.log("test input name: " + data.usernameSignUp + "\nresult name: " + result[x].username);  
                     if (!signInStatus) {
-                        if (data.usernameLogin == result[x].username) {
+                        if (data.usernameLogin == result[x].username && result[x].isBanned == "false") {
                             let decryptedPassword = simpleCrypto.decrypt(result[x].password);
                             if(data.passwordLogin == decryptedPassword) {
                                 signInStatus = true;           
-                                userElo = result[x].userElo;                     
+                                userElo = result[x].userElo;
+                                isAdmin = result[x].isAdmin;                     
                             }   
                         } 
+                        else if (data.usernameLogin == result[x].username && result[x].isBanned == "true") {
+                            message = "User is currently banned!"
+                        }
                     }                                 
                 }
                 if (signInStatus) {
@@ -761,7 +778,7 @@ try {
                     }                                                                                
                     consoleUpdate();                  
                 }                
-                socket.emit('signIn', {signInStatus : signInStatus, username : socket.username, changelogContents : changelogContents, message : message, userElo : userElo});
+                socket.emit('signIn', {signInStatus : signInStatus, username : socket.username, changelogContents : changelogContents, message : message, userElo : userElo, isAdmin : isAdmin});
                 updateCount();
             })            
         })
@@ -769,7 +786,48 @@ try {
         // ============================== Change Username ==============================
         // Change username
         socket.on('changeUserName', (data) => {
-            socket.username = data.username;            
+            let changeStatus = false;
+            let oldUsername = data.oldUsername;
+            let newUsername = "";
+            conn.query("SELECT username FROM tbl_userdata WHERE username = '" + data.username + "';", function(err, result, fields){
+                if (result.length == 0) {
+                    newUsername = data.username.toUpperCase();
+                    conn.query("UPDATE tbl_userdata SET username = '" + newUsername + "' WHERE username = '" + data.oldUsername + "';", function(){
+                        if (casualQueue.includes(socket.username)) {
+                            let indexCasual = casualQueue.indexOf(socket.username);
+                            casualQueue[indexCasual] = newUsername;
+                        }
+                        if (rankQueue.includes(socket.username)) {
+                            let indexRank = rankQueue.indexOf(socket.username);
+                            rankQueue[indexRank] = newUsername;
+                        }
+                        let index = connectedUsers.indexOf(socket.username);
+                        connectedUsers[index] = newUsername;
+                        changeStatus = true;                        
+                        socket.username = newUsername;
+                        socket.emit('changeUsernameConfirm', {oldUsername : oldUsername, newUsername : newUsername, changeStatus : changeStatus})
+                    });                    
+                }              
+                else {
+                    socket.emit('changeUsernameConfirm', {oldUsername : oldUsername, newUsername : newUsername, changeStatus : changeStatus})
+                }                
+            });          
+        })
+
+        // ============================== Change Password ==============================
+        socket.on('changePassword', (data) => {
+            if (data.username == socket.username) {
+                conn.query("SELECT password FROM tbl_userdata WHERE username = '"+ socket.username + "';", function(err, result, fields){
+                    let decryptedPassword = simpleCrypto.decrypt(result[0].password);
+                    if (decryptedPassword == data.oldPassword) {
+                        let encryptedPassword = simpleCrypto.encrypt(data.password);
+                        conn.query("UPDATE tbl_userdata SET password = '" + encryptedPassword + "' WHERE username = '" + socket.username + "';", function(){
+                            socket.emit('changePasswordConfirm');
+                        });
+                    }
+                });
+                
+            }
         })
             
         // =============================== Chat Messages ===============================
@@ -851,6 +909,32 @@ try {
                 socket.emit('profileConfirm', {result : result, profileSrc : profileSrc});
             });
         }) 
+
+        // =============================== Admin Controls ===============================
+        socket.on('retrieveAdmin', (data) => {
+            let adminQuery = "SELECT username, isAdmin, isBanned FROM tbl_userdata WHERE username != '" + socket.username + "';";
+            conn.query(adminQuery, function(err, result, fields){
+                if (err) throw err;
+                socket.emit('adminData', {result : result, username : socket.username});
+            });
+        }) 
+        socket.on('adminQuery', (data) => {
+            let result;
+            if (data.status == "true") {
+                result = false;
+            }
+            else if (data.status == "false") {
+                result = true;
+            }
+            console.log("TEST " + data.name + " " + data.type);
+            conn.query("UPDATE tbl_userdata SET " + data.type + " = '" + result + "' WHERE username = '" + data.name + "';", function(){
+                let adminQuery = "SELECT username, isAdmin, isBanned FROM tbl_userdata WHERE username != '" + socket.username + "';";
+                conn.query(adminQuery, function(err, result, fields){
+                    if (err) throw err;
+                    socket.emit('adminData', {result : result, username : socket.username});
+                });
+            });            
+        })
     })
     console.log("Guns1v1 Server Online");
 

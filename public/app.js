@@ -52,6 +52,11 @@ let bungeeFont;
 // Text
 let enemyName;
 
+// Enemy and Place Face
+let textureFace;
+let materialFace;
+let textureNew;
+
 function init(){
     scene = new THREE.Scene();
     scene.fog = new THREE.Fog(0x000000, 7, 30);
@@ -64,14 +69,15 @@ function init(){
     });
 
     // Textures 
-    let textureFace = new THREE.TextureLoader().load( 'textures/default.png' );
+    textureFace = new THREE.TextureLoader().load( 'textures/default.png' );
+    textureFace.crossOrigin = '';
     let textureSkin = new THREE.TextureLoader().load( 'textures/skin.jpg' );
     let textureGround = new THREE.TextureLoader().load( 'textures/ground.jpg' );
 
     // Materials
     let materialWhite = new THREE.MeshBasicMaterial( { color:0xffffff } );
     let materialSkin = new THREE.MeshLambertMaterial( { map: textureSkin } );
-    let materialFace = new THREE.MeshLambertMaterial( { map: textureFace, transparent: true } );
+    materialFace = new THREE.MeshLambertMaterial( { map: textureFace, transparent: true } );
     let materialGround = new THREE.MeshLambertMaterial( { map: textureGround } );
 
     // ==========================  OBJECTS ==========================
@@ -4615,6 +4621,8 @@ function animate(){
     playerHandRightE.position.y -= hoverSpeed;
     curPosition -= hoverSpeed;
   }
+  textureFace.needsUpdate = true;
+  materialFace.needsUpdate = true;;
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
 }
